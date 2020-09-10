@@ -109,6 +109,8 @@ print(df)
 embed = cuml.UMAP(n_neighbors=100, n_epochs=500, min_dist=0.1,
                   init="spectral", learning_rate=1.5).fit_transform(df)
 
+print(embed.shape)
+print(embed.head().to_pandas())
 
 result_path = "results/test"
 np.save(f"{result_path}/embeddings.npy", embed.head().to_pandas().to_numpy())
