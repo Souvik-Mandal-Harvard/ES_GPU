@@ -84,8 +84,8 @@ for path in tqdm(glob("data/clean_data/**/*.h5")):
     # morlet wavelet
     num_interp_fr, num_ang = angles.shape
     num_freq = 20
-#     freq = np.linspace(1, fps/2, num_freq)
-    max_freq, min_freq = fps/2, 1 # Nyquist Frequency
+    #freq = np.linspace(1, fps/2, num_freq)
+    max_freq, min_freq = interp_fps/2, 1 # Nyquist Frequency
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*(np.arange(num_freq,0,-1)-1)/(num_freq-1))
     widths = w*interp_fps / (2*freq*np.pi)
     power = np.zeros((num_ang, num_freq, num_interp_fr))
@@ -106,11 +106,13 @@ power_mod = tot_pwr.reshape((num_angles*num_freq, num_fr)).T
 df = cudf.DataFrame(power_mod)
 print(df)
 
-embed = cuml.UMAP(n_neighbors=100, n_epochs=5000, min_dist=0.1,
-                  init="spectral", learning_rate=1.5).fit_transform(df)
+embed = cuml.UMAP(n_neighbors=20, n_epochs=5000, min_dist=0.1, negative_sample_rate=5,
+                  init="spectral", repulsion_strength=2).fit_transform(df)
+cu_score = cuml.metrics.trustworthiness( df, embed )
 
 print(embed.shape)
 print(embed.to_pandas())
+print(cu_score)
 
 result_path = "results/test"
 np.save(f"{result_path}/embeddings.npy", embed.to_pandas().to_numpy())
