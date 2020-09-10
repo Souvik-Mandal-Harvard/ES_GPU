@@ -111,7 +111,7 @@ embed = cuml.UMAP(n_neighbors=100, n_epochs=500, min_dist=0.1,
 
 
 result_path = "results/test"
-np.save(f"{result_path}/embeddings.npy", embed.to_array())
-np.save(f"{result_path}/bodypoints.npy", tot_bp.to_array())
-np.save(f"{result_path}/angles.npy", tot_angles.to_array())
-np.save(f"{result_path}/power.npy", tot_pwr.to_array())
+np.save(f"{result_path}/embeddings.npy", embed.head().to_pandas().to_numpy())
+np.save(f"{result_path}/bodypoints.npy", tot_bp.head().to_pandas().to_numpy())
+np.save(f"{result_path}/angles.npy", tot_angles.head().to_pandas().to_numpy())
+np.save(f"{result_path}/power.npy", tot_pwr.head().to_pandas().to_numpy())
