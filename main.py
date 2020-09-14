@@ -83,7 +83,7 @@ for path in tqdm(glob("data/clean_data/**/*.h5")):
     
     # morlet wavelet
     num_interp_fr, num_ang = angles.shape
-    num_freq = 20
+    num_freq = 20 
     #freq = np.linspace(1, fps/2, num_freq)
     max_freq, min_freq = interp_fps/2, 1 # Nyquist Frequency
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*(np.arange(num_freq,0,-1)-1)/(num_freq-1))
