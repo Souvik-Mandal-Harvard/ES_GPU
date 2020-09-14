@@ -45,10 +45,11 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     norm = np.median(dist)
     scale_list.append(norm)
     DLC_data /= norm
-    
+
     # Rotate
     ROT_data, body_angle = _rotational(data=DLC_data, axis_bp=config['bp_rotate'])
-    
+    bp_list.append(ROT_data)
+
     # Angles
     angles = angle_calc(ROT_data, config['angles'])
     angles -= np.mean(angles, axis=0)
