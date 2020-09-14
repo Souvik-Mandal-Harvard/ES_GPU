@@ -1,0 +1,42 @@
+# Experimental Settings
+fps: 50        # camera frame rate (units: frames/sec)
+input_data_path: "data/clean_data"
+result_path: "results/test"
+
+# Signals
+bp_center: 2
+bp_scale: [1, 2]
+bp_rotate: 1
+angles:
+  - {"a": 2, "b": 9, "c": 8}
+  - {"a": 2, "b": 22, "c": 21}
+
+# Morlet Wavelet Transformation
+w: 5
+f_bin: 20       # number of frequency bin
+
+# UMAP
+n_neighbors: 50
+n_epochs: 5000
+min_dist: 0.1
+negative_sample_rate: 5
+init: "spectral"
+repulsion_strength: 2
+
+# Clustering (HDBSCAN, GMM)
+method: GMM
+n_components: 12
+max_iter: 500
+BIC_n_components: 20
+
+# Figures
+figure_scaled_bp: True
+
+# Save
+save_file_refs: True
+save_bp_scales: True
+save_trans_bodypoints: True
+save_angles: True
+save_powers: True
+save_freqs: True
+save_embeddings: True
