@@ -95,7 +95,7 @@ print(f"UMAP Trustworthiness: {cu_score}")
 # Save data
 if config['save_file_refs']:
     pickle_out = open(f"{config['result_path']}/files_ref.pickle","wb")
-    pickle.dump(FILES, pickle_out)
+    pickle.dump(files_ref, pickle_out)
     pickle_out.close()
 if config['save_bp_scales']:
     np.save(f"{config['result_path']}/scales.npy", scale_list)
