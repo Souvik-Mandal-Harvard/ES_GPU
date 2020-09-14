@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from glob import glob
 from tqdm import tqdm
+import pickle
 
 import seaborn as sns
 import matplotlib
@@ -25,12 +26,11 @@ fps = 50
 KEYS = [{"a": 2, "b": 9, "c": 8},
         {"a": 2, "b": 22, "c": 21}]
 
-
+FILES = {}
+FR_START = 0
 length = []
 
 # parameters
-interp_samp = 1
-interp_fps = fps*interp_samp
 w = 5
 
 bp_list, angles_list, power_list = [], [], []
@@ -70,14 +70,10 @@ for path in tqdm(glob("data/clean_data/**/*.h5")):
     
     # interpolate data
     num_fr, _,_ = ROT_data.shape
-    time = np.arange(0, num_fr)
-    new_time = np.arange(0, num_fr-1, 1/interp_samp)
-    interp_func = interp1d(time, ROT_data, axis=0, kind='cubic')
-    new_ROT_data = interp_func(new_time)
-    bp_list.append(new_ROT_data)
+    bp_list.append(ROT_data)
     
     # compute angles
-    angles = angle_calc(new_ROT_data, KEYS)
+    angles = angle_calc(ROT_data, KEYS)
     angles -= np.mean(angles, axis=0)
     angles_list.append(angles)
     
@@ -85,15 +81,18 @@ for path in tqdm(glob("data/clean_data/**/*.h5")):
     num_interp_fr, num_ang = angles.shape
     num_freq = 20 
     #freq = np.linspace(1, fps/2, num_freq)
-    max_freq, min_freq = interp_fps/2, 1 # Nyquist Frequency
+    max_freq, min_freq = fps/2, 1 # Nyquist Frequency
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*(np.arange(num_freq,0,-1)-1)/(num_freq-1))
-    widths = w*interp_fps / (2*freq*np.pi)
+    widths = w*fps / (2*freq*np.pi)
     power = np.zeros((num_ang, num_freq, num_interp_fr))
     for i in range(num_ang):
         cwtm = cwt(angles[:,i], morlet2, widths, dtype=None, w=w)
         power[i] = np.abs(cwtm)**2
     power_list.append(power)
     
+    FILES[path] = (FR_START, FR_START+num_fr)
+    FR_START += num_fr
+    print(FR_START)
 
 tot_bp = np.concatenate(bp_list, axis=0)
 tot_angles = np.concatenate(angles_list, axis=0)
@@ -106,7 +105,7 @@ power_mod = tot_pwr.reshape((num_angles*num_freq, num_fr)).T
 df = cudf.DataFrame(power_mod)
 print(df)
 
-embed = cuml.UMAP(n_neighbors=20, n_epochs=5000, min_dist=0.1, negative_sample_rate=5,
+embed = cuml.UMAP(n_neighbors=50, n_epochs=5000, min_dist=0.1, negative_sample_rate=5,
                   init="spectral", repulsion_strength=2).fit_transform(df)
 cu_score = cuml.metrics.trustworthiness( df, embed )
 
@@ -115,6 +114,9 @@ print(embed.to_pandas())
 print(cu_score)
 
 result_path = "results/test"
+pickle_out = open(f"{result_path}/files_ref.pickle","wb")
+pickle.dump(FILES, pickle_out)
+pickle_out.close()
 np.save(f"{result_path}/embeddings.npy", embed.to_pandas().to_numpy())
 np.save(f"{result_path}/bodypoints.npy", tot_bp)
 np.save(f"{result_path}/angles.npy", tot_angles)
