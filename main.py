@@ -86,11 +86,12 @@ cu_score = cuml.metrics.trustworthiness(df, embed)
 
 print(f"UMAP Trustworthiness: {cu_score}")
 
-# Figures
-# TODO
-#     plt.subplots(figsize=(4,4))
-#     plt.scatter(ROT_data[:,:,0], ROT_data[:,:,1], alpha=0.4, s=7)
-#     plt.show()
+# Clustering (HDBSCAN, GMM)
+# TODO: HDBSCAN
+# TODO: GMM
+
+# Ethogram
+# TODO: Ethogram
 
 # Save data
 if config['save_file_refs']:
