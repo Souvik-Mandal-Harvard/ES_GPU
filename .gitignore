@@ -1,3 +1,6 @@
 data
 results
 videos
+__pycache__
+.ipynb_checkpoints
+cache
