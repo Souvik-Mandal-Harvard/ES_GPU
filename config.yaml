@@ -1,7 +1,7 @@
 # Experimental Settings
 fps: 50        # camera frame rate (units: frames/sec)
 input_data_path: "data/clean_data"
-result_path: "results/test"
+result_path: "results/test_angles"
 
 # Signals
 bp_center: 2
