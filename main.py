@@ -63,6 +63,7 @@ tot_angles = np.concatenate(angles_list, axis=0)
 for angles in angles_list:
     # Normalize Angles
     angles -= np.mean(tot_angles, axis=0)
+    
     # Morlet Wavelet
     num_fr, num_ang = angles.shape
     power = np.zeros((num_ang, config['f_bin'], num_fr))
@@ -70,9 +71,15 @@ for angles in angles_list:
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*
         (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1))
     widths = config['w']*config['fps'] / (2*freq*np.pi)
+    
+    # Normalization Factor
+    s = (config['w'] + np.sqrt(2+config['w']**2))/(4*np.pi*freq)
+    C = np.pi**(-0.25)*np.exp(0.25*(config['w']-np.sqrt(config['w']**2+2))**2)/np.sqrt(2*s)
+
     for i in range(num_ang):
         cwtm = cwt(angles[:,i], morlet2, widths, dtype=None, w=config['w'])
-        power[i] = np.abs(cwtm)**2
+        # power[i] = np.abs(cwtm)**2
+        power[i] = (np.abs(cwtm/np.expand_dims(np.sqrt(s),1)))/np.expand_dims(C, axis=(0,2))
     power_list.append(power)
     
     # Record Files

@@ -2,6 +2,5 @@ data
 results
 videos
 __pycache__
-__pycache__/helper.cpython-37.pyc
 .ipynb_checkpoints
 cache
