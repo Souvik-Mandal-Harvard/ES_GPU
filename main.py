@@ -55,7 +55,14 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     angles = angle_calc(ROT_data, config['angles'])
     angles -= np.mean(angles, axis=0)
     angles_list.append(angles)
-    
+
+# Combine Bodypoints and Angles Data
+tot_bp = np.concatenate(bp_list, axis=0)
+tot_angles = np.concatenate(angles_list, axis=0)  
+
+for angles in angles_list:
+    # Normalize Angles
+    angles -= np.mean(tot_angles, axis=0)
     # Morlet Wavelet
     num_fr, num_ang = angles.shape
     power = np.zeros((num_ang, config['f_bin'], num_fr))
@@ -72,8 +79,6 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     files_ref[path] = (frame_start, frame_start+num_fr)
     frame_start += num_fr
 
-tot_bp = np.concatenate(bp_list, axis=0)
-tot_angles = np.concatenate(angles_list, axis=0)
 tot_pwr = np.concatenate(power_list, axis=2)
 
 # Dimensional Reduction
