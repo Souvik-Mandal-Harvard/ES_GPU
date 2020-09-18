@@ -1,4 +1,4 @@
-import yaml, matplotlib, random, pickle, cudf, cuml
+import yaml, matplotlib, random, pickle, cudf, cuml, time
 import numpy as np
 import pandas as pd
 from glob import glob
@@ -10,6 +10,7 @@ from sklearn.mixture import GaussianMixture
 
 from helper import _rotational, angle_calc
 
+start_timer = time.time()
 # Configuration
 with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
@@ -37,7 +38,7 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     DLC_data = np.concatenate((
         np.expand_dims(x_data, axis=-1), 
         np.expand_dims(y_data, axis=-1)), axis=-1)
-    
+
     # Scale
     x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
     y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
@@ -82,9 +83,9 @@ df = cudf.DataFrame(power_mod)
 embed = cuml.UMAP(n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                 min_dist=config['min_dist'], negative_sample_rate=config['negative_sample_rate'],
                 init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
-cu_score = cuml.metrics.trustworthiness(df, embed)
+#cu_score = cuml.metrics.trustworthiness(df, embed)
 
-print(f"UMAP Trustworthiness: {cu_score}")
+#print(f"UMAP Trustworthiness: {cu_score}")
 
 # Clustering (HDBSCAN, GMM)
 # TODO: HDBSCAN
@@ -111,7 +112,8 @@ if config['save_freqs']:
 if config['save_embeddings']:
     np.save(f"{config['result_path']}/embeddings.npy", embed.to_pandas().to_numpy())
 
-
+print(tot_pwr.shape)
+print(f"Computation Time: {time.time()-start_timer}")
 
 
 
