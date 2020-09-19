@@ -16,9 +16,18 @@ with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 # Initialize
-files_ref = {}
+files_ref, bad_frames_ref = {}, {}
 frame_start = 0
 bp_list, scale_list, angles_list, power_list = [], [], [], []
+
+# Bodypoints Used for Analysis
+bp_analyze = []
+for angle_points in config["angles"]:
+    bp_analyze.extend(angle_points.values())
+bp_analyze.append(config["bp_rotate"])
+bp_analyze.extend(config["bp_scale"])
+bp_analyze.append(config["bp_center"])
+bp_analyze = np.unique(bp_analyze)
 
 for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     # Import
@@ -26,8 +35,14 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     df = store['df_with_missing']
     x_data = df.xs('x', level="coords", axis=1).to_numpy()
     y_data = df.xs('y', level="coords", axis=1).to_numpy()
+    likelihood = df.xs('likelihood', level="coords", axis=1).to_numpy()
     store.close()
     
+    # Check Likelihood
+    below_thresh = np.where(likelihood[:, bp_analyze] < .2)
+    fr_bad = np.unique(below_thresh[0])
+    bad_frames_ref[path] = fr_bad
+
     # Center
     x_center = x_data[:,config['bp_center']]
     y_center = y_data[:,config['bp_center']]
@@ -38,7 +53,8 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     DLC_data = np.concatenate((
         np.expand_dims(x_data, axis=-1), 
         np.expand_dims(y_data, axis=-1)), axis=-1)
-
+    num_fr,_,_ = DLC_data.shape
+    
     # Scale
     x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
     y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
@@ -88,9 +104,15 @@ for angles in angles_list:
 
 tot_pwr = np.concatenate(power_list, axis=2)
 
+# Take Out Bad Frames
+tot_fr_bad = []
+for path, fr_range in files_ref.items():
+    tot_fr_bad.extend(bad_frames_ref[path]+fr_range[0])
+good_tot_pwr = np.delete(tot_pwr, tot_fr_bad, axis=2).shape
+
 # Dimensional Reduction
-num_angles, num_freq, num_fr = tot_pwr.shape
-power_mod = tot_pwr.reshape((num_angles*num_freq, num_fr)).T
+num_angles, num_freq, num_good_fr = good_tot_pwr.shape
+power_mod = good_tot_pwr.reshape((num_angles*num_freq, num_good_fr)).T
 df = cudf.DataFrame(power_mod)
 embed = cuml.UMAP(n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                 min_dist=config['min_dist'], negative_sample_rate=config['negative_sample_rate'],
@@ -111,6 +133,10 @@ if config['save_file_refs']:
     pickle_out = open(f"{config['result_path']}/files_ref.pickle","wb")
     pickle.dump(files_ref, pickle_out)
     pickle_out.close()
+if config['save_bad_frames_ref']:
+    pickle_out = open(f"{config['result_path']}/bad_frames_ref.pickle","wb")
+    pickle.dump(bad_frames_ref, pickle_out)
+    pickle_out.close()
 if config['save_bp_scales']:
     np.save(f"{config['result_path']}/scales.npy", scale_list)
 if config['save_trans_bodypoints']:
@@ -124,7 +150,8 @@ if config['save_freqs']:
 if config['save_embeddings']:
     np.save(f"{config['result_path']}/embeddings.npy", embed.to_pandas().to_numpy())
 
-print(tot_pwr.shape)
+print(good_tot_pwr.shape)
+print(embed.shape)
 print(f"Computation Time: {time.time()-start_timer}")
 
 
