@@ -108,7 +108,7 @@ tot_pwr = np.concatenate(power_list, axis=2)
 tot_fr_bad = []
 for path, fr_range in files_ref.items():
     tot_fr_bad.extend(bad_frames_ref[path]+fr_range[0])
-good_tot_pwr = np.delete(tot_pwr, tot_fr_bad, axis=2).shape
+good_tot_pwr = np.delete(tot_pwr, tot_fr_bad, axis=2)
 
 # Dimensional Reduction
 num_angles, num_freq, num_good_fr = good_tot_pwr.shape
