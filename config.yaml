@@ -35,6 +35,7 @@ figure_scaled_bp: True
 
 # Save
 save_file_refs: True
+save_bad_frames_ref: True
 save_bp_scales: True
 save_trans_bodypoints: True
 save_angles: True
