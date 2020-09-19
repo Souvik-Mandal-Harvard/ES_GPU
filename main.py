@@ -56,6 +56,10 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     angles -= np.mean(angles, axis=0)
     angles_list.append(angles)
 
+    # Record Files
+    files_ref[path] = (frame_start, frame_start+num_fr)
+    frame_start += num_fr
+
 # Combine Bodypoints and Angles Data
 tot_bp = np.concatenate(bp_list, axis=0)
 tot_angles = np.concatenate(angles_list, axis=0)  
@@ -81,10 +85,6 @@ for angles in angles_list:
         # power[i] = np.abs(cwtm)**2
         power[i] = (np.abs(cwtm/np.expand_dims(np.sqrt(s),1)))/np.expand_dims(C, axis=(0,2))
     power_list.append(power)
-    
-    # Record Files
-    files_ref[path] = (frame_start, frame_start+num_fr)
-    frame_start += num_fr
 
 tot_pwr = np.concatenate(power_list, axis=2)
 
