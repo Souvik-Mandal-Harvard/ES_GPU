@@ -38,6 +38,7 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     DLC_data = np.concatenate((
         np.expand_dims(x_data, axis=-1), 
         np.expand_dims(y_data, axis=-1)), axis=-1)
+    num_fr,_,_ = DLC_data.shape
 
     # Scale
     x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
