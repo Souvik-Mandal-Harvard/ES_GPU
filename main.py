@@ -150,15 +150,22 @@ if config['save_bp_scales']:
 if config['save_freqs']:
     np.save(f"{config['result_path']}/freq.npy", freq)
 
-# TODO: SAVE FOR EACH FILE
-if config['save_trans_bodypoints']:
-    np.save(f"{config['result_path']}/bodypoints.npy", tot_bp)
-if config['save_angles']:
-    np.save(f"{config['result_path']}/angles.npy", tot_angles)
-if config['save_powers']:
-    np.save(f"{config['result_path']}/power.npy", tot_pwr)
-if config['save_embeddings']:
-    np.save(f"{config['result_path']}/embeddings.npy", np_embed)
+for path, fr_range in files_ref.items():
+    # set up directory path
+    folder = os.path.dirname(path).split("/")[-1]
+    dir_path = f"{config['result_path']}/{folder}"
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+        np.save(f"{dir_path}/bodypoints.npy", tot_bp)
+    # save requested files
+    if config['save_trans_bodypoints']:
+        np.save(f"{config['result_path']}/bodypoints.npy", tot_bp[fr_range[0]:fr_range[1],:,:])
+    if config['save_angles']:
+        np.save(f"{config['result_path']}/angles.npy", tot_angles[fr_range[0]:fr_range[1],:])
+    if config['save_powers']:
+        np.save(f"{config['result_path']}/power.npy", tot_pwr[:,:,fr_range[0]:fr_range[1]])
+    if config['save_embeddings']:
+        np.save(f"{config['result_path']}/embeddings.npy", full_embed[fr_range[0]:fr_range[1],:])
 
 print(good_tot_pwr.shape)
 print(np_embed.shape)
