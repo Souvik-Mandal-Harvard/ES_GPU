@@ -124,7 +124,7 @@ np_embed = embed.to_pandas().to_numpy()
 # Append Undefined Frames
 full_embed = np.empty((num_fr, 2))
 full_embed[:] = np.nan
-test[:, :, tot_fr_good] = np_embed
+full_embed[tot_fr_good, :] = np_embed
 
 #cu_score = cuml.metrics.trustworthiness(df, embed)
 #print(f"UMAP Trustworthiness: {cu_score}")
