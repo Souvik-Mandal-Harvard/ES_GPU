@@ -158,13 +158,13 @@ for path, fr_range in files_ref.items():
         os.makedirs(dir_path)
         # save requested files
         if config['save_trans_bodypoints']:
-            np.save(f"{config['result_path']}/bodypoints.npy", tot_bp[fr_range[0]:fr_range[1],:,:])
+            np.save(f"{dir_path}/bodypoints.npy", tot_bp[fr_range[0]:fr_range[1],:,:])
         if config['save_angles']:
-            np.save(f"{config['result_path']}/angles.npy", tot_angles[fr_range[0]:fr_range[1],:])
+            np.save(f"{dir_path}/angles.npy", tot_angles[fr_range[0]:fr_range[1],:])
         if config['save_powers']:
-            np.save(f"{config['result_path']}/power.npy", tot_pwr[:,:,fr_range[0]:fr_range[1]])
+            np.save(f"{dir_path}/power.npy", tot_pwr[:,:,fr_range[0]:fr_range[1]])
         if config['save_embeddings']:
-            np.save(f"{config['result_path']}/embeddings.npy", full_embed[fr_range[0]:fr_range[1],:])
+            np.save(f"{dir_path}/embeddings.npy", full_embed[fr_range[0]:fr_range[1],:])
 
 print(good_tot_pwr.shape)
 print(np_embed.shape)
