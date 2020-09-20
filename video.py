@@ -63,7 +63,7 @@ class Video:
             for fr_i, fr in enumerate(tqdm(np.arange(start, stop), desc="Frame Loop")):
                 # ant plot
                 self.ax1.clear()
-                self.ax1.set_xlim([-4,4]); self.ax1.set_ylim([-5,5]);
+                self.ax1.set_xlim([-4,4]); self.ax1.set_ylim([-5,8]);
                 for shadow_i in range(-10,1):
                     if shadow_i == 0:
                         alpha=0.8
