@@ -1,4 +1,4 @@
-import yaml, matplotlib, random, pickle, cudf, cuml, time
+import os, yaml, matplotlib, random, pickle, cudf, cuml, time
 import numpy as np
 import pandas as pd
 from glob import glob
