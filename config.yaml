@@ -1,7 +1,7 @@
 # Experimental Settings
 fps: 50        # camera frame rate (units: frames/sec)
 input_data_path: "data/clean_data"
-result_path: "results/test_bias"
+result_path: "results/frontleg_antennae"
 
 # Signals
 bp_center: 2
@@ -10,8 +10,8 @@ bp_rotate: 1
 angles:
   - {"a": 2, "b": 9, "c": 8}
   - {"a": 2, "b": 22, "c": 21}
-  # - {"a": 7, "b": 6, "c": 5}
-  # - {"a": 20, "b": 19, "c": 18}
+  - {"a": 7, "b": 6, "c": 5}
+  - {"a": 20, "b": 19, "c": 18}
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin
