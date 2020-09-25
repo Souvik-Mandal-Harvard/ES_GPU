@@ -1,17 +1,17 @@
-# MOUSE
 # Experimental Settings
-fps: 30        # camera frame rate (units: frames/sec)
-input_data_path: "data/mouse_data"
-result_path: "results/mouse"
+fps: 50        # camera frame rate (units: frames/sec)
+input_data_path: "data/clean_data"
+result_path: "results/legs"
 
 # Signals
-bp_center: 3
+bp_center: 2
 bp_scale: [1, 2]
-bp_rotate: 8
+bp_rotate: 1
 angles:
-  - {"a": 1, "b": 0, "c": 2}
-  - {"a": 3, "b": 8, "c": 11}
-  - {"a": 0, "b": 3, "c": 8}
+  - {"a": 2, "b": 9, "c": 8}
+  - {"a": 2, "b": 22, "c": 21}
+  # - {"a": 7, "b": 6, "c": 5}
+  # - {"a": 20, "b": 19, "c": 18}
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin
