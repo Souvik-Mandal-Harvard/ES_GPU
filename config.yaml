@@ -8,14 +8,15 @@ bp_center: 2
 bp_scale: [1, 2]
 bp_rotate: 1
 angles:
+  - {"a": 7, "b": 6, "c": 5}
   - {"a": 2, "b": 9, "c": 8}
   - {"a": 2, "b": 12, "c": 11}
   - {"a": 2, "b": 15, "c": 14}
+  - {"a": 20, "b": 19, "c": 18}
   - {"a": 2, "b": 22, "c": 21}
   - {"a": 2, "b": 25, "c": 24}
   - {"a": 2, "b": 28, "c": 27}
-  # - {"a": 7, "b": 6, "c": 5}
-  # - {"a": 20, "b": 19, "c": 18}
+  
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin

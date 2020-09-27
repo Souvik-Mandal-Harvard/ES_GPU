@@ -49,7 +49,79 @@ class Video:
             self.ax6.annotate(clust_i, self.cluster_mean[clust_i], fontsize=4, fontweight='bold', color='k')
         self.ax6.set(xlabel='Component 1', ylabel='Component 2')
 
-    def create_video(self, start, stop, filepath):
+
+    def create_video_legs(self, start, stop, filepath):
+        num_clusters = np.max(self.cluster)+1
+
+        # scatter cluster plot
+        samp_frac = 0.5
+        num_fr, _ = self.embed.shape
+        idx = random.sample(range(num_fr), int(samp_frac*num_fr))
+
+        FFMpegWriter = animation.writers['ffmpeg']
+        writer = FFMpegWriter(fps=self.fps)
+        with writer.saving(self.fig, filepath, dpi=self.dpi):
+            for fr_i, fr in enumerate(tqdm(np.arange(start, stop), desc="Frame Loop")):
+                # ant plot
+                self.ax1.clear()
+                self.ax1.set_xlim([-4,4]); self.ax1.set_ylim([-5,8]);
+                for shadow_i in range(-10,1):
+                    if shadow_i == 0:
+                        alpha=0.8
+                    else:
+                        alpha = 0.1
+                    self.ax1.plot(self.bodypoints[fr+shadow_i,0:4,0], self.bodypoints[fr+shadow_i,0:4,1], 
+                             c='k', alpha=alpha, 
+                             marker="o", markersize=3)
+                    self.ax1.plot(self.bodypoints[fr+shadow_i,8:11,0], self.bodypoints[fr+shadow_i,8:11,1], 
+                             c='tab:blue', alpha=alpha, 
+                             marker="o", markersize=3)
+                    self.ax1.plot(self.bodypoints[fr+shadow_i,21:24,0], self.bodypoints[fr+shadow_i,21:24,1], 
+                             c='tab:orange', alpha=alpha,
+                             marker="o", markersize=3)
+                
+                # angle plot
+                self.ax2.clear()
+                self.ax2.set_xlim([start,stop-1]); self.ax2.set_ylim([-1.0,1.0]);
+                for i in range(2):
+                    self.ax2.plot(np.arange(start, fr+1), self.angles[start:fr+1,i], alpha=0.5, linewidth=1, label=f"ang {i}")
+                self.ax2.legend()
+                self.ax2.set(xlabel='Frame', ylabel='Normalized Angle')
+                
+                # ethogram plot
+                self.ax3.clear()
+                self.ax3.set_xlim([start,stop-1]); self.ax3.set_ylim([-0.5,num_clusters]);
+                self.ax3.scatter(np.arange(start, fr+1), self.cluster[start:fr+1], c=self.cluster_colors[start:fr+1], 
+                            alpha=1, s=2, marker="s")
+                self.ax3.set_yticks(range(0,num_clusters))
+                self.ax3.set(xlabel='Frame', ylabel='Ethogram')
+                
+                # power spectrogram plot
+                self.ax4.clear()
+                for i in range(2):
+                    self.ax4.plot(self.freq, self.power[i,:,fr].T, label=f"ang {i}", alpha=0.5, linewidth=1)
+                self.ax4.set_xlabel("freq"); self.ax4.set_ylabel("power")
+                self.ax4.set_ylim([-0.05,0.8])
+                self.ax4.legend()
+                
+                # scatter cluster plot
+                self.ax5.clear()
+                self.ax5.scatter(self.embed[idx,0], self.embed[idx,1], 
+                        c=self.cluster_colors[idx], 
+                        alpha=0.2, s=0.1)
+                self.ax5.plot(self.embed[start:fr+1,0], self.embed[start:fr+1,1],
+                        c='k', linewidth=1, alpha=0.5)
+                self.ax5.scatter(self.embed[fr,0], self.embed[fr,1],
+                        c='k', s=5, marker="x")
+                self.ax5.set(xlabel='Component 1', ylabel='Component 2', title=f"frame {fr}", xlim=self.ax6.get_xlim(), ylim=self.ax6.get_ylim())
+                
+                # take snapshot
+                writer.grab_frame()
+            writer.grab_frame()
+            plt.close()
+
+
+    def create_video_frontlegs(self, start, stop, filepath):
         num_clusters = np.max(self.cluster)+1
 
         # scatter cluster plot
