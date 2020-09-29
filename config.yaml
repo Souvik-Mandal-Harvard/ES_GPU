@@ -42,8 +42,10 @@ figure_scaled_bp: True
 save_file_refs: True
 save_bad_frames_ref: True
 save_bp_scales: True
+save_unrot_bodypoints: True
 save_trans_bodypoints: True
 save_angles: True
+save_rotations: True
 save_powers: True
 save_freqs: True
 save_embeddings: True

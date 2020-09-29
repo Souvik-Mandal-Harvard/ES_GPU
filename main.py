@@ -18,7 +18,7 @@ with open("config.yaml") as f:
 # Initialize
 files_ref, bad_frames_ref = {}, {}
 frame_start = 0
-bp_list, scale_list, angles_list, power_list = [], [], [], []
+bp_unrot_list, bp_list, scale_list, angles_list, rotate_list, power_list = [], [], [], [], [], []
 
 # Bodypoints Used for Analysis
 bp_analyze = []
@@ -62,10 +62,12 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     norm = np.median(dist)
     scale_list.append(norm)
     DLC_data /= norm
+    bp_unrot_list.append(DLC_data)
 
     # Rotate
     ROT_data, body_angle = _rotational(data=DLC_data, axis_bp=config['bp_rotate'])
     bp_list.append(ROT_data)
+    rotate_list.append(body_angle)
 
     # Angles
     angles = angle_calc(ROT_data, config['angles'])
@@ -77,8 +79,12 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
     frame_start += num_fr
 
 # Combine Bodypoints and Angles Data
+tot_bp_unrot = np.concatenate(bp_unrot_list, axis=0)
 tot_bp = np.concatenate(bp_list, axis=0)
-tot_angles = np.concatenate(angles_list, axis=0)  
+tot_angles = np.concatenate(angles_list, axis=0)
+tot_rotations = np.concatenate(rotate_list, axis=0)
+print("hello")
+print(tot_rotations.shape)
 
 for angles in tqdm(angles_list):
     # Normalize Angles
@@ -157,10 +163,14 @@ for path, fr_range in files_ref.items():
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
         # save requested files
+        if config['save_unrot_bodypoints']:
+            np.save(f"{dir_path}/bodypoints_unrot.npy", tot_bp_unrot[fr_range[0]:fr_range[1],:,:])
         if config['save_trans_bodypoints']:
             np.save(f"{dir_path}/bodypoints.npy", tot_bp[fr_range[0]:fr_range[1],:,:])
         if config['save_angles']:
             np.save(f"{dir_path}/angles.npy", tot_angles[fr_range[0]:fr_range[1],:])
+        if config['save_rotations']:
+            np.save(f"{dir_path}/rotation.npy", tot_rotations[fr_range[0]:fr_range[1]])
         if config['save_powers']:
             np.save(f"{dir_path}/power.npy", tot_pwr[:,:,fr_range[0]:fr_range[1]])
         if config['save_embeddings']:
