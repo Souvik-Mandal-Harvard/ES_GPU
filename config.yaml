@@ -1,7 +1,7 @@
 # Experimental Settings
 fps: 50        # camera frame rate (units: frames/sec)
 input_data_path: "data/clean_data"
-result_path: "results/legs"
+result_path: "results/legs_antennae"
 
 # Signals
 bp_center: 2

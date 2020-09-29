@@ -79,7 +79,7 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
 # Combine Bodypoints and Angles Data
 tot_bp = np.concatenate(bp_list, axis=0)
 tot_angles = np.concatenate(angles_list, axis=0)  
-
+print(tot_angles.shape)
 for angles in tqdm(angles_list):
     # Normalize Angles
     angles -= np.mean(tot_angles, axis=0)
@@ -160,12 +160,13 @@ for path, fr_range in files_ref.items():
         if config['save_trans_bodypoints']:
             np.save(f"{dir_path}/bodypoints.npy", tot_bp[fr_range[0]:fr_range[1],:,:])
         if config['save_angles']:
+            print(tot_angles[fr_range[0]:fr_range[1],:].shape)
             np.save(f"{dir_path}/angles.npy", tot_angles[fr_range[0]:fr_range[1],:])
         if config['save_powers']:
             np.save(f"{dir_path}/power.npy", tot_pwr[:,:,fr_range[0]:fr_range[1]])
         if config['save_embeddings']:
             np.save(f"{dir_path}/embeddings.npy", full_embed[fr_range[0]:fr_range[1],:])
-
+print(tot_angles.shape)
 print(good_tot_pwr.shape)
 print(np_embed.shape)
 print(full_embed.shape)
