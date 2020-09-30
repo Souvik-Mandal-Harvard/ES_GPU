@@ -71,7 +71,7 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
 
     # Angles
     angles = angle_calc(ROT_data, config['angles'])
-    angles -= np.mean(angles, axis=0)
+    # angles -= np.mean(angles, axis=0) # TODO: TAKE THIS OUT BECAUSE YOU ARE DOING THIS IN LINE 91
     angles_list.append(angles)
 
     # Record Files
@@ -83,13 +83,12 @@ tot_bp_unrot = np.concatenate(bp_unrot_list, axis=0)
 tot_bp = np.concatenate(bp_list, axis=0)
 tot_angles = np.concatenate(angles_list, axis=0)
 tot_rotations = np.concatenate(rotate_list, axis=0)
-print("hello")
-print(tot_rotations.shape)
 
 for angles in tqdm(angles_list):
     # Normalize Angles
     angles -= np.mean(tot_angles, axis=0)
-    
+    # TODO: NORMALIZE ALL ANGLES SO THAT EACH ANGLE HAS EQUAL WEIGHT (I.E)
+
     # Morlet Wavelet
     num_fr, num_ang = angles.shape
     power = np.zeros((num_ang, config['f_bin'], num_fr))
