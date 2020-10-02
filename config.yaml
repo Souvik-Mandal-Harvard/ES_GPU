@@ -1,7 +1,7 @@
 # Experimental Settings
 fps: 50        # camera frame rate (units: frames/sec)
 input_data_path: "data/clean_data"
-result_path: "results/legs_antennae"
+result_path: "results/legs_antennae_tip"
 
 # Signals
 bp_center: 2
@@ -9,7 +9,7 @@ bp_scale: [1, 2]
 bp_rotate: 1
 angles:
   # RIGHT ANTENNAE
-  # - {"a": 6, "b": 5, "c": 4} # tip
+  - {"a": 6, "b": 5, "c": 4} # tip
   - {"a": 7, "b": 6, "c": 5}
   # RIGHT FRONT-LEG
   - {"a": 2, "b": 9, "c": 8}
@@ -22,6 +22,7 @@ angles:
   - {"a": 3, "b": 15, "c": 14}
   
   # LEFT ANTENNAE
+  - {"a": 19, "b": 18, "c": 17} # tip
   - {"a": 20, "b": 19, "c": 18}
   # LEFT FRONT-LEG
   - {"a": 2, "b": 22, "c": 21}

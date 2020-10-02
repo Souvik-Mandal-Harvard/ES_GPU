@@ -71,7 +71,7 @@ for path in tqdm(glob(f"{config['input_data_path']}/**/*.h5")):
 
     # Angles
     angles = angle_calc(ROT_data, config['angles'])
-    # angles -= np.mean(angles, axis=0) # TODO: TAKE THIS OUT BECAUSE YOU ARE DOING THIS IN LINE 91
+    #angles -= np.mean(angles, axis=0) # TODO: TAKE THIS OUT BECAUSE YOU ARE DOING THIS IN LINE 91
     angles_list.append(angles)
 
     # Record Files
