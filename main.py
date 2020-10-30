@@ -121,7 +121,7 @@ good_tot_pwr = np.delete(tot_pwr, tot_fr_bad, axis=2)
 num_angles, num_freq, num_good_fr = good_tot_pwr.shape
 power_mod = good_tot_pwr.reshape((num_angles*num_freq, num_good_fr)).T
 df = cudf.DataFrame(power_mod)
-embed = cuml.UMAP(n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
+embed = cuml.UMAP(n_components=2, n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                 min_dist=config['min_dist'], negative_sample_rate=config['negative_sample_rate'],
                 init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
 np_embed = embed.to_pandas().to_numpy()
