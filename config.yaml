@@ -1,7 +1,7 @@
 # Experimental Settings
 fps: 50        # camera frame rate (units: frames/sec)
-input_data_path: "data/ant_field_round2"
-result_path: "results/round2_legs_antennae"
+input_data_path: "data/ant_field_round1"
+result_path: "results/test"
 
 # Signals
 bp_center: 2
@@ -38,6 +38,7 @@ w: 5
 f_bin: 20       # number of frequency bin
 
 # UMAP
+n_components: 2
 n_neighbors: 150
 n_epochs: 15000
 min_dist: 0.01
@@ -46,15 +47,16 @@ init: "spectral"
 repulsion_strength: 2
 
 # Clustering (HDBSCAN, GMM)
-method: GMM
-n_components: 12
-max_iter: 500
-BIC_n_components: 20
 
 # Figures
-figure_scaled_bp: True
 
 # Save
+save_bodypoints: False
+save_scaled_bodypoints: False
+save_rotated_bodypoints: False
+save_body_orientation_angles: False
+save_angles: False
+
 save_file_refs: True
 save_bad_frames_ref: True
 save_bp_scales: True
