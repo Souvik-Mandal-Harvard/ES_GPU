@@ -1,4 +1,4 @@
-import os, yaml, matplotlib, random, pickle, time
+import os, yaml, matplotlib, random, pickle, time, cudf, cuml
 import numpy as np
 import pandas as pd
 from glob import glob
@@ -152,6 +152,7 @@ for folder_name, val in INFO.items():
         np.save(f"{dir_path}/embeddings.npy", embed[fr_start:fr_start+val['number_frames'],:])
     fr_start += val['number_frames']
 
+print(INFO)
 print(embed.shape)
 print(f"Computation Time: {time.time()-start_timer}")
 
