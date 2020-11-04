@@ -51,10 +51,10 @@ repulsion_strength: 2
 # Figures
 
 # Save
-save_bodypoints: False
-save_scaled_bodypoints: False
-save_rotated_bodypoints: False
-save_body_orientation_angles: False
-save_angles: False
+save_bodypoints: True
+save_scaled_bodypoints: True
+save_rotated_bodypoints: True
+save_body_orientation_angles: True
+save_angles: True
 save_powers: True
 save_embeddings: True
