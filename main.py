@@ -152,6 +152,9 @@ for folder_name, val in INFO.items():
         np.save(f"{dir_path}/embeddings.npy", embed[fr_start:fr_start+val['number_frames'],:])
     fr_start += val['number_frames']
 
+with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
+    documents = yaml.dump(info, file)
+
 print(INFO)
 print(embed.shape)
 print(f"Computation Time: {time.time()-start_timer}")
