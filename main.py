@@ -117,7 +117,7 @@ for (folder_name, val), angles in tqdm(zip(INFO.items(), angles_list)):
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*
         (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1))
     widths = config['w']*config['fps'] / (2*freq*np.pi)
-    INFO[folder_name]["frequencies"] = freq
+    INFO[folder_name]["frequencies"] = freq.tolist()
     
     # Normalization Factor
     s = (config['w'] + np.sqrt(2+config['w']**2))/(4*np.pi*freq)
