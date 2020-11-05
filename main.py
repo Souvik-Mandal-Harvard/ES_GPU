@@ -32,6 +32,7 @@ bp_analyze.append(config["bp_center"])
 bp_analyze = np.unique(bp_analyze)
 
 
+start_fr = 0
 for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))):
     ### Directory Path
     folder_name = os.path.dirname(path).split("/")[-1]
@@ -98,6 +99,9 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     
     ### Record Files
     INFO[folder_name]['number_frames'] = num_fr
+    INFO[folder_name]['global_start_fr'] = start_fr
+    INFO[folder_name]['global_stop_fr'] = start_fr+num_fr
+    start_fr += num_fr
 
 tot_angles = np.concatenate(angles_list, axis=0)
 for (folder_name, val), angles in tqdm(zip(INFO.items(), angles_list)):
@@ -153,7 +157,7 @@ for folder_name, val in INFO.items():
     fr_start += val['number_frames']
 
 with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
-    documents = yaml.dump(info, file)
+    documents = yaml.dump(INFO, file)
 
 print(INFO)
 print(embed.shape)
