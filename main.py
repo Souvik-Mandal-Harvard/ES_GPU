@@ -74,7 +74,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     dist = np.sqrt(x_d**2+y_d**2)
     scale_factor = np.median(dist)
     DLC_data /= scale_factor    
-    INFO[folder_name]['scale_factor'] = round(scale_factor, 3)
+    INFO[folder_name]['scale_factor'] = round(scale_factor.item(), 3)
     if config['save_scaled_bodypoints']:
         np.save(f"{dir_path}/scaled_bodypoints.npy", DLC_data)
 
