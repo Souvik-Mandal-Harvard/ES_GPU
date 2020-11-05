@@ -153,7 +153,7 @@ for folder_name, val in INFO.items():
     fr_start += val['number_frames']
 
 with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
-    documents = yaml.dump(info, file)
+    documents = yaml.dump(INFO, file)
 
 print(INFO)
 print(embed.shape)
