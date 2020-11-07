@@ -52,12 +52,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     y_data = df.xs('y', level="coords", axis=1).to_numpy()
     likelihood = df.xs('likelihood', level="coords", axis=1).to_numpy()
     store.close()
-
-    ### Center
-    x_center = x_data[:,config['bp_center']]
-    y_center = y_data[:,config['bp_center']]
-    x_data -= x_center[:,np.newaxis]
-    y_data -= y_center[:,np.newaxis]
         
     ### Format
     DLC_data = np.concatenate((
@@ -67,6 +61,9 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     num_fr,_,_ = DLC_data.shape
     if config['save_bodypoints']:
         np.save(f"{dir_path}/bodypoints.npy", DLC_data)
+
+    ### Center
+    DLC_data[:,:,0:2] -= DLC_data[:,config['bp_center'],0:2]
     
     ### Scale
     x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
