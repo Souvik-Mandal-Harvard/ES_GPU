@@ -32,7 +32,16 @@ angles:
   # LEFT BACK-LEG
   # - {"a": 2, "b": 28, "c": 27}
   - {"a": 3, "b": 28, "c": 27}
-  
+angle_labels:
+  - Right Antennae 
+  - Right Front-Leg
+  - Right Mid-Leg
+  - Right Back-Leg
+  - Left Antennae 
+  - Left Front-Leg
+  - Left Mid-Leg
+  - Left Back-Leg
+
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin
@@ -49,6 +58,9 @@ repulsion_strength: 2
 # Clustering (HDBSCAN, GMM)
 
 # Figures
+save_video_path: "videos/round2_legs_antennae"
+num_sample_videos: 3
+max_video_length: 80
 
 # Save
 save_bodypoints: True
@@ -58,3 +70,4 @@ save_body_orientation_angles: True
 save_angles: True
 save_powers: True
 save_embeddings: True
+save_clusters: True
