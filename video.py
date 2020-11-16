@@ -5,6 +5,7 @@ import matplotlib.animation as animation
 import seaborn as sns
 from tqdm import tqdm
 import skvideo.io
+from glob import glob
 
 class Video:
     def __init__(self, config, INFO, bodypoints, angles, power, embed, cluster, fps=25):
