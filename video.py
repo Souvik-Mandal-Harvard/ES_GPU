@@ -51,7 +51,7 @@ class Video:
         # cluster mean
         self.cluster_mean = np.zeros((self.num_clusters, 2))
         for clust_i in range(self.num_clusters):
-            self.cluster_mean[clust_i,:] = np.mean(tot_embed[clusterer.labels_==clust_i, :-1], axis=0)
+            self.cluster_mean[clust_i,:] = np.mean(self.embed[clusterer.labels_==clust_i, :-1], axis=0)
         
         # ax6: density cluster plot
         samp_idx = random.sample(range(self.num_fr), int(self.num_fr*1/20))
