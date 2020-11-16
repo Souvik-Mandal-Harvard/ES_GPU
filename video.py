@@ -81,7 +81,8 @@ class Video:
             file_path = global_directories[file_bool].item()
             print(file_path)
             file_key = file_path.split("/")[-1]
-            video_path = glob(f"{file_path}/*.avi")[0]
+            # video_path = glob(f"{file_path}/*.avi")[0]
+            video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round2/{file_key}.avi")[0]
             video = skvideo.io.vread(video_path)
         else:
             return # don't create a video
