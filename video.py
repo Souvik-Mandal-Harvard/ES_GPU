@@ -258,7 +258,7 @@ def main():
                 start, stop = start_fr-pad, stop_fr+pad
             
             # Define Filename
-            filepath = f"{config["save_video_path"]}/cluster{clust_i}_frame{start}-{stop}.mp4"
+            filepath = f"{config['save_video_path']}/cluster{clust_i}_frame{start}-{stop}.mp4"
             
             # Create Video
             video_creator.create_video_legs(start, stop, filepath)
