@@ -1,7 +1,7 @@
 # Experimental Settings
 fps: 50        # camera frame rate (units: frames/sec)
-input_data_path: "data/ant_field_round1"
-result_path: "results/test"
+input_data_path: "data/ant_field_round2"
+result_path: "results/round2_legs_antennae"
 
 # Signals
 bp_center: 2
@@ -48,7 +48,7 @@ f_bin: 20       # number of frequency bin
 
 # UMAP
 n_components: 2
-n_neighbors: 150
+n_neighbors: 50
 n_epochs: 15000
 min_dist: 0.01
 negative_sample_rate: 5

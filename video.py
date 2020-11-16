@@ -1,9 +1,9 @@
 import numpy as np
-import matplotlib, random
+import matplotlib, random, yaml
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 import skvideo.io
 
 class Video:
@@ -51,7 +51,7 @@ class Video:
         # cluster mean
         self.cluster_mean = np.zeros((self.num_clusters, 2))
         for clust_i in range(self.num_clusters):
-            self.cluster_mean[clust_i,:] = np.mean(self.embed[clusterer.labels_==clust_i, :-1], axis=0)
+            self.cluster_mean[clust_i,:] = np.mean(self.embed[self.cluster==clust_i, :-1], axis=0)
         
         # ax6: density cluster plot
         samp_idx = random.sample(range(self.num_fr), int(self.num_fr*1/20))
@@ -146,8 +146,8 @@ class Video:
                 
                 # ax3: ethogram
                 self.ax3.clear()
-                self.ax3.set(yticks=range(-1,num_clusters,3), 
-                             xlim=[start-file_start_fr, stop-file_start_fr-1], ylim=[-1.5,num_clusters], 
+                self.ax3.set(yticks=range(-1,self.num_clusters,3), 
+                             xlim=[start-file_start_fr, stop-file_start_fr-1], ylim=[-1.5,self.num_clusters], 
                              xlabel=f"Cluster: {self.cluster[fr]}", ylabel='Ethogram')
                 self.ax3.scatter(np.arange(start-file_start_fr, fr-file_start_fr+1), self.cluster[start:fr+1], c=self.cluster_colors[start:fr+1], 
                             alpha=1, s=3, marker="s")
@@ -224,7 +224,7 @@ def main():
     video_creator.setup()
 
     # Determine Which frames to Abstract
-    num_clusters = np.max(tot_clusters[:,0]) + 1
+    num_clusters = int(np.max(tot_clusters[:,0]).item()) + 1
     cluster_distribution = []
     for clust_i in range(num_clusters):
         clust_idx = np.where(tot_clusters[:,0] == clust_i)[0]
@@ -258,7 +258,7 @@ def main():
                 start, stop = start_fr-pad, stop_fr+pad
             
             # Define Filename
-            filepath = f"{save_video_path}/cluster{clust_i}_frame{start}-{stop}.mp4"
+            filepath = f"{config["save_video_path"]}/cluster{clust_i}_frame{start}-{stop}.mp4"
             
             # Create Video
             video_creator.create_video_legs(start, stop, filepath)
