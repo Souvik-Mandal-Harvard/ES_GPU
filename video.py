@@ -155,8 +155,8 @@ class Video:
                 # ax4: power spectrogram
                 xtick_idx = np.arange(1, self.num_freq, 3).astype(int)
                 self.ax4.clear()
-                self.ax4.imshow(self.power[:,:-1,fr], norm = matplotlib.colors.LogNorm(), 
-                              vmin=0.01, vmax=np.max(self.power[:,:-1,:]), cmap='hot')
+                self.ax4.imshow(self.power[:,:-1,fr], norm=matplotlib.colors.LogNorm(vmin=0.01, vmax=np.max(self.power[:,:-1,:])), 
+                            cmap='hot')
                 self.ax4.set(
                     xticks=xtick_idx, 
                     xticklabels=np.around(self.freq[xtick_idx], 1), 
