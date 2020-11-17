@@ -70,7 +70,7 @@ def main():
     save_path="videos/test.mp4"
     with writer.saving(fig, save_path, dpi=300):
         for fr_i in tqdm(np.arange(0, 100), desc="Frame Loop"):
-            for i, (start, stop) in tqdm(video_cluster_idx[2]):
+            for i, (start, stop) in enumerate(video_cluster_idx[2]):
                 ax[i//4,i%4].clear()
                 ax[i//4,i%4].set_axis_off()
                 ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
