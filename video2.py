@@ -65,7 +65,7 @@ def main():
     ang_palette = sns.color_palette('tab10', 10)
 
     # find video filename
-    INFO_values = list(self.INFO.values())
+    INFO_values = list(INFO.values())
     INFO_values.sort(key=lambda x: x['order'])
     
     global_start_frames = np.array([val['global_start_fr'] for val in INFO_values])
