@@ -64,6 +64,30 @@ def main():
     fig, ax = plt.subplots(4,4,figsize=(10,10))
     ang_palette = sns.color_palette('tab10', 10)
 
+    # find video filename
+    INFO_values = list(self.INFO.values())
+    INFO_values.sort(key=lambda x: x['order'])
+    
+    global_start_frames = np.array([val['global_start_fr'] for val in INFO_values])
+    global_stop_frames = np.array([val['global_stop_fr'] for val in INFO_values])
+    global_directories = np.array([val['directory'] for val in INFO_values])
+    
+    # animal video data
+    video_i, file_start_fr = {}, {}
+    for i, (start, stop) in enumerate(video_cluster_idx[2])
+        file_bool = [a and b for a, b in zip(start >= global_start_frames, stop < global_stop_frames)]
+        if any(file_bool):
+            file_start_fr[i] = global_start_frames[file_bool].item()
+            file_path = global_directories[file_bool].item()
+            print(file_path)
+            file_key = file_path.split("/")[-1]
+            video_path = glob(f"{file_path}/*.avi")[0]
+            # video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round2/{file_key}.avi")[0]
+            video = skvideo.io.vread(video_path)
+            video_i[i] = video
+        else:
+            return # don't create a video
+
     # video format        
     FFMpegWriter = animation.writers['ffmpeg']
     writer = FFMpegWriter(fps=10)
@@ -79,6 +103,8 @@ def main():
                 bp_markersize = 3
                 alpha = 0.8
                 fr, shadow_i = start+fr_i, 0
+
+                ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
 
                 # left side
                 ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,0:4,0], tot_bp_scaled[fr+shadow_i,0:4,1], 
