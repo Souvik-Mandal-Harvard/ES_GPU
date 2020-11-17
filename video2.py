@@ -74,7 +74,7 @@ def main():
     
     # animal video data
     video_i, file_start_fr = {}, {}
-    for i, (start, stop) in enumerate(video_cluster_idx[2])
+    for i, (start, stop) in enumerate(tqdm(video_cluster_idx[2], desc="Collecting Videos"))
         file_bool = [a and b for a, b in zip(start >= global_start_frames, stop < global_stop_frames)]
         if any(file_bool):
             file_start_fr[i] = global_start_frames[file_bool].item()
