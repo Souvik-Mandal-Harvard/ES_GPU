@@ -93,7 +93,7 @@ def main():
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
         writer = FFMpegWriter(fps=10)
-        save_path="videos/mutivideo_cluster2.mp4"
+        save_path=f"videos/mutivideo_cluster{clust_i}.mp4"
         with writer.saving(fig, save_path, dpi=300):
             for fr_i in tqdm(np.arange(0, 100), desc="Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
