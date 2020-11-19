@@ -77,7 +77,7 @@ def main():
         # animal video data
         video_i, file_start_fr = {}, {}
         for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
-            file_bool = start >= global_start_frames
+            file_bool = start > global_start_frames
             if any(file_bool):
                 file_start_fr[i] = global_start_frames[file_bool][-1]
                 file_path = global_directories[file_bool][-1]
