@@ -91,7 +91,7 @@ def main():
     # video format        
     FFMpegWriter = animation.writers['ffmpeg']
     writer = FFMpegWriter(fps=10)
-    save_path="videos/test.mp4"
+    save_path="videos/mutivideo_cluster2.mp4"
     with writer.saving(fig, save_path, dpi=300):
         for fr_i in tqdm(np.arange(0, 100), desc="Frame Loop"):
             for i, (start, stop) in enumerate(video_cluster_idx[2]):
@@ -99,7 +99,7 @@ def main():
                 ax[i//4,i%4].set_axis_off()
                 #ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
 
-                bp_linewidth = 0.7
+                bp_linewidth = 1
                 bp_markersize = 2
                 alpha = 0.6
                 fr, shadow_i = start+fr_i, 0
