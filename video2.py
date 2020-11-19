@@ -29,7 +29,7 @@ def main():
         tot_embed.append( np.load(f"{file['directory']}/embeddings.npy") )
         tot_clusters.append( np.load(f"{file['directory']}/clusters.npy") )
     tot_bp = np.concatenate(tot_bp)
-    tot_bp_scaled = np.concatenate(tot_bp_scaled)
+    tot_bp_scaled = np.concatenate(tot_bp)
     tot_angles = np.concatenate(tot_angles)
     tot_power = np.concatenate(tot_power, axis=2)
     tot_embed = np.concatenate(tot_embed)
@@ -97,7 +97,7 @@ def main():
             for i, (start, stop) in enumerate(video_cluster_idx[2]):
                 ax[i//4,i%4].clear()
                 ax[i//4,i%4].set_axis_off()
-                ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
+                #ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
 
                 bp_linewidth = 2
                 bp_markersize = 3
