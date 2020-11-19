@@ -99,16 +99,16 @@ def main():
                 ax[i//4,i%4].set_axis_off()
                 #ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
 
-                bp_linewidth = 2
-                bp_markersize = 3
-                alpha = 0.8
+                bp_linewidth = 0.7
+                bp_markersize = 2
+                alpha = 0.6
                 fr, shadow_i = start+fr_i, 0
 
                 ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
 
                 # left side
                 ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,0:4,0], tot_bp_scaled[fr+shadow_i,0:4,1], 
-                         c='k', alpha=alpha, 
+                         c='w', alpha=alpha, 
                          marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
                 ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,5:8,0], tot_bp_scaled[fr+shadow_i,5:8,1], 
                          c=ang_palette[0], alpha=alpha, 
