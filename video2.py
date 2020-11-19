@@ -21,7 +21,7 @@ def main():
 
     # Format Data
     tot_bp, tot_bp_scaled, tot_angles, tot_rotations, tot_power, tot_embed, tot_clusters = [], [], [], [], [], [], []
-    for file in tqdm(INFO_values):
+    for file in tqdm(INFO_values, , desc="Collecting Data"):
         tot_bp.append( np.load(f"{file['directory']}/bodypoints.npy") )
         tot_bp_scaled.append( np.load(f"{file['directory']}/scaled_bodypoints.npy") )
         tot_angles.append( np.load(f"{file['directory']}/angles.npy") )
@@ -81,7 +81,6 @@ def main():
             if any(file_bool):
                 file_start_fr[i] = global_start_frames[file_bool][-1]
                 file_path = global_directories[file_bool][-1]
-                print(file_path)
                 file_key = file_path.split("/")[-1]
                 # video_path = glob(f"{file_path}/*.avi")[0]
                 video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round2/{file_key}.avi")[0]
@@ -95,14 +94,14 @@ def main():
         writer = FFMpegWriter(fps=10)
         save_path=f"videos/mutivideo_cluster{clust_i}.mp4"
         with writer.saving(fig, save_path, dpi=300):
-            for fr_i in tqdm(np.arange(0, 100), desc="Frame Loop"):
+            for fr_i in tqdm(np.arange(0, 100), desc=f"Cluster {clust_i} Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
                     bp_linewidth = 1
                     bp_markersize = 2
                     alpha = 0.6
                     fr, shadow_i = start+fr_i, 0
 
-                    if fr-file_start_fr[i] >= file_start_fr[i]: break
+                    if fr-file_start_fr[i] >= len(video_i[i]): continue
 
                     ax[i//4,i%4].clear()
                     ax[i//4,i%4].set_axis_off()
