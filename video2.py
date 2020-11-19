@@ -73,7 +73,7 @@ def main():
     global_stop_frames = np.array([val['global_stop_fr'] for val in INFO_values])
     global_directories = np.array([val['directory'] for val in INFO_values])
     
-    for clust_i in range(num_clusters):
+    for clust_i in range(23, num_clusters):
         # animal video data
         video_i, file_start_fr = {}, {}
         for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
@@ -97,6 +97,7 @@ def main():
         with writer.saving(fig, save_path, dpi=300):
             for fr_i in tqdm(np.arange(0, 100), desc="Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
+                    if fr-file_start_fr[i] >= file_start_fr[i]: break
                     ax[i//4,i%4].clear()
                     ax[i//4,i%4].set_axis_off()
                     #ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
