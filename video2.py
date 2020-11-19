@@ -97,15 +97,16 @@ def main():
         with writer.saving(fig, save_path, dpi=300):
             for fr_i in tqdm(np.arange(0, 100), desc="Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
-                    if fr-file_start_fr[i] >= file_start_fr[i]: break
-                    ax[i//4,i%4].clear()
-                    ax[i//4,i%4].set_axis_off()
-                    #ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
-
                     bp_linewidth = 1
                     bp_markersize = 2
                     alpha = 0.6
                     fr, shadow_i = start+fr_i, 0
+
+                    if fr-file_start_fr[i] >= file_start_fr[i]: break
+
+                    ax[i//4,i%4].clear()
+                    ax[i//4,i%4].set_axis_off()
+                    #ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
 
                     ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
 
