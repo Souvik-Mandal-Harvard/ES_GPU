@@ -21,7 +21,7 @@ def main():
 
     # Format Data
     tot_bp, tot_bp_scaled, tot_angles, tot_rotations, tot_power, tot_embed, tot_clusters = [], [], [], [], [], [], []
-    for file in tqdm(INFO_values, , desc="Collecting Data"):
+    for file in tqdm(INFO_values, desc="Collecting Data"):
         tot_bp.append( np.load(f"{file['directory']}/bodypoints.npy") )
         tot_bp_scaled.append( np.load(f"{file['directory']}/scaled_bodypoints.npy") )
         tot_angles.append( np.load(f"{file['directory']}/angles.npy") )
