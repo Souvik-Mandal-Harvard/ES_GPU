@@ -1,7 +1,8 @@
 # Experimental Settings
-fps: 50        # camera frame rate (units: frames/sec)
-input_data_path: "data/ant_field_round2_resnet101/filtered"
-result_path: "results/round2_legs_antennae_resnet101_filtered"
+fps: 50          # camera frame rate (units: frames/sec)
+camera_scale: 60 # pixel/cm
+input_data_path: "data/ant_field_round3"
+result_path: "results/round3_legs_antennae"
 
 # Signals
 bp_center: 2
@@ -9,38 +10,37 @@ bp_scale: [1, 2]
 bp_rotate: 1
 angles:
   # RIGHT ANTENNAE
-  #- {"a": 6, "b": 5, "c": 4} # tip
-  - {"a": 7, "b": 6, "c": 5}
+  - {"a": 0, "b": 6, "c": 5}
+  # RIGHT ANTENNAE 2
+  - {"a": 1, "b": 0, "c": 6}
   # RIGHT FRONT-LEG
-  - {"a": 2, "b": 9, "c": 8}
+  - {"a": 2, "b": 1, "c": 8}
   # RIGHT MID-LEG
-  # - {"a": 2, "b": 12, "c": 11}
   - {"a": 1, "b": 2, "c": 11}
   # RIGHT BACK-LEG
-  # - {"a": 2, "b": 15, "c": 14}
-  # - {"a": 16, "b": 15, "c": 14}
-  - {"a": 3, "b": 15, "c": 14}
+  - {"a": 1, "b": 2, "c": 14}
   
   # LEFT ANTENNAE
-  #- {"a": 19, "b": 18, "c": 17} # tip
-  - {"a": 20, "b": 19, "c": 18}
+  - {"a": 0, "b": 19, "c": 18}
+  # LEFT ANTENNAE 2
+  - {"a": 1, "b": 0, "c": 19}
   # LEFT FRONT-LEG
-  - {"a": 2, "b": 22, "c": 21}
+  - {"a": 2, "b": 1, "c": 21}
   # LEFT MID-LEG
-  # - {"a": 2, "b": 25, "c": 24}
   - {"a": 1, "b": 2, "c": 24}
   # LEFT BACK-LEG
-  # - {"a": 2, "b": 28, "c": 27}
-  - {"a": 3, "b": 28, "c": 27}
+  - {"a": 1, "b": 2, "c": 27}
 angle_labels:
-  - Right Antennae 
-  - Right Front-Leg
-  - Right Mid-Leg
-  - Right Back-Leg
-  - Left Antennae 
-  - Left Front-Leg
-  - Left Mid-Leg
-  - Left Back-Leg
+  - (R) Antennae
+  - (R) Antennae 2 
+  - (R) Front-Leg
+  - (R) Middle-Leg
+  - (R) Hind-Leg
+  - (L) Antennae 
+  - (L) Antennae 2
+  - (L) Front-Leg
+  - (L) Middle-Leg
+  - (L) Hind-Leg
 
 # Morlet Wavelet Transformation
 w: 5
