@@ -33,9 +33,10 @@ bp_analyze = np.unique(bp_analyze)
 
 
 start_fr = 0
-for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))):
+for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     ### Directory Path
-    folder_name = os.path.dirname(path).split("/")[-1]
+    # folder_name = os.path.dirname(path).split("/")[-1]
+    folder_name = os.path.basename(path).split("DLC")[0]
     print(folder_name)
     dir_path = f"{config['result_path']}/{folder_name}"
     if not os.path.exists(dir_path):

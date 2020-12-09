@@ -8,7 +8,7 @@ import skvideo.io
 from glob import glob
 
 def main():
-    result_path = "results/round2_legs_antennae"
+    result_path = "results/round2_legs_antennae_resnet101"
 
     # Load Config Files
     with open(f"{result_path}/INFO.yaml") as f:
@@ -73,7 +73,7 @@ def main():
     global_stop_frames = np.array([val['global_stop_fr'] for val in INFO_values])
     global_directories = np.array([val['directory'] for val in INFO_values])
     
-    for clust_i in range(23, num_clusters):
+    for clust_i in range(0, num_clusters):
         # animal video data
         video_i, file_start_fr = {}, {}
         for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
@@ -92,7 +92,7 @@ def main():
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
         writer = FFMpegWriter(fps=10)
-        save_path=f"videos/mutivideo_cluster{clust_i}.mp4"
+        save_path=f"videos/round2_resnet101_multivideo/mutivideo_cluster{clust_i}.mp4"
         with writer.saving(fig, save_path, dpi=300):
             for fr_i in tqdm(np.arange(0, 100), desc=f"Cluster {clust_i} Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
