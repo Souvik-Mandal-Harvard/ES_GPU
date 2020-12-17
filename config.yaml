@@ -45,11 +45,11 @@ num_sample_videos: 3
 max_video_length: 80
 
 # Save
-save_bodypoints: True
-save_scaled_bodypoints: True
-save_rotated_bodypoints: True
-save_body_orientation_angles: True
-save_angles: True
-save_powers: True
-save_embeddings: True
-save_clusters: True
+save_bodypoints: False
+save_scaled_bodypoints: False
+save_rotated_bodypoints: False
+save_body_orientation_angles: False
+save_angles: False
+save_powers: False
+save_embeddings: False
+save_clusters: False

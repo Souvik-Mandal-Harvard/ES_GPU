@@ -131,7 +131,13 @@ for (folder_name, val), angles in tqdm(zip(INFO.items(), angles_list)):
     power_list.append(power)
 tot_pwr = np.concatenate(power_list, axis=2)
 
+# TEST
+(good_ang_idx, good_fr_idx) = np.where(tot_pwr[:,-1,:] == 1)
+unique_good_fr = np.unique(good_fr_idx)
+###########
+
 # Dimensional Reduction
+tot_pwr = tot_pwr[:,:,unique_good_fr]
 num_ang, num_freq, num_fr = tot_pwr.shape
 power_mod = tot_pwr.reshape((num_ang*num_freq, num_fr)).T
 embed = np.zeros((num_fr, config['n_components']+1))
@@ -142,6 +148,13 @@ cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_
                 init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
 embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
 embed[:,config['n_components']] = np.prod(tot_pwr[:,-1,:], axis=0)
+
+# TEST
+fig_base, ax_base = plt.subplots(figsize=(10,10))
+ax_base.scatter(embed[:,0], embed[:,1], alpha=0.002, s=1)  
+ax_base.set(xlabel='Component 1', ylabel='Component 2', title="Behavioral Manifold")
+plt.savefig("embedding")
+###########
 
 #cu_score = cuml.metrics.trustworthiness(df, embed)
 #print(f"UMAP Trustworthiness: {cu_score}")
