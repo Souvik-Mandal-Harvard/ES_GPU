@@ -8,7 +8,7 @@ import skvideo.io
 from glob import glob
 
 def main():
-    result_path = "results/round2_legs_antennae_resnet101"
+    result_path = "results/round3_antennae"
 
     # Load Config Files
     with open(f"{result_path}/INFO.yaml") as f:
@@ -83,7 +83,7 @@ def main():
                 file_path = global_directories[file_bool][-1]
                 file_key = file_path.split("/")[-1]
                 # video_path = glob(f"{file_path}/*.avi")[0]
-                video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round2/{file_key}.avi")[0]
+                video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round3/{file_key}.avi")[0]
                 video = skvideo.io.vread(video_path)
                 video_i[i] = video
             else:
@@ -92,7 +92,7 @@ def main():
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
         writer = FFMpegWriter(fps=10)
-        save_path=f"videos/round2_resnet101_multivideo/mutivideo_cluster{clust_i}.mp4"
+        save_path=f"videos/round3_antennae/mutivideo_cluster{clust_i}.mp4"
         with writer.saving(fig, save_path, dpi=300):
             for fr_i in tqdm(np.arange(0, 100), desc=f"Cluster {clust_i} Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
