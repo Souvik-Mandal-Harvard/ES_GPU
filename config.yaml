@@ -33,9 +33,10 @@ n_components: 2
 n_neighbors: 40
 n_epochs: 15000
 min_dist: 0.01
+spread: 3.0
 negative_sample_rate: 5
 init: "spectral"
-repulsion_strength: 2
+repulsion_strength: 10
 
 # Clustering (HDBSCAN, GMM)
 
