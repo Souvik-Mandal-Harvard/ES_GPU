@@ -39,7 +39,7 @@ def angle_calc(data, keys):
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
 
-def cuml_umap(feature):
+def cuml_umap(config, feature):
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
