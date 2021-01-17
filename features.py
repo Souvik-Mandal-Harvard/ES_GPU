@@ -1,87 +1,105 @@
-import os, random, matplotlib, pickle, yaml, cudf, cuml
-import numpy as np
-import seaborn as sns
-from tqdm.notebook import tqdm
-import matplotlib.pyplot as plt
-import matplotlib.colors as colors
-import matplotlib as mpl
-from matplotlib.ticker import FormatStrFormatter
-from matplotlib.colors import ListedColormap
+import os, random, time
+import yaml, pickle
 from glob import glob
+from tqdm import tqdm
+import numpy as np
+import pandas as pd
 
-result_path = "results/round3_antennae"
-with open(f"{result_path}/INFO.yaml") as f:
+# Import Signal Processor
+from scipy.signal import morlet2, cwt
+# Import Visualization
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Import Helper Function
+from helper import _rotational, angle_calc, cuml_umap
+
+start_timer = time.time()
+
+with open("config.yaml") as f:
+    config = yaml.load(f, Loader=yaml.FullLoader)
+with open(f"{config['result_path']}/INFO.yaml") as f:
     INFO = yaml.load(f, Loader=yaml.FullLoader)
     INFO_values = list(INFO.values())
     INFO_values.sort(key=lambda x: x['order'])
-    
-config_path = "."
-with open(f"{config_path}/config.yaml") as f:
-    config = yaml.load(f, Loader=yaml.FullLoader)
 
+angles_list, power_list = [], []
 
-tot_bp, tot_bp_scaled, tot_bp_rotated, tot_body_orientation, tot_angles, tot_rotations, tot_power, tot_embed = [], [], [], [], [], [], [], []
-for file in tqdm(INFO_values):
-    tot_bp.append( np.load(f"{file['directory']}/bodypoints.npy") )
-    tot_bp_scaled.append( np.load(f"{file['directory']}/scaled_bodypoints.npy") )
-    tot_bp_rotated.append( np.load(f"{file['directory']}/rotated_bodypoints.npy") )
-    tot_body_orientation.append( np.load(f"{file['directory']}/body_orientation_angles.npy") )
-    tot_angles.append( np.load(f"{file['directory']}/angles.npy") )
-    tot_power.append( np.load(f"{file['directory']}/power.npy") )
-    tot_embed.append( np.load(f"{file['directory']}/embeddings.npy") )
+tot_bp, tot_angle, tot_limb = [], [], []
 
-tot_bp = np.concatenate(tot_bp)
-tot_bp_scaled = np.concatenate(tot_bp_scaled)
-tot_bp_rotated = np.concatenate(tot_bp_rotated)
-tot_body_orientation = np.concatenate(tot_body_orientation)
-tot_angles = np.concatenate(tot_angles)
-tot_power = np.concatenate(tot_power, axis=2)
-tot_embed = np.concatenate(tot_embed)
+for file in INFO_values:
+    save_path = file['directory']
+    bp = np.load(f"{save_path}/rotated_bodypoints.npy")
+    num_fr, num_bp, _ = bp.shape
 
+    # Marker Position
+    if config['include_marker_postural'] or config['include_marker_postural']:
+        tot_bp.append(bp)
 
-print(f"tot_bp shape: {tot_bp.shape}")
-print(f"tot_bp_unrot shape: {tot_bp_scaled.shape}")
-print(f"tot_bp_rotated shape: {tot_bp_rotated.shape}")
-print(f"tot_angles shape: {tot_angles.shape}")
-print(f"tot_power shape: {tot_power.shape}")
-print(f"tot_embed shape: {tot_embed.shape}")
+    # Joint Angle
+    if config['include_angle_postural'] or config['include_angle_postural']:
+        # compute angle
+        num_angles = len(config['angles'])
+        angles = np.zeros((num_fr, num_angles, 2))
+        angles[:,:,0] = angle_calc(bp[:,:,0:2], config['angles'])
+        # measure angle likelihood
+        for ang_idx, angle_key in enumerate(config['angles']):
+            angles[:,ang_idx,1] = likelihood[:,angle_key['a']] * likelihood[:,angle_key['b']] * likelihood[:,angle_key['c']]
+        if config['save_angles']:
+            np.save(f"{save_path}/angles.npy", angles)
+        tot_angle.append(angles)
 
-### Embed Postural Features
+    # Limb Length
+    if config['include_limb_postural'] or config['include_limb_postural']:
+        limbs = np.zeros((num_fr, len(config['limbs'])))
+        for i, limb_pts in enumerate(config['limbs']):
+            limb_i = bp[:,limb_pts,0:2]
+            limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+        tot_limb.append(limbs)
 
-def cuml_umap(feature):
-    embed = np.zeros((num_fr, config['n_components']))
-    # embed = np.zeros((num_fr, config['n_components']+1))
-    df = cudf.DataFrame(feature)
-    cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
-                    min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
-                    init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
-    embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
-    return embed
+# Concat Data
+if config['include_marker_postural'] or config['include_marker_postural']:
+    tot_bp = np.concatenate(tot_bp)
+if config['include_angle_postural'] or config['include_angle_postural']:
+    tot_angle = np.concatenate(tot_angle)
+if config['include_limb_postural'] or config['include_limb_postural']:
+    tot_limb = np.concatenate(tot_limb)
 
-
+### Postural Features ###
 # 1) Marker Position
-num_fr, num_bp, num_bp_dim = tot_bp_scaled.shape
-tot_bp_scaled_mod = tot_bp_scaled[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
-embed = cuml_umap(tot_bp_scaled_mod)
-
-fig, ax = plt.subplots(figsize=(10,10))
-ax.scatter(embed[:,0], embed[:,1], s=1, alpha=0.05)
-ax.set(title="Postural Embedding")
-plt.savefig(f"figures/marker_position_embedding.png")
+if config['include_marker_postural']:
+    num_fr, num_bp, num_bp_dim = tot_bp.shape
+    tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
+    embed = cuml_umap(tot_bp_mod)
+    plot_embedding(embed, title="Marker Position",fname="marker_position_embedding")
+    print(f"::: Marker Position ::: Computation Time: {time.time()-start_timer}")
 
 # 2) Joint Angle
-
+if config['include_angle_postural']:
+    embed = cuml_umap(tot_angle[:,:,0])
+    plot_embedding(embed, title="Joint Angle", fname="joint_angle_embedding")
+    print(f"::: Joint Angle ::: Computation Time: {time.time()-start_timer}")
 
 # 3) Limb Length
+if config['include_limb_postural']:
+    embed = cuml_umap(tot_limb)
+    plot_embedding(embed, title="Limb Length", fname="limb_length_embedding")
+    print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
 
+# 4) Marker Position, Joint Angle, & Limb Length (TODO Later)
+if False:
+    print(f"::: Total Postural Features ::: Computation Time: {time.time()-start_timer}")
 
-# 4) Marker Position, Joint Angle, & Limb Length
+### Kinematic Features ###
+# TODO
 
-
-
-
-
-
+def plot_embedding(embed, title="test", fname="test"):
+    fig, ax = plt.subplots(figsize=(10,10))
+    ax.scatter(embed[:,0], embed[:,1], s=1, alpha=0.05)
+    ax.set(title=title)
+    plt.savefig(f"figures/{fname}.png")
+    return
 
 
 

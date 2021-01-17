@@ -1,5 +1,8 @@
 import numpy as np
 
+# Import RAPIDS
+import cudf, cuml
+
 def _rotational(data, axis_bp):
     # rotate axis to be vertical; only works with 2 dimensions as of right now
     # data format: num_fr, num_bp, num_dim
@@ -35,3 +38,13 @@ def angle_calc(data, keys):
         cosine_angle = np.sum(ba*bc,axis=-1)/ (np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
+
+def cuml_umap(feature):
+    embed = np.zeros((num_fr, config['n_components']))
+    # embed = np.zeros((num_fr, config['n_components']+1))
+    df = cudf.DataFrame(feature)
+    cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
+                    min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
+                    init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
+    embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
+    return embed

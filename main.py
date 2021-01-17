@@ -6,7 +6,6 @@ from tqdm import tqdm
 
 import matplotlib.pyplot as plt
 from scipy.signal import morlet2, cwt
-from sklearn.mixture import GaussianMixture
 
 from helper import _rotational, angle_calc
 
@@ -17,10 +16,7 @@ with open("config.yaml") as f:
 
 # Initialize
 INFO = {}
-
-bad_frames_ref = {}
-frame_start = 0
-bp_unrot_list, bp_list, scale_list, angles_list, rotate_list, power_list = [], [], [], [], [], []
+angles_list, power_list = [], []
 
 # Bodypoints Used for Analysis
 bp_analyze = []
