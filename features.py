@@ -40,6 +40,7 @@ for file in INFO_values:
         angles = np.zeros((num_fr, num_angles, 2))
         angles[:,:,0] = angle_calc(bp[:,:,0:2], config['angles'])
         # measure angle likelihood
+        likelihood = bp[:,:,2]
         for ang_idx, angle_key in enumerate(config['angles']):
             angles[:,ang_idx,1] = likelihood[:,angle_key['a']] * likelihood[:,angle_key['b']] * likelihood[:,angle_key['c']]
         if config['save_angles']:
