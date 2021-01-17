@@ -1,19 +1,15 @@
-import os, random, time
-import yaml, pickle
-from glob import glob
-from tqdm import tqdm
+import time
+import yaml
 import numpy as np
-import pandas as pd
 
 # Import Signal Processor
 from scipy.signal import morlet2, cwt
 # Import Visualization
 import matplotlib
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Import Helper Function
-from helper import _rotational, angle_calc, cuml_umap
+from helper import angle_calc, cuml_umap
 
 start_timer = time.time()
 
@@ -67,6 +63,8 @@ if config['include_limb_postural'] or config['include_limb_postural']:
     tot_limb = np.concatenate(tot_limb)
 
 ### Postural Features ###
+start_timer = time.time()
+print(f"::: Marker Position ::: START")
 # 1) Marker Position
 if config['include_marker_postural']:
     num_fr, num_bp, num_bp_dim = tot_bp.shape
@@ -76,12 +74,16 @@ if config['include_marker_postural']:
     print(f"::: Marker Position ::: Computation Time: {time.time()-start_timer}")
 
 # 2) Joint Angle
+start_timer = time.time()
+print(f"::: Joint Angle ::: START")
 if config['include_angle_postural']:
     embed = cuml_umap(tot_angle[:,:,0])
     plot_embedding(embed, title="Joint Angle", fname="joint_angle_embedding")
     print(f"::: Joint Angle ::: Computation Time: {time.time()-start_timer}")
 
 # 3) Limb Length
+start_timer = time.time()
+print(f"::: Limb Length ::: START")
 if config['include_limb_postural']:
     embed = cuml_umap(tot_limb)
     plot_embedding(embed, title="Limb Length", fname="limb_length_embedding")

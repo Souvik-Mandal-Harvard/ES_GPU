@@ -78,4 +78,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
 
 print(f"::: Data Preprocessing ::: Computation Time: {time.time()-start_timer}")
 
+with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
+    documents = yaml.dump(INFO, file)
+
 
