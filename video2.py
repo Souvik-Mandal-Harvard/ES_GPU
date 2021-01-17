@@ -29,7 +29,8 @@ def main():
         tot_embed.append( np.load(f"{file['directory']}/embeddings.npy") )
         tot_clusters.append( np.load(f"{file['directory']}/clusters.npy") )
     tot_bp = np.concatenate(tot_bp)
-    tot_bp_scaled = tot_bp
+    # tot_bp_scaled= tot_bp
+    tot_bp_scaled = np.concatenate(tot_bp_scaled)
     tot_angles = np.concatenate(tot_angles)
     tot_power = np.concatenate(tot_power, axis=2)
     tot_embed = np.concatenate(tot_embed)
@@ -75,19 +76,19 @@ def main():
     
     for clust_i in range(0, num_clusters):
         # animal video data
-        video_i, file_start_fr = {}, {}
-        for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
-            file_bool = start > global_start_frames
-            if any(file_bool):
-                file_start_fr[i] = global_start_frames[file_bool][-1]
-                file_path = global_directories[file_bool][-1]
-                file_key = file_path.split("/")[-1]
-                # video_path = glob(f"{file_path}/*.avi")[0]
-                video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round3/{file_key}.avi")[0]
-                video = skvideo.io.vread(video_path)
-                video_i[i] = video
-            else:
-                return # don't create a video
+        # video_i, file_start_fr = {}, {}
+        # for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
+        #     file_bool = start > global_start_frames
+        #     if any(file_bool):
+        #         file_start_fr[i] = global_start_frames[file_bool][-1]
+        #         file_path = global_directories[file_bool][-1]
+        #         file_key = file_path.split("/")[-1]
+        #         # video_path = glob(f"{file_path}/*.avi")[0]
+        #         video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round3/{file_key}.avi")[0]
+        #         video = skvideo.io.vread(video_path)
+        #         video_i[i] = video
+        #     else:
+        #         return # don't create a video
 
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
@@ -101,13 +102,13 @@ def main():
                     alpha = 0.6
                     fr, shadow_i = start+fr_i, 0
 
-                    if fr-file_start_fr[i] >= len(video_i[i]): continue
+                    # if fr-file_start_fr[i] >= len(video_i[i]): continue
 
                     ax[i//4,i%4].clear()
                     ax[i//4,i%4].set_axis_off()
-                    #ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
+                    ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
 
-                    ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
+                    # ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
 
                     # left side
                     ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,0:4,0], tot_bp_scaled[fr+shadow_i,0:4,1], 
