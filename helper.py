@@ -40,6 +40,7 @@ def angle_calc(data, keys):
     return angles
 
 def cuml_umap(feature):
+    num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
     df = cudf.DataFrame(feature)
