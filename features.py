@@ -20,6 +20,13 @@ with open(f"{config['result_path']}/INFO.yaml") as f:
     INFO_values = list(INFO.values())
     INFO_values.sort(key=lambda x: x['order'])
 
+def plot_embedding(embed, title="test", fname="test"):
+    fig, ax = plt.subplots(figsize=(10,10))
+    ax.scatter(embed[:,0], embed[:,1], s=1, alpha=0.05)
+    ax.set(title=title)
+    plt.savefig(f"figures/{fname}.png")
+    return
+
 angles_list, power_list = [], []
 
 tot_bp, tot_angle, tot_limb = [], [], []
@@ -31,7 +38,8 @@ for file in INFO_values:
 
     # Marker Position
     if config['include_marker_postural'] or config['include_marker_postural']:
-        tot_bp.append(bp)
+        # TODO: only include specific bp specified in config.yaml
+        tot_bp.append(bp[:,config['markers'],:])
 
     # Joint Angle
     if config['include_angle_postural'] or config['include_angle_postural']:
@@ -97,12 +105,7 @@ if False:
 ### Kinematic Features ###
 # TODO
 
-def plot_embedding(embed, title="test", fname="test"):
-    fig, ax = plt.subplots(figsize=(10,10))
-    ax.scatter(embed[:,0], embed[:,1], s=1, alpha=0.05)
-    ax.set(title=title)
-    plt.savefig(f"figures/{fname}.png")
-    return
+
 
 
 
