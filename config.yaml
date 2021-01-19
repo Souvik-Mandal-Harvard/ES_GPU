@@ -11,7 +11,7 @@ bp_rotate: 1
 
 ### Bad Frames ###
 likelihood_thresh: 0.98
-marker_thresh: 3
+marker_thresh: 2
 bad_fr_pad: 20
 
 ### Postural Features ###
@@ -101,9 +101,9 @@ f_bin: 20       # number of frequency bin
 
 # UMAP
 n_components: 2
-n_neighbors: 40
+n_neighbors: 50
 n_epochs: 5000
-min_dist: 0.01
+min_dist: 0.1
 spread: 1.0 # 3.0
 negative_sample_rate: 5
 init: "spectral"
