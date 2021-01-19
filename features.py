@@ -48,7 +48,7 @@ for key, file in INFO_items:
     # append pads
     padded_fr = np.array([ list(range(fr-config['bad_fr_pad'], fr+config['bad_fr_pad']+1)) for fr in bad_fr])
     disregard_fr = np.unique(padded_fr.flatten())
-    disregard_fr = disregard_fr[(disregard_fr >= 0) & (disregard_fr <= len(likelihood))]
+    disregard_fr = disregard_fr[(disregard_fr >= 0) & (disregard_fr < len(likelihood))]
     good_fr_idx = np.array([True]*len(likelihood))
     good_fr_idx[disregard_fr] = False
     good_fr = np.where(good_fr_idx==True)[0]
