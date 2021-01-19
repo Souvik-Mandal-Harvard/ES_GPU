@@ -1,6 +1,7 @@
 import time
 import yaml
 import numpy as np
+from tqdm import tqdm
 import collections
 
 # Import Signal Processor
@@ -31,7 +32,7 @@ def plot_embedding(embed, title="test", fname="test"):
 angles_list, power_list = [], []
 tot_bp, tot_angle, tot_limb = [], [], []
 
-for key, file in INFO_items:
+for key, file in tqdm(INFO_items):
     save_path = file['directory']
     bp = np.load(f"{save_path}/rotated_bodypoints.npy")
     num_fr, num_bp, _ = bp.shape
@@ -43,8 +44,11 @@ for key, file in INFO_items:
     cnt = collections.Counter(below_thresh_fr)
     cnt_array = np.array(list(cnt.items()))
     # check if above marker threshold
-    bad_fr_idx = np.where(cnt_array[:,1] > config['marker_thresh'])[0]
-    bad_fr = cnt_array[bad_fr_idx,0]
+    try:
+        bad_fr_idx = np.where(cnt_array[:,1] > config['marker_thresh'])[0]
+        bad_fr = cnt_array[bad_fr_idx,0]
+    except:
+        bad_fr = np.array([])
     # append pads
     padded_fr = np.array([ list(range(fr-config['bad_fr_pad'], fr+config['bad_fr_pad']+1)) for fr in bad_fr])
     disregard_fr = np.unique(padded_fr.flatten())
