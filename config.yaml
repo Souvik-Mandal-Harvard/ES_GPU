@@ -9,6 +9,11 @@ bp_center: 2
 bp_scale: [1, 2]
 bp_rotate: 1
 
+### Bad Frames ###
+likelihood_thresh: 0.98
+marker_thresh: 3
+bad_fr_pad: 20
+
 ### Postural Features ###
 # Marker Position
 include_marker_postural: True
@@ -118,5 +123,5 @@ save_body_orientation_angles: False
 save_rotated_bodypoints: True
 save_angles: False
 save_powers: False
-save_embeddings: False
+save_embeddings: True
 save_clusters: False

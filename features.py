@@ -1,6 +1,7 @@
 import time
 import yaml
 import numpy as np
+import collections
 
 # Import Signal Processor
 from scipy.signal import morlet2, cwt
@@ -17,8 +18,8 @@ with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 with open(f"{config['result_path']}/INFO.yaml") as f:
     INFO = yaml.load(f, Loader=yaml.FullLoader)
-    INFO_values = list(INFO.values())
-    INFO_values.sort(key=lambda x: x['order'])
+    INFO_items = list(INFO.items())
+    INFO_items.sort(key=lambda x: x[1]['order'])
 
 def plot_embedding(embed, title="test", fname="test"):
     fig, ax = plt.subplots(figsize=(10,10))
@@ -28,18 +29,40 @@ def plot_embedding(embed, title="test", fname="test"):
     return
 
 angles_list, power_list = [], []
-
 tot_bp, tot_angle, tot_limb = [], [], []
 
-for file in INFO_values:
+for key, file in INFO_items:
     save_path = file['directory']
     bp = np.load(f"{save_path}/rotated_bodypoints.npy")
     num_fr, num_bp, _ = bp.shape
+    likelihood = bp[:,:,2]
 
+    ### Locate Bad Frames ###
+    # check if below likelihood threshold
+    (below_thresh_fr, below_thresh_marker) = np.where(likelihood < config['likelihood_thresh'])
+    cnt = collections.Counter(below_thresh_fr)
+    cnt_array = np.array(list(cnt.items()))
+    # check if above marker threshold
+    bad_fr_idx = np.where(cnt_array[:,1] > config['marker_thresh'])[0]
+    bad_fr = cnt_array[bad_fr_idx,0]
+    # append pads
+    padded_fr = np.array([ list(range(fr-config['bad_fr_pad'], fr+config['bad_fr_pad']+1)) for fr in bad_fr])
+    disregard_fr = np.unique(padded_fr.flatten())
+    disregard_fr = disregard_fr[(disregard_fr >= 0) & (disregard_fr <= len(likelihood))]
+    good_fr_idx = np.array([True]*len(likelihood))
+    good_fr_idx[disregard_fr] = False
+    good_fr = np.where(good_fr_idx==True)[0]
+
+    file['good_fr'] = good_fr.tolist()
+    file['bad_fr'] = bad_fr.tolist()
+    file['disregard_fr'] = disregard_fr.tolist()
+
+    ### Postural Features ###
     # Marker Position
     if config['include_marker_postural'] or config['include_marker_postural']:
-        # TODO: only include specific bp specified in config.yaml
-        tot_bp.append(bp[:,config['markers'],:])
+        # remove bad frames
+        tot_bp.append(bp[good_fr_idx,config['markers'],:])
+
 
     # Joint Angle
     if config['include_angle_postural'] or config['include_angle_postural']:
@@ -48,12 +71,11 @@ for file in INFO_values:
         angles = np.zeros((num_fr, num_angles, 2))
         angles[:,:,0] = angle_calc(bp[:,:,0:2], config['angles'])
         # measure angle likelihood
-        likelihood = bp[:,:,2]
         for ang_idx, angle_key in enumerate(config['angles']):
             angles[:,ang_idx,1] = likelihood[:,angle_key['a']] * likelihood[:,angle_key['b']] * likelihood[:,angle_key['c']]
         if config['save_angles']:
             np.save(f"{save_path}/angles.npy", angles)
-        tot_angle.append(angles)
+        tot_angle.append(angles[good_fr_idx,:,:])
 
     # Limb Length
     if config['include_limb_postural'] or config['include_limb_postural']:
@@ -61,7 +83,11 @@ for file in INFO_values:
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
             limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-        tot_limb.append(limbs)
+        tot_limb.append(limbs[good_fr_idx,:])
+
+    ### Kinematic Features ###
+    # TODO
+
 
 # Concat Data
 if config['include_marker_postural'] or config['include_marker_postural']:
@@ -78,15 +104,15 @@ print(f"::: Marker Position ::: START")
 if config['include_marker_postural']:
     num_fr, num_bp, num_bp_dim = tot_bp.shape
     tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
-    embed = cuml_umap(config, tot_bp_mod)
-    plot_embedding(embed, title="Marker Position",fname="marker_position_embedding")
+    marker_postural_embed = cuml_umap(config, tot_bp_mod)
+    plot_embedding(marker_postural_embed, title="Marker Position",fname="marker_position_embedding")
     print(f"::: Marker Position ::: Computation Time: {time.time()-start_timer}")
 
 # 2) Joint Angle
 start_timer = time.time()
 print(f"::: Joint Angle ::: START")
 if config['include_angle_postural']:
-    embed = cuml_umap(config, tot_angle[:,:,0])
+    angle_postural_embed = cuml_umap(config, tot_angle[:,:,0])
     plot_embedding(embed, title="Joint Angle", fname="joint_angle_embedding")
     print(f"::: Joint Angle ::: Computation Time: {time.time()-start_timer}")
 
@@ -94,7 +120,7 @@ if config['include_angle_postural']:
 start_timer = time.time()
 print(f"::: Limb Length ::: START")
 if config['include_limb_postural']:
-    embed = cuml_umap(config, tot_limb)
+    limb_postural_embed = cuml_umap(config, tot_limb)
     plot_embedding(embed, title="Limb Length", fname="limb_length_embedding")
     print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
 
@@ -104,6 +130,38 @@ if False:
 
 ### Kinematic Features ###
 # TODO
+
+### Save Embedding ###
+# TODO: add bad features back into embed
+if config['save_embeddings']:
+    start_fr = 0
+    for key, file in INFO_items:
+        num_fr = file['number_frames']
+        good_fr = file['good_fr']
+        num_good_fr = len(good_fr)
+
+        if config['include_marker_postural']:
+            embed = np.empty((num_fr, config['n_components']))
+            embed[:] = np.nan
+            embed[good_fr,:] = marker_postural_embed[start_fr:start_fr+num_good_fr]
+            np.save(f"{file['directory']}/marker_postural_embeddings.npy", embed)
+        
+        if config['include_angle_postural']:
+            embed = np.empty((num_fr, config['n_components']))
+            embed[:] = np.nan
+            embed[good_fr,:] = angle_postural_embed[start_fr:start_fr+num_good_fr]
+            np.save(f"{file['directory']}/angle_postural_embeddings.npy", embed)
+        
+        if config['include_limb_postural']:
+            embed = np.empty((num_fr, config['n_components']))
+            embed[:] = np.nan
+            embed[good_fr,:] = limb_postural_embed[start_fr:start_fr+num_good_fr]
+            np.save(f"{file['directory']}/limb_postural_embeddings.npy", embed)
+
+        start_fr += num_good_fr
+
+with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
+    documents = yaml.dump(dict(INFO_items), file)
 
 
 

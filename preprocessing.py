@@ -62,6 +62,10 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     if config['save_scaled_bodypoints']:
         np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
 
+    ### Data Correction
+    # TODO: make everything with below threshold likelihood as (0,0)
+    # TODO: do low pass filter
+
     ### Rotate
     DLC_data[:,:,0:2], body_orientation = _rotational(data=DLC_data[:,:,0:2], axis_bp=config['bp_rotate'])
     DLC_data[:,:,2] = likelihood
