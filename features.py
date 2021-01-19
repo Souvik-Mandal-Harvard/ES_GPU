@@ -47,15 +47,17 @@ for key, file in tqdm(INFO_items):
     try:
         bad_fr_idx = np.where(cnt_array[:,1] > config['marker_thresh'])[0]
         bad_fr = cnt_array[bad_fr_idx,0]
+        # append pads
+        padded_fr = np.array([ list(range(fr-config['bad_fr_pad'], fr+config['bad_fr_pad']+1)) for fr in bad_fr])
+        disregard_fr = np.unique(padded_fr.flatten())
+        disregard_fr = disregard_fr[(disregard_fr >= 0) & (disregard_fr < num_fr)]
+        good_fr_idx = np.array([True]*num_fr)
+        good_fr_idx[disregard_fr] = False
+        good_fr = np.where(good_fr_idx==True)[0]
     except:
         bad_fr = np.array([])
-    # append pads
-    padded_fr = np.array([ list(range(fr-config['bad_fr_pad'], fr+config['bad_fr_pad']+1)) for fr in bad_fr])
-    disregard_fr = np.unique(padded_fr.flatten())
-    disregard_fr = disregard_fr[(disregard_fr >= 0) & (disregard_fr < len(likelihood))]
-    good_fr_idx = np.array([True]*len(likelihood))
-    good_fr_idx[disregard_fr] = False
-    good_fr = np.where(good_fr_idx==True)[0]
+        disregard_fr = np.array([])
+        good_fr = np.arange(num_fr)
 
     file['good_fr'] = good_fr.tolist()
     file['bad_fr'] = bad_fr.tolist()
