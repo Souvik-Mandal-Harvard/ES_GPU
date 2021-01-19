@@ -120,7 +120,7 @@ start_timer = time.time()
 print(f"::: Joint Angle ::: START")
 if config['include_angle_postural']:
     angle_postural_embed = cuml_umap(config, tot_angle[:,:,0])
-    plot_embedding(embed, title="Joint Angle", fname="joint_angle_embedding")
+    plot_embedding(angle_postural_embed, title="Joint Angle", fname="joint_angle_embedding")
     print(f"::: Joint Angle ::: Computation Time: {time.time()-start_timer}")
 
 # 3) Limb Length
@@ -128,7 +128,7 @@ start_timer = time.time()
 print(f"::: Limb Length ::: START")
 if config['include_limb_postural']:
     limb_postural_embed = cuml_umap(config, tot_limb)
-    plot_embedding(embed, title="Limb Length", fname="limb_length_embedding")
+    plot_embedding(limb_postural_embed, title="Limb Length", fname="limb_length_embedding")
     print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
 
 # 4) Marker Position, Joint Angle, & Limb Length (TODO Later)
