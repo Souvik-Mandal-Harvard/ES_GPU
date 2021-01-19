@@ -61,7 +61,7 @@ for key, file in INFO_items:
     # Marker Position
     if config['include_marker_postural'] or config['include_marker_postural']:
         # remove bad frames
-        tot_bp.append(bp[good_fr_idx,config['markers'],:])
+        tot_bp.append(bp[good_fr,config['markers'],:])
 
 
     # Joint Angle
@@ -75,7 +75,7 @@ for key, file in INFO_items:
             angles[:,ang_idx,1] = likelihood[:,angle_key['a']] * likelihood[:,angle_key['b']] * likelihood[:,angle_key['c']]
         if config['save_angles']:
             np.save(f"{save_path}/angles.npy", angles)
-        tot_angle.append(angles[good_fr_idx,:,:])
+        tot_angle.append(angles[good_fr,:,:])
 
     # Limb Length
     if config['include_limb_postural'] or config['include_limb_postural']:
@@ -83,7 +83,7 @@ for key, file in INFO_items:
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
             limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-        tot_limb.append(limbs[good_fr_idx,:])
+        tot_limb.append(limbs[good_fr,:])
 
     ### Kinematic Features ###
     # TODO
