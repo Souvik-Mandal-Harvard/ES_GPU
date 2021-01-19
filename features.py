@@ -61,7 +61,8 @@ for key, file in INFO_items:
     # Marker Position
     if config['include_marker_postural'] or config['include_marker_postural']:
         # remove bad frames
-        tot_bp.append(bp[good_fr,config['markers'],:])
+        bp_markers = bp[:,config['markers'],:]
+        tot_bp.append(bp_markers[good_fr,:])
 
 
     # Joint Angle
