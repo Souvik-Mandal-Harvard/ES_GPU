@@ -24,7 +24,7 @@ with open(f"{config['result_path']}/INFO.yaml") as f:
 
 def plot_embedding(embed, title="test", fname="test"):
     fig, ax = plt.subplots(figsize=(10,10))
-    ax.scatter(embed[:,0], embed[:,1], s=1, alpha=0.05)
+    ax.scatter(embed[:,0], embed[:,1], s=1, alpha=0.01)
     ax.set(title=title)
     plt.savefig(f"figures/{fname}.png")
     return
@@ -65,14 +65,14 @@ for key, file in tqdm(INFO_items):
 
     ### Postural Features ###
     # Marker Position
-    if config['include_marker_postural'] or config['include_marker_postural']:
+    if config['include_marker_postural'] or config['include_all_postural']:
         # remove bad frames
         bp_markers = bp[:,config['markers'],:]
         tot_bp.append(bp_markers[good_fr,:])
 
 
     # Joint Angle
-    if config['include_angle_postural'] or config['include_angle_postural']:
+    if config['include_angle_postural'] or config['include_all_postural']:
         # compute angle
         num_angles = len(config['angles'])
         angles = np.zeros((num_fr, num_angles, 2))
@@ -85,7 +85,7 @@ for key, file in tqdm(INFO_items):
         tot_angle.append(angles[good_fr,:,:])
 
     # Limb Length
-    if config['include_limb_postural'] or config['include_limb_postural']:
+    if config['include_limb_postural'] or config['include_all_postural']:
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
@@ -95,13 +95,12 @@ for key, file in tqdm(INFO_items):
     ### Kinematic Features ###
     # TODO
 
-
 # Concat Data
-if config['include_marker_postural'] or config['include_marker_postural']:
+if config['include_marker_postural'] or config['include_all_postural']:
     tot_bp = np.concatenate(tot_bp)
-if config['include_angle_postural'] or config['include_angle_postural']:
+if config['include_angle_postural'] or config['include_all_postural']:
     tot_angle = np.concatenate(tot_angle)
-if config['include_limb_postural'] or config['include_limb_postural']:
+if config['include_limb_postural'] or config['include_all_postural']:
     tot_limb = np.concatenate(tot_limb)
 
 ### Postural Features ###
@@ -132,8 +131,13 @@ if config['include_limb_postural']:
     print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
 
 # 4) Marker Position, Joint Angle, & Limb Length (TODO Later)
-if False:
-    print(f"::: Total Postural Features ::: Computation Time: {time.time()-start_timer}")
+if config['include_all_postural']:
+    num_fr, num_bp, num_bp_dim = tot_bp.shape
+    tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
+    
+    postural_embed = cuml_umap(config, np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1) )
+    plot_embedding(postural_embed, title="All Postural", fname="all_postural_embedding")
+    print(f"::: All Postural Features ::: Computation Time: {time.time()-start_timer}")
 
 ### Kinematic Features ###
 # TODO
@@ -164,6 +168,12 @@ if config['save_embeddings']:
             embed[:] = np.nan
             embed[good_fr,:] = limb_postural_embed[start_fr:start_fr+num_good_fr]
             np.save(f"{file['directory']}/limb_postural_embeddings.npy", embed)
+
+        if config['include_limb_postural']:
+            embed = np.empty((num_fr, config['n_components']))
+            embed[:] = np.nan
+            embed[good_fr,:] = postural_embed[start_fr:start_fr+num_good_fr]
+            np.save(f"{file['directory']}/all_postural_embeddings.npy", embed)
 
         start_fr += num_good_fr
 
