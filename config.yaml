@@ -4,15 +4,19 @@ camera_scale: 60 # pixel/cm
 input_data_path: "data/ant_field_round2_resnet101"
 result_path: "results/round2"
 
+### Bad Frames ###
+x_bound_std: 2.5
+y_bound_std: 2.5
+velocity_thresh: 40  # pixel/frame; a little over half the body length
+
+likelihood_thresh: 0.98
+marker_thresh: 1
+bad_fr_pad: 20
+
 ### Signals ###
 bp_center: 2
 bp_scale: [1, 2]
 bp_rotate: 1
-
-### Bad Frames ###
-likelihood_thresh: 0.98
-marker_thresh: 1
-bad_fr_pad: 20
 
 ### Postural Features ###
 # Marker Position
