@@ -169,7 +169,7 @@ if config['save_embeddings']:
             embed[good_fr,:] = limb_postural_embed[start_fr:start_fr+num_good_fr]
             np.save(f"{file['directory']}/limb_postural_embeddings.npy", embed)
 
-        if config['include_limb_postural']:
+        if config['include_all_postural']:
             embed = np.empty((num_fr, config['n_components']))
             embed[:] = np.nan
             embed[good_fr,:] = postural_embed[start_fr:start_fr+num_good_fr]
