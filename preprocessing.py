@@ -65,7 +65,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     # Check if the BP moves to quickly
     marker_change = np.diff(DLC_data[:,:,0:2], axis=0)**2
     marker_velocity = np.sqrt(np.sum(marker_change, axis=2))
-    (above_velocity_fr, above_velocity_marker) = np.where(marker_velocity > config['velocity_threshold'])
+    (above_velocity_fr, above_velocity_marker) = np.where(marker_velocity > config['velocity_thresh'])
     above_velocity_fr+=1
     DLC_data[above_velocity_fr, above_velocity_marker, 2] = 0
 
