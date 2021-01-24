@@ -109,7 +109,7 @@ f_bin: 20       # number of frequency bin
 # UMAP
 n_components: 2
 n_neighbors: 50
-n_epochs: 20000  # 5000
+n_epochs: 5000 
 min_dist: 0.1
 spread: 1.0 # 3.0
 negative_sample_rate: 5
@@ -127,8 +127,8 @@ max_video_length: 80
 save_bodypoints: False
 save_scaled_bodypoints: False
 save_body_orientation_angles: False
-save_rotated_bodypoints: True
+save_rotated_bodypoints: False
 save_angles: False
 save_powers: False
-save_embeddings: False
+save_embeddings: True
 save_clusters: False
