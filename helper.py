@@ -49,3 +49,12 @@ def cuml_umap(config, feature):
                     init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
     embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
     return embed
+
+def cuml_pca(config, feature, components=10):
+    num_fr = feature.shape[0]
+    embed = np.zeros((num_fr, components))
+    # embed = np.zeros((num_fr, config['n_components']+1))
+    df = cudf.DataFrame(feature)
+    cu_embed = cuml.PCA(n_components=components).fit_transform(df)
+    embed[:,0:components] = cu_embed.to_pandas().to_numpy()
+    return embed

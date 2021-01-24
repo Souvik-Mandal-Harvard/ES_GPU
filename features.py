@@ -11,7 +11,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Import Helper Function
-from helper import angle_calc, cuml_umap
+from helper import angle_calc, cuml_umap, cuml_pca
 
 start_timer = time.time()
 
@@ -132,12 +132,25 @@ if config['include_limb_postural']:
 
 # 4) Marker Position, Joint Angle, & Limb Length (TODO Later)
 if config['include_all_postural']:
+    start_timer = time.time()
+    print(f"::: All Postural ::: START Timer")
+    
     num_fr, num_bp, num_bp_dim = tot_bp.shape
     tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
     
-    postural_embed = cuml_umap(config, np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1) )
+    # PCA Embedding
+    bp_pca = cuml_pca(config, tot_bp_mod, components=10)
+    print(f"::: All Postural Features (BP PCA) ::: Time Stamp: {time.time()-start_timer}")
+    bp_angle = cuml_pca(config, tot_angle[:,:,0], components=10)
+    print(f"::: All Postural Features (Angle PCA) ::: Time Stamp: {time.time()-start_timer}")
+    bp_limb = cuml_pca(config, tot_limb, components=10)
+    print(f"::: All Postural Features (Limb PCA) ::: Time Stamp: {time.time()-start_timer}")
+    
+    # UMAP Embedding
+    feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
+    postural_embed = cuml_umap(config, feature)
     plot_embedding(postural_embed, title="All Postural", fname="all_postural_embedding")
-    print(f"::: All Postural Features ::: Computation Time: {time.time()-start_timer}")
+    print(f"::: All Postural Features ::: Time Stamp: {time.time()-start_timer}")
 
 ### Kinematic Features ###
 # TODO
