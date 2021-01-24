@@ -142,10 +142,10 @@ if config['include_all_postural']:
     bp_pca, exp_var = cuml_pca(config, tot_bp_mod, components=10) # 21
     print(exp_var)
     print(f"::: All Postural Features (BP PCA) ::: Time Stamp: {time.time()-start_timer}")
-    bp_angle, exp_var = cuml_pca(config, tot_angle[:,:,0], components=10) # 12
+    bp_angle, exp_var = cuml_pca(config, tot_angle[:,:,0], components=6) # 12
     print(exp_var)
     print(f"::: All Postural Features (Angle PCA) ::: Time Stamp: {time.time()-start_timer}")
-    bp_limb, exp_var = cuml_pca(config, tot_limb, components=10) # 13
+    bp_limb, exp_var = cuml_pca(config, tot_limb, components=6) # 13
     print(exp_var)
     print(f"::: All Postural Features (Limb PCA) ::: Time Stamp: {time.time()-start_timer}")
     
