@@ -55,6 +55,9 @@ def cuml_pca(config, feature, components=10):
     embed = np.zeros((num_fr, components))
     # embed = np.zeros((num_fr, config['n_components']+1))
     df = cudf.DataFrame(feature)
-    cu_embed = cuml.PCA(n_components=components).fit_transform(df)
-    embed[:,0:components] = cu_embed.to_pandas().to_numpy()
-    return embed
+    pca = cuml.PCA(n_components=components)
+    pca.fit(df)
+    exp_var = pca.explained_variance_ratio_.to_pandas().to_numpy()
+    embed[:,0:components] = pca.components_.to_pandas().to_numpy()
+    
+    return embed, exp_var
