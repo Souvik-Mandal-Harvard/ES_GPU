@@ -139,18 +139,22 @@ if config['include_all_postural']:
     tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
     
     # PCA Embedding
-    bp_pca, exp_var = cuml_pca(config, tot_bp_mod, components=10) # 21
-    print(exp_var)
-    print(f"::: All Postural Features (BP PCA) ::: Time Stamp: {time.time()-start_timer}")
-    bp_angle, exp_var = cuml_pca(config, tot_angle[:,:,0], components=6) # 12
-    print(exp_var)
-    print(f"::: All Postural Features (Angle PCA) ::: Time Stamp: {time.time()-start_timer}")
-    bp_limb, exp_var = cuml_pca(config, tot_limb, components=6) # 13
-    print(exp_var)
-    print(f"::: All Postural Features (Limb PCA) ::: Time Stamp: {time.time()-start_timer}")
+    # bp_pca, exp_var = cuml_pca(config, tot_bp_mod, components=10) # 21
+    # print(exp_var)
+    # print(np.sum(exp_var))
+    # print(f"::: All Postural Features (BP PCA) ::: Time Stamp: {time.time()-start_timer}")
+    # bp_angle, exp_var = cuml_pca(config, tot_angle[:,:,0], components=6) # 12
+    # print(exp_var)
+    # print(np.sum(exp_var))
+    # print(f"::: All Postural Features (Angle PCA) ::: Time Stamp: {time.time()-start_timer}")
+    # bp_limb, exp_var = cuml_pca(config, tot_limb, components=6) # 13
+    # print(exp_var)
+    # print(np.sum(exp_var))
+    # print(f"::: All Postural Features (Limb PCA) ::: Time Stamp: {time.time()-start_timer}")
     
     # UMAP Embedding
-    feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
+    # feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
+    feature = np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1)
     postural_embed = cuml_umap(config, feature)
     plot_embedding(postural_embed, title="All Postural", fname="all_postural_embedding")
     print(f"::: All Postural Features ::: Time Stamp: {time.time()-start_timer}")
