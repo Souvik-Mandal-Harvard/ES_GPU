@@ -5,6 +5,10 @@ from scipy.signal import morlet2, cwt
 
 # Import RAPIDS
 import cudf, cuml
+from dask_cuda import LocalCUDACluster
+from dask.distributed import Client
+from cuml.manifold import UMAP
+from cuml.dask.manifold import UMAP as MNMG_UMAP
 
 def _rotational(data, axis_bp):
     # rotate axis to be vertical; only works with 2 dimensions as of right now
@@ -66,10 +70,18 @@ def cuml_umap(config, feature):
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
     df = cudf.DataFrame(feature)
-    cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
+    # cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
+    #                 min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
+    #                 init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
+
+    cluster = LocalCUDACluster(threads_per_worker=1)
+    client = Client(cluster)
+    local_model = UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                     min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
-                    init=config['init'], repulsion_strength=config['repulsion_strength'],
-                    optim_batch_size=50000).fit_transform(df)
+                    init=config['init'], repulsion_strength=config['repulsion_strength'])
+    local_model.fit(feature)
+    distributed_model = MNMG_UMAP(local_model)
+    embed = distributed_model.transform(feature)
     embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
     return embed
 
