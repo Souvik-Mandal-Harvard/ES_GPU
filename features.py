@@ -119,7 +119,7 @@ for key, file in tqdm(INFO_items):
         num_fr, num_bp, num_bp_dim = bp_markers.shape
         tot_bp_mod = bp_markers[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
 
-        marker_power = morlet(config, tot_bp_mod)
+        marker_power = morlet(config, INFO, tot_bp_mod)
         if config['save_powers']:
             np.save(f"{dir_path}/marker_power.npy", marker_power)
         tot_marker_pwr.append(marker_power[good_fr,:,:])
@@ -129,7 +129,7 @@ for key, file in tqdm(INFO_items):
         angles = angle_calc(bp[:,:,0:2], config['angles'])
         angles -= np.mean(tot_angle[:,:,0], axis=0)
 
-        angle_power = morlet(config, angles)
+        angle_power = morlet(config, INFO, angles)
         if config['save_powers']:
             np.save(f"{dir_path}/angle_power.npy", angle_power)
         tot_angle_pwr.append(angle_power[good_fr,:,:])
@@ -142,7 +142,7 @@ for key, file in tqdm(INFO_items):
             limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
         
         limbs -= np.mean(tot_limb, axis=0)
-        limb_power = morlet(config, limbs)
+        limb_power = morlet(config, INFO, limbs)
         if config['save_powers']:
             np.save(f"{dir_path}/limb_power.npy", limb_power)
         tot_limb_pwr.append(limb_power[good_fr,:,:])
