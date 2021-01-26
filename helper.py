@@ -42,7 +42,7 @@ def angle_calc(data, keys):
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
 
-def morlet(data):
+def morlet(config, data):
     # data - (frames, features)
     # Morlet Wavelet
     num_fr, num_feat = data.shape
