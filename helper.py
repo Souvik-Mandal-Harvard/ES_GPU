@@ -80,9 +80,9 @@ def cuml_umap(config, feature):
     local_model = UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                     min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
                     init=config['init'], repulsion_strength=config['repulsion_strength'])
-    local_model.fit(feature)
+    local_model.fit(df)
     distributed_model = MNMG_UMAP(local_model)
-    embed = distributed_model.transform(feature)
+    embed = distributed_model.transform(df)
     embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
     return embed
 
