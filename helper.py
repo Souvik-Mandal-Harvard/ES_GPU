@@ -1,5 +1,8 @@
 import numpy as np
 
+# Import Signal Processor
+from scipy.signal import morlet2, cwt
+
 # Import RAPIDS
 import cudf, cuml
 
@@ -38,6 +41,26 @@ def angle_calc(data, keys):
         cosine_angle = np.sum(ba*bc,axis=-1)/ (np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
+
+def morlet(data):
+    # data - (frames, features)
+    # Morlet Wavelet
+    num_fr, num_feat = data.shape
+    power = np.zeros((num_feat, config['f_bin'], num_fr))
+    max_freq, min_freq = config['fps']/2, 1 # Nyquist Frequency
+    freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*
+        (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1))
+    widths = config['w']*config['fps'] / (2*freq*np.pi)
+    INFO[folder_name]["frequencies"] = freq.tolist()
+    # Normalization Factor
+    s = (config['w'] + np.sqrt(2+config['w']**2))/(4*np.pi*freq)
+    C = np.pi**(-0.25)*np.exp(0.25*(config['w']-np.sqrt(config['w']**2+2))**2)/np.sqrt(2*s)
+    
+    for i in range(num_feat):
+        cwtm = cwt(data[:,i], morlet2, widths, dtype=None, w=config['w'])
+        # power[i] = np.abs(cwtm)**2
+        power[i,:,:] = (np.abs(cwtm/np.expand_dims(np.sqrt(s),1)))/np.expand_dims(C, axis=(0,2))
+    return power.T
 
 def cuml_umap(config, feature):
     num_fr = feature.shape[0]
