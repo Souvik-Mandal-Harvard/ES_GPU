@@ -101,9 +101,9 @@ limb_labels:
   - (L) Mid Leg
   - (L) Hind Leg
 
-include_all_postural: True
+include_all_postural: False
 include_all_kinematic: True
-include_all_features: True # include_all_postural + include_all_kinematic must be TRUE
+include_all_features: True
 
 # Morlet Wavelet Transformation
 w: 5

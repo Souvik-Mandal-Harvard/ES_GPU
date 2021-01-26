@@ -64,13 +64,13 @@ for key, file in tqdm(INFO_items):
 
     ### Postural Features ###
     # Marker Position
-    if config['include_marker_postural'] or config['include_all_postural']:
+    if config['include_marker_postural'] or config['include_all_postural'] or config['include_all_features']:
         # remove bad frames
         bp_markers = bp[:,config['markers'],:]
         tot_bp.append(bp_markers[good_fr,:])
 
     # Joint Angle
-    if config['include_angle_postural'] or config['include_all_postural']:
+    if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
         # compute angle
         num_angles = len(config['angles'])
         angles = np.zeros((num_fr, num_angles, 2))
@@ -83,7 +83,7 @@ for key, file in tqdm(INFO_items):
         tot_angle.append(angles[good_fr,:,:])
 
     # Limb Length
-    if config['include_limb_postural'] or config['include_all_postural']:
+    if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
@@ -91,13 +91,13 @@ for key, file in tqdm(INFO_items):
         tot_limb.append(limbs[good_fr,:])
 
 # Concat Data
-if config['include_marker_postural'] or config['include_all_postural']:
+if config['include_marker_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_bp = np.concatenate(tot_bp)
     print(f"tot_bp shape: {tot_bp.shape}")
-if config['include_angle_postural'] or config['include_all_postural']:
+if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_angle = np.concatenate(tot_angle)
     print(f"tot_angle shape: {tot_angle.shape}")
-if config['include_limb_postural'] or config['include_all_postural']:
+if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
     print(f"tot_limb shape: {tot_limb.shape}")
 
@@ -112,7 +112,7 @@ for key, file in tqdm(INFO_items):
 
     ### Kinematic Features ###
     # Marker Position
-    if config['include_marker_kinematic'] or config['include_all_kinematic']:
+    if config['include_marker_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
         bp_markers = bp[:,config['markers'],:]
         bp_markers[:,:,:-1] -= np.mean(tot_bp[:,:,:-1], axis=0)
 
@@ -125,7 +125,7 @@ for key, file in tqdm(INFO_items):
         tot_marker_pwr.append(marker_power[good_fr,:,:])
 
     # Joint Angle
-    if config['include_angle_kinematic'] or config['include_all_kinematic']:
+    if config['include_angle_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
         angles = angle_calc(bp[:,:,0:2], config['angles'])
         angles -= np.mean(tot_angle[:,:,0], axis=0)
 
@@ -135,7 +135,7 @@ for key, file in tqdm(INFO_items):
         tot_angle_pwr.append(angle_power[good_fr,:,:])
 
     # Limb Length
-    if config['include_limb_kinematic'] or config['include_all_kinematic']:
+    if config['include_limb_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
@@ -148,13 +148,13 @@ for key, file in tqdm(INFO_items):
         tot_limb_pwr.append(limb_power[good_fr,:,:])
 
 # Concat Data
-if config['include_marker_kinematic'] or config['include_all_kinematic']:
+if config['include_marker_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
     tot_marker_pwr = np.concatenate(tot_marker_pwr)
     print(f"tot_marker_pwr shape: {tot_marker_pwr.shape}")
-if config['include_angle_kinematic'] or config['include_all_kinematic']:
+if config['include_angle_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
     tot_angle_pwr = np.concatenate(tot_angle_pwr)
     print(f"tot_angle_pwr shape: {tot_angle_pwr.shape}")
-if config['include_limb_kinematic'] or config['include_all_kinematic']:
+if config['include_limb_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
     tot_limb_pwr = np.concatenate(tot_limb_pwr) 
     print(f"tot_limb_pwr shape: {tot_limb_pwr.shape}")  
 
