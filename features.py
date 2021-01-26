@@ -8,6 +8,12 @@ import collections
 import matplotlib
 import matplotlib.pyplot as plt
 
+from dask_cuda import LocalCUDACluster
+from dask.distributed import Client
+
+cluster = LocalCUDACluster(threads_per_worker=1)
+client = Client(cluster)
+
 # Import Helper Function
 from helper import angle_calc, cuml_umap, cuml_pca, morlet
 
