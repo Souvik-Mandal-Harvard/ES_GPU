@@ -42,7 +42,7 @@ def angle_calc(data, keys):
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
 
-def morlet(config, INFO, data):
+def morlet(config, data):
     # data - (frames, features)
     # Morlet Wavelet
     num_fr, num_feat = data.shape
@@ -51,7 +51,6 @@ def morlet(config, INFO, data):
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*
         (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1))
     widths = config['w']*config['fps'] / (2*freq*np.pi)
-    INFO[folder_name]["frequencies"] = freq.tolist()
     # Normalization Factor
     s = (config['w'] + np.sqrt(2+config['w']**2))/(4*np.pi*freq)
     C = np.pi**(-0.25)*np.exp(0.25*(config['w']-np.sqrt(config['w']**2+2))**2)/np.sqrt(2*s)
