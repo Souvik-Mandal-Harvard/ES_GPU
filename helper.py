@@ -4,6 +4,8 @@ import numpy as np
 from scipy.signal import morlet2, cwt
 
 # Import RAPIDS
+from dask_cuda import LocalCUDACluster
+from dask.distributed import Client
 import cudf, cuml
 from cuml.manifold import UMAP
 from cuml.dask.manifold import UMAP as MNMG_UMAP
@@ -67,6 +69,9 @@ def cuml_umap(config, feature):
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
+    cluster = LocalCUDACluster(threads_per_worker=1)
+    client = Client(cluster)
+
     df = cudf.DataFrame(feature)
     # cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
     #                 min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
