@@ -91,3 +91,14 @@ def cuml_pca(config, feature, components=10):
 
 
 
+def plot_skeleton_length(skel_len):
+    fig, ax = plt.subplots(figsize=(10,5))
+    plt.hist(skel_len.flatten(),200, color='k')
+    # plt.xlim([0,50])
+    plt.xlabel("Length (pixel)")
+    plt.ylabel("Count")
+    plt.title("Skeleton Component Length")
+    plt.show()
+
+
+

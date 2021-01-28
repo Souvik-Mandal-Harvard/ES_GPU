@@ -8,8 +8,31 @@ result_path: "results/round2"
 x_bound_std: 2.5
 y_bound_std: 2.5
 velocity_thresh: 40  # pixel/frame; a little over half the body length
-max_limb_length: 20
+max_limb_length: 40
 # TODO set threshold based on every video
+
+### Skeleton ###
+skeleton: [
+    [0,1],[1,2],[2,3],
+    [4,5],[5,6],[6,7],
+    [8,9],[9,10],
+    [11,12],[12,13],
+    [14,15],[15,16],
+    [17,18],[18,19],[19,20],
+    [21,22],[22,23],
+    [24,25],[25,26],
+    [27,28],[28,29]
+]
+skeleton_color: [
+    'tab:blue','tab:blue','tab:blue',
+    'tab:orange','tab:orange','tab:orange',
+    'tab:green','tab:green',
+    'tab:red','tab:red',
+    'tab:purple','tab:purple',
+    'tab:brown','tab:brown','tab:brown',
+    'tab:pink','tab:pink',
+    'tab:gray','tab:gray',
+    'tab:olive','tab:olive']
 
 likelihood_thresh: 0.98
 marker_thresh: 1
