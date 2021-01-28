@@ -58,6 +58,7 @@ for key, file in tqdm(INFO_items):
         disregard_fr = np.array([])
         good_fr = np.arange(num_fr)
 
+    # TODO: modify proportion of good fr
     file['good_fr'] = good_fr.tolist()
     file['bad_fr'] = bad_fr.tolist()
     file['disregard_fr'] = disregard_fr.tolist()
@@ -193,20 +194,6 @@ if config['include_all_postural']:
     num_fr, num_bp, num_bp_dim = tot_bp.shape
     tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
     
-    # PCA Embedding
-    # bp_pca, exp_var = cuml_pca(config, tot_bp_mod, components=10) # 21
-    # print(exp_var)
-    # print(np.sum(exp_var))
-    # print(f"::: All Postural Features (BP PCA) ::: Time Stamp: {time.time()-start_timer}")
-    # bp_angle, exp_var = cuml_pca(config, tot_angle[:,:,0], components=6) # 12
-    # print(exp_var)
-    # print(np.sum(exp_var))
-    # print(f"::: All Postural Features (Angle PCA) ::: Time Stamp: {time.time()-start_timer}")
-    # bp_limb, exp_var = cuml_pca(config, tot_limb, components=6) # 13
-    # print(exp_var)
-    # print(np.sum(exp_var))
-    # print(f"::: All Postural Features (Limb PCA) ::: Time Stamp: {time.time()-start_timer}")
-    
     # UMAP Embedding
     # feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
     postural_features = np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1)
@@ -220,10 +207,12 @@ start_timer = time.time()
 if config['include_marker_kinematic']:
     print(f"::: Marker (Kinematic) ::: START")
     num_fr, num_freq, num_feat = tot_marker_pwr.shape
-    marker_kinematic_embed = cuml_umap(
-        config, 
-        tot_marker_pwr.reshape(num_fr, num_freq*num_feat)
-    )
+
+    # PCA Embedding
+    pca, _ = cuml_pca(config, 
+        tot_marker_pwr.reshape(num_fr, num_freq*num_feat), 
+        components=config['angle_kinematic_pca_components'])
+    marker_kinematic_embed = cuml_umap(config, pca)
     plot_embedding(marker_kinematic_embed, title="Marker Kinematic", fname="marker_kinematic_embedding")
     print(f"::: Marker (Kinematic) ::: Computation Time: {time.time()-start_timer}")
 

@@ -4,11 +4,7 @@ import numpy as np
 from scipy.signal import morlet2, cwt
 
 # Import RAPIDS
-from dask_cuda import LocalCUDACluster
-from dask.distributed import Client
 import cudf, cuml
-from cuml.manifold import UMAP
-from cuml.dask.manifold import UMAP as MNMG_UMAP
 
 def _rotational(data, axis_bp):
     # rotate axis to be vertical; only works with 2 dimensions as of right now
@@ -69,20 +65,10 @@ def cuml_umap(config, feature):
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
-    cluster = LocalCUDACluster(threads_per_worker=1)
-    client = Client(cluster)
-
     df = cudf.DataFrame(feature)
-    # cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
-    #                 min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
-    #                 init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
-
-    local_model = UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
+    cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                     min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
-                    init=config['init'], repulsion_strength=config['repulsion_strength'])
-    local_model.fit(df)
-    distributed_model = MNMG_UMAP(local_model)
-    embed = distributed_model.transform(df)
+                    init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
     embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
     return embed
 
@@ -97,4 +83,11 @@ def cuml_pca(config, feature, components=10):
     exp_var = pca.explained_variance_ratio_.to_pandas().to_numpy()
     embed[:,0:components] = cu_embed.to_pandas().to_numpy()
     
+    print("*** PCA ***")
+    print(exp_var)
+    print(f"Sum of Explained Variance: {np.sum(exp_var)}")
+
     return embed, exp_var
+
+
+

@@ -55,6 +55,8 @@ angles:
   - {"a": 21, "b": 1, "c": 2}
   - {"a": 24, "b": 1, "c": 2}
   - {"a": 27, "b": 2, "c": 1}
+angle_kinematic_pca_components: 200
+
 angle_labels:
   - Head
   - Abdomen
@@ -102,8 +104,8 @@ limb_labels:
   - (L) Hind Leg
 
 include_all_postural: False
-include_all_kinematic: True
-include_all_features: True
+include_all_kinematic: False
+include_all_features: False
 
 # Morlet Wavelet Transformation
 w: 5
