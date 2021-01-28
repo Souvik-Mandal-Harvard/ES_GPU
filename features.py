@@ -247,9 +247,13 @@ if config['include_all_kinematic']:
     num_fr, num_freq, num_marker_feat = tot_marker_pwr.shape
     num_fr, num_freq, num_angle_feat = tot_angle_pwr.shape
     num_fr, num_freq, num_limb_feat = tot_limb_pwr.shape
+
+    marker_pca, _ = cuml_pca(config, 
+        tot_marker_pwr.reshape(num_fr, num_freq*num_marker_feat), 
+        components=config['marker_kinematic_pca_components'])
     
     kinematic_features = np.concatenate([
-        tot_marker_pwr.reshape(num_fr, num_freq*num_marker_feat),
+        marker_pca,
         tot_angle_pwr.reshape(num_fr, num_freq*num_angle_feat),
         tot_limb_pwr.reshape(num_fr, num_freq*num_limb_feat)
     ], axis=1)
