@@ -115,8 +115,8 @@ for key, file in tqdm(INFO_items):
     # Marker Position
     if config['include_marker_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
         bp_markers = bp[:,config['markers'],:]
-        print(bp_markers[:,:,0:2].shape)
-        bp_markers[:,:,0:2] -= np.mean(bp_markers[:,:,0:2], axis=0)
+        print(tot_bp[:,:,0:2].shape)
+        bp_markers[:,:,0:2] -= np.mean(tot_bp[:,:,0:2], axis=0)
 
         num_fr, num_bp, num_bp_dim = bp_markers.shape
         tot_bp_mod = bp_markers[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
