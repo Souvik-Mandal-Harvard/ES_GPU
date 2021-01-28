@@ -8,7 +8,7 @@ result_path: "results/round2"
 x_bound_std: 2.5
 y_bound_std: 2.5
 velocity_thresh: 40  # pixel/frame; a little over half the body length
-max_limb_length: 1
+max_limb_length: 40
 # TODO set threshold based on every video
 
 ### Skeleton ###
@@ -154,10 +154,10 @@ num_sample_videos: 3
 max_video_length: 80
 
 # Save
-save_bodypoints: False
+save_bodypoints: True
 save_scaled_bodypoints: False
 save_body_orientation_angles: False
-save_rotated_bodypoints: False
+save_rotated_bodypoints: True
 save_angles: False
 save_powers: False
 save_embeddings: True
