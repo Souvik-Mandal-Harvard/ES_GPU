@@ -104,7 +104,7 @@ if config['include_limb_postural'] or config['include_all_postural'] or config['
 
 tot_marker_pwr, tot_angle_pwr, tot_limb_pwr = [], [], []
 
-### Use Postural Feature to Compute Kinematic Features
+### Kinematic Features
 for key, file in tqdm(INFO_items):
     save_path = file['directory']
     bp = np.load(f"{save_path}/rotated_bodypoints.npy")
@@ -187,7 +187,7 @@ if config['include_limb_postural']:
     print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
 
 # 4) Marker Position, Joint Angle, & Limb Length (TODO Later)
-if config['include_all_postural']:
+if config['include_all_postural'] or config['include_all_features']:
     start_timer = time.time()
     print(f"::: All Postural ::: START Timer")
     
@@ -207,12 +207,12 @@ start_timer = time.time()
 if config['include_marker_kinematic']:
     print(f"::: Marker (Kinematic) ::: START")
     num_fr, num_freq, num_feat = tot_marker_pwr.shape
-
     # PCA Embedding
-    pca, _ = cuml_pca(config, 
+    marker_kinematic_pca, _ = cuml_pca(config, 
         tot_marker_pwr.reshape(num_fr, num_freq*num_feat), 
         components=config['marker_kinematic_pca_components'])
-    marker_kinematic_embed = cuml_umap(config, pca)
+    # UMAP Embedding
+    marker_kinematic_embed = cuml_umap(config, marker_kinematic_pca)
     plot_embedding(marker_kinematic_embed, title="Marker Kinematic", fname="marker_kinematic_embedding")
     print(f"::: Marker (Kinematic) ::: Computation Time: {time.time()-start_timer}")
 
@@ -221,10 +221,12 @@ start_timer = time.time()
 if config['include_angle_kinematic']:
     print(f"::: Angle (Kinematic) ::: START")
     num_fr, num_freq, num_feat = tot_angle_pwr.shape
-    marker_angle_embed = cuml_umap(
-        config, 
-        tot_angle_pwr.reshape(num_fr, num_freq*num_feat)
-    )
+    # PCA Embedding
+    angle_kinematic_pca, _ = cuml_pca(config, 
+        tot_angle_pwr.reshape(num_fr, num_freq*num_feat), 
+        components=config['angle_kinematic_pca_components'])
+    # UMAP Embedding
+    marker_angle_embed = cuml_umap(config, angle_kinematic_pca)
     plot_embedding(marker_angle_embed, title="Angle Kinematic", fname="angle_kinematic_embedding")
     print(f"::: Angle (Kinematic) ::: Computation Time: {time.time()-start_timer}")
 
@@ -233,35 +235,41 @@ start_timer = time.time()
 if config['include_limb_kinematic']:
     print(f"::: Limb (Kinematic) ::: START")
     num_fr, num_freq, num_feat = tot_limb_pwr.shape
-    marker_limb_embed = cuml_umap(
-        config, 
-        tot_limb_pwr.reshape(num_fr, num_freq*num_feat)
-    )
+    # PCA Embedding
+    limb_kinematic_pca, _ = cuml_pca(config, 
+        tot_limb_pwr.reshape(num_fr, num_freq*num_feat), 
+        components=config['limb_kinematic_pca_components'])
+    # UMAP Embedding
+    marker_limb_embed = cuml_umap(config, limb_kinematic_pca)
     plot_embedding(marker_limb_embed, title="Limb Kinematic", fname="limb_kinematic_embedding")
     print(f"::: Limb (Kinematic) ::: Computation Time: {time.time()-start_timer}")
 
 # 8) All Kinematic Features
 start_timer = time.time()
-if config['include_all_kinematic']:
+if config['include_all_kinematic'] or config['include_all_features']:
     print(f"::: All Kinematic ::: START")
     num_fr, num_freq, num_marker_feat = tot_marker_pwr.shape
     num_fr, num_freq, num_angle_feat = tot_angle_pwr.shape
     num_fr, num_freq, num_limb_feat = tot_limb_pwr.shape
 
-    marker_pca, _ = cuml_pca(config, 
-        tot_marker_pwr.reshape(num_fr, num_freq*num_marker_feat), 
+    # PCA Embedding
+    marker_kinematic_pca, _ = cuml_pca(config, 
+        tot_marker_pwr.reshape(num_fr, num_freq*num_feat), 
         components=config['marker_kinematic_pca_components'])
+    angle_kinematic_pca, _ = cuml_pca(config, 
+        tot_angle_pwr.reshape(num_fr, num_freq*num_feat), 
+        components=config['angle_kinematic_pca_components'])
+    limb_kinematic_pca, _ = cuml_pca(config, 
+        tot_limb_pwr.reshape(num_fr, num_freq*num_feat), 
+        components=config['limb_kinematic_pca_components'])
     
     kinematic_features = np.concatenate([
         marker_pca,
-        tot_angle_pwr.reshape(num_fr, num_freq*num_angle_feat),
-        tot_limb_pwr.reshape(num_fr, num_freq*num_limb_feat)
+        angle_kinematic_pca,
+        limb_kinematic_pca
     ], axis=1)
-
-    all_kinematic_embed = cuml_umap(
-        config, 
-        kinematic_features
-    )
+    # UMAP Embedding
+    all_kinematic_embed = cuml_umap(config, kinematic_features)
     plot_embedding(all_kinematic_embed, title="All Kinematic", fname="all_kinematic_embedding")
     print(f"::: All Kinematic ::: Computation Time: {time.time()-start_timer}")
 

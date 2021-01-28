@@ -58,6 +58,7 @@ marker_labels: [head, thorax, abdomen,
 # Joint Angle
 include_angle_postural: False
 include_angle_kinematic: True
+angle_kinematic_pca_components: 90
 angles:
   # HEAD
   - {"a": 0, "b": 1, "c": 2}
@@ -98,6 +99,7 @@ angle_labels:
 # Limb Length
 include_limb_postural: False
 include_limb_kinematic: True
+limb_kinematic_pca_components: 90
 limbs:
   - [0,1]
   - [1,2]
@@ -127,8 +129,8 @@ limb_labels:
   - (L) Mid Leg
   - (L) Hind Leg
 
-include_all_postural: True
-include_all_kinematic: True
+include_all_postural: False
+include_all_kinematic: False
 include_all_features: True
 
 # Morlet Wavelet Transformation
