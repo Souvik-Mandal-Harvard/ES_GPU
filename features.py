@@ -115,7 +115,8 @@ for key, file in tqdm(INFO_items):
     # Marker Position
     if config['include_marker_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
         bp_markers = bp[:,config['markers'],:]
-        bp_markers[:,:,:-1] -= np.mean(tot_bp[:,:,:-1], axis=0)
+        print(bp_markers[:,:,0:2].shape)
+        bp_markers[:,:,0:2] -= np.mean(tot_bp[:,:,0:2], axis=0)
 
         num_fr, num_bp, num_bp_dim = bp_markers.shape
         tot_bp_mod = bp_markers[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
@@ -211,7 +212,7 @@ if config['include_marker_kinematic']:
     # PCA Embedding
     pca, _ = cuml_pca(config, 
         tot_marker_pwr.reshape(num_fr, num_freq*num_feat), 
-        components=config['angle_kinematic_pca_components'])
+        components=config['marker_kinematic_pca_components'])
     marker_kinematic_embed = cuml_umap(config, pca)
     plot_embedding(marker_kinematic_embed, title="Marker Kinematic", fname="marker_kinematic_embedding")
     print(f"::: Marker (Kinematic) ::: Computation Time: {time.time()-start_timer}")
