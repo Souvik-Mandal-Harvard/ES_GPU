@@ -49,26 +49,26 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     if config['save_bodypoints']:
         np.save(f"{save_path}/bodypoints.npy", DLC_data)
 
-    ### Reevaluate likelihood
-    # Check if BP exceeds a certain range
-    # x_bp, y_bp = DLC_data[:,:,0], DLC_data[:,:,1]
-    # x_mean, x_std = np.mean(x_bp), np.std(x_bp)
-    # y_mean, y_std = np.mean(y_bp), np.std(y_bp)
+    ## Reevaluate likelihood
+    Check if BP exceeds a certain range
+    x_bp, y_bp = DLC_data[:,:,0], DLC_data[:,:,1]
+    x_mean, x_std = np.mean(x_bp), np.std(x_bp)
+    y_mean, y_std = np.mean(y_bp), np.std(y_bp)
 
-    # x_bound = np.array([x_mean-config['x_bound_std']*x_std, x_mean+config['x_bound_std']*x_std])
-    # y_bound = np.array([y_mean-config['y_bound_std']*y_std, y_mean+config['y_bound_std']*y_std])
+    x_bound = np.array([x_mean-config['x_bound_std']*x_std, x_mean+config['x_bound_std']*x_std])
+    y_bound = np.array([y_mean-config['y_bound_std']*y_std, y_mean+config['y_bound_std']*y_std])
 
-    # x_condition = (DLC_data[:,:,0]>x_bound[1]) | (DLC_data[:,:,0]<x_bound[0])
-    # y_condition = (DLC_data[:,:,1]>y_bound[1]) | (DLC_data[:,:,1]<y_bound[0])
-    # (out_bound_fr, out_bound_marker) = np.where(x_condition | y_condition)
-    # DLC_data[out_bound_fr,out_bound_marker,2] = 0
+    x_condition = (DLC_data[:,:,0]>x_bound[1]) | (DLC_data[:,:,0]<x_bound[0])
+    y_condition = (DLC_data[:,:,1]>y_bound[1]) | (DLC_data[:,:,1]<y_bound[0])
+    (out_bound_fr, out_bound_marker) = np.where(x_condition | y_condition)
+    DLC_data[out_bound_fr,out_bound_marker,2] = 0
 
-    # # Check if the BP moves to quickly
-    # marker_change = np.diff(DLC_data[:,:,0:2], axis=0)**2
-    # marker_velocity = np.sqrt(np.sum(marker_change, axis=2))
-    # (above_velocity_fr, above_velocity_marker) = np.where(marker_velocity > config['velocity_thresh'])
-    # above_velocity_fr+=1
-    # DLC_data[above_velocity_fr, above_velocity_marker, 2] = 0
+    # Check if the BP moves to quickly
+    marker_change = np.diff(DLC_data[:,:,0:2], axis=0)**2
+    marker_velocity = np.sqrt(np.sum(marker_change, axis=2))
+    (above_velocity_fr, above_velocity_marker) = np.where(marker_velocity > config['velocity_thresh'])
+    above_velocity_fr+=1
+    DLC_data[above_velocity_fr, above_velocity_marker, 2] = 0
     
     # Check if skeleton component is too long
     for joint1_idx, joint2_idx in config['skeleton']:
