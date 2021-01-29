@@ -69,15 +69,16 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     # (above_velocity_fr, above_velocity_marker) = np.where(marker_velocity > config['velocity_thresh'])
     # above_velocity_fr+=1
     # DLC_data[above_velocity_fr, above_velocity_marker, 2] = 0
-    # # Check if skeleton component is too long
-    # for joint1_idx, joint2_idx in config['skeleton']:
-    #     joint1 = DLC_data[:,joint1_idx,:]
-    #     joint2 = DLC_data[:,joint2_idx,:]
-    #     skel_i = np.sqrt((joint1[:,0]-joint2[:,0])**2 + (joint1[:,1]-joint2[:,1])**2)
-    #     bad_skel_fr = np.where(skel_i>config['max_limb_length'])[0]
-    #     DLC_data[bad_skel_fr,joint1_idx,2] = 0
-    #     DLC_data[bad_skel_fr,joint2_idx,2] = 0
-    # # TODO: plot_skeleton_length(skel_len)
+    
+    # Check if skeleton component is too long
+    for joint1_idx, joint2_idx in config['skeleton']:
+        joint1 = DLC_data[:,joint1_idx,:]
+        joint2 = DLC_data[:,joint2_idx,:]
+        skel_i = np.sqrt((joint1[:,0]-joint2[:,0])**2 + (joint1[:,1]-joint2[:,1])**2)
+        bad_skel_fr = np.where(skel_i>config['max_limb_length'])[0]
+        DLC_data[bad_skel_fr,joint1_idx,2] = 0
+        DLC_data[bad_skel_fr,joint2_idx,2] = 0
+    # TODO: plot_skeleton_length(skel_len)
 
     ### Center
     DLC_data[:,:,0:2] -= DLC_data[:,config['bp_center'],0:2][:,np.newaxis,:]
