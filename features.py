@@ -264,7 +264,7 @@ if config['include_all_kinematic'] or config['include_all_features']:
         components=config['limb_kinematic_pca_components'])
     
     kinematic_features = np.concatenate([
-        marker_pca,
+        marker_kinematic_pca,
         angle_kinematic_pca,
         limb_kinematic_pca
     ], axis=1)
