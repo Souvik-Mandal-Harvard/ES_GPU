@@ -83,14 +83,14 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     DLC_data[:,:,0:2] -= DLC_data[:,config['bp_center'],0:2][:,np.newaxis,:]
     
     # ### Scale
-    # x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
-    # y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
-    # dist = np.sqrt(x_d**2+y_d**2)
-    # scale_factor = np.median(dist)
-    # DLC_data[:,:,0:2] /= scale_factor    
-    # INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
-    # if config['save_scaled_bodypoints']:
-    #     np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
+    x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
+    y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
+    dist = np.sqrt(x_d**2+y_d**2)
+    scale_factor = np.median(dist)
+    DLC_data[:,:,0:2] /= scale_factor    
+    INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
+    if config['save_scaled_bodypoints']:
+        np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
 
     ### Data Correction
     # TODO: make everything with below threshold likelihood as (0,0)
