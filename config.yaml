@@ -8,7 +8,7 @@ result_path: "results/round2"
 x_bound_std: 2.5
 y_bound_std: 2.5
 velocity_thresh: 40  # pixel/frame; a little over half the body length
-max_limb_length: 40
+max_limb_length: 10
 # TODO set threshold based on every video
 
 ### Skeleton ###
