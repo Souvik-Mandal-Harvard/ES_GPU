@@ -62,7 +62,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     # y_condition = (DLC_data[:,:,1]>y_bound[1]) | (DLC_data[:,:,1]<y_bound[0])
     # (out_bound_fr, out_bound_marker) = np.where(x_condition | y_condition)
     # DLC_data[out_bound_fr,out_bound_marker,2] = 0
-    
+
     # # Check if the BP moves to quickly
     # marker_change = np.diff(DLC_data[:,:,0:2], axis=0)**2
     # marker_velocity = np.sqrt(np.sum(marker_change, axis=2))
@@ -80,17 +80,17 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
     # # TODO: plot_skeleton_length(skel_len)
 
     ### Center
-    DLC_data[:,:,0:2] -= DLC_data[:,config['bp_center'],0:2][:,np.newaxis,:]
+    # DLC_data[:,:,0:2] -= DLC_data[:,config['bp_center'],0:2][:,np.newaxis,:]
     
-    ### Scale
-    x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
-    y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
-    dist = np.sqrt(x_d**2+y_d**2)
-    scale_factor = np.median(dist)
-    DLC_data[:,:,0:2] /= scale_factor    
-    INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
-    if config['save_scaled_bodypoints']:
-        np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
+    # ### Scale
+    # x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
+    # y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
+    # dist = np.sqrt(x_d**2+y_d**2)
+    # scale_factor = np.median(dist)
+    # DLC_data[:,:,0:2] /= scale_factor    
+    # INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
+    # if config['save_scaled_bodypoints']:
+    #     np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
 
     ### Data Correction
     # TODO: make everything with below threshold likelihood as (0,0)
@@ -98,7 +98,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
 
     ### Rotate
     DLC_data[:,:,0:2], body_orientation = _rotational(data=DLC_data[:,:,0:2], axis_bp=config['bp_rotate'])
-    DLC_data[:,:,2] = likelihood
+    #DLC_data[:,:,2] = likelihood ### PROBLEM IS HERE!!!!!!
 
     if config['save_body_orientation_angles']:
         np.save(f"{save_path}/body_orientation_angles.npy", body_orientation)
