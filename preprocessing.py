@@ -50,7 +50,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))
         np.save(f"{save_path}/bodypoints.npy", DLC_data)
 
     ## Reevaluate likelihood
-    Check if BP exceeds a certain range
+    # Check if BP exceeds a certain range
     x_bp, y_bp = DLC_data[:,:,0], DLC_data[:,:,1]
     x_mean, x_std = np.mean(x_bp), np.std(x_bp)
     y_mean, y_std = np.mean(y_bp), np.std(y_bp)
