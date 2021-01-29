@@ -57,7 +57,7 @@ for key, file in tqdm(INFO_items):
         bad_fr = np.array([])
         disregard_fr = np.array([])
         good_fr = np.arange(num_fr)
-
+    print(good_fr)
     # TODO: modify proportion of good fr
     file['good_fr'] = good_fr.tolist()
     file['bad_fr'] = bad_fr.tolist()
