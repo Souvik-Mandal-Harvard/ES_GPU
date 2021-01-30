@@ -1,8 +1,8 @@
 ### Experimental Settings ###
 fps: 50          # camera frame rate (units: frames/sec)
 camera_scale: 60 # pixel/cm
-input_data_path: "data/ant_field_round2_resnet101"
-result_path: "results/round2"
+input_data_path: "data/ant_field_round3"
+result_path: "results/round3"
 
 ### Bad Frames ###
 x_bound_std: 2.5
@@ -98,7 +98,7 @@ angle_labels:
 # Limb Length
 include_limb_postural: False
 include_limb_kinematic: False
-limb_kinematic_pca_components: 60
+limb_kinematic_pca_components: 40
 limbs:
   - [0,1]
   - [1,2]
