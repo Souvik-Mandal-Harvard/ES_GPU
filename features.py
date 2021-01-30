@@ -57,7 +57,7 @@ for key, file in tqdm(INFO_items):
         bad_fr = np.array([])
         disregard_fr = np.array([])
         good_fr = np.arange(num_fr)
-        
+
     # TODO: modify proportion of good fr
     file['good_fr'] = good_fr.tolist()
     file['bad_fr'] = bad_fr.tolist()
@@ -196,7 +196,8 @@ if config['include_all_postural'] or config['include_all_features']:
     
     # UMAP Embedding
     # feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
-    postural_features = np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1)
+    # postural_features = np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1)
+    postural_features = np.concatenate([tot_angle[:,:,0], tot_limb], axis=1)
     all_postural_embed = cuml_umap(config, postural_features)
     plot_embedding(all_postural_embed, title="All Postural", fname="all_postural_embedding")
     print(f"::: All Postural Features ::: Time Stamp: {time.time()-start_timer}")
@@ -226,8 +227,8 @@ if config['include_angle_kinematic']:
         tot_angle_pwr.reshape(num_fr, num_freq*num_feat),
         components=config['angle_kinematic_pca_components'])
     # UMAP Embedding
-    marker_angle_embed = cuml_umap(config, angle_kinematic_pca)
-    plot_embedding(marker_angle_embed, title="Angle Kinematic", fname="angle_kinematic_embedding")
+    angle_kinematic_embed = cuml_umap(config, angle_kinematic_pca)
+    plot_embedding(angle_kinematic_embed, title="Angle Kinematic", fname="angle_kinematic_embedding")
     print(f"::: Angle (Kinematic) ::: Computation Time: {time.time()-start_timer}")
 
 # 7) Limb Length Morlet
@@ -240,8 +241,8 @@ if config['include_limb_kinematic']:
         tot_limb_pwr.reshape(num_fr, num_freq*num_feat), 
         components=config['limb_kinematic_pca_components'])
     # UMAP Embedding
-    marker_limb_embed = cuml_umap(config, limb_kinematic_pca)
-    plot_embedding(marker_limb_embed, title="Limb Kinematic", fname="limb_kinematic_embedding")
+    limb_kinematic_embed = cuml_umap(config, limb_kinematic_pca)
+    plot_embedding(limb_kinematic_embed, title="Limb Kinematic", fname="limb_kinematic_embedding")
     print(f"::: Limb (Kinematic) ::: Computation Time: {time.time()-start_timer}")
 
 # 8) All Kinematic Features
@@ -253,9 +254,9 @@ if config['include_all_kinematic'] or config['include_all_features']:
     num_fr, num_freq, num_limb_feat = tot_limb_pwr.shape
 
     # PCA Embedding
-    marker_kinematic_pca, _ = cuml_pca(config, 
-        tot_marker_pwr.reshape(num_fr, num_freq*num_marker_feat), 
-        components=config['marker_kinematic_pca_components'])
+    # marker_kinematic_pca, _ = cuml_pca(config, 
+    #     tot_marker_pwr.reshape(num_fr, num_freq*num_marker_feat), 
+    #     components=config['marker_kinematic_pca_components'])
     angle_kinematic_pca, _ = cuml_pca(config, 
         tot_angle_pwr.reshape(num_fr, num_freq*num_angle_feat), 
         components=config['angle_kinematic_pca_components'])
@@ -264,7 +265,7 @@ if config['include_all_kinematic'] or config['include_all_features']:
         components=config['limb_kinematic_pca_components'])
     
     kinematic_features = np.concatenate([
-        marker_kinematic_pca,
+        # marker_kinematic_pca,
         angle_kinematic_pca,
         limb_kinematic_pca
     ], axis=1)
@@ -334,14 +335,14 @@ if config['save_embeddings']:
         if config['include_angle_kinematic']:
             embed = np.empty((num_fr, config['n_components']))
             embed[:] = np.nan
-            embed[good_fr,:] = marker_angle_embed[start_fr:start_fr+num_good_fr]
-            np.save(f"{file['directory']}/marker_angle_embeddings.npy", embed)
+            embed[good_fr,:] = angle_kinematic_embed[start_fr:start_fr+num_good_fr]
+            np.save(f"{file['directory']}/angle_kinematic_embeddings.npy", embed)
 
         if config['include_limb_kinematic']:
             embed = np.empty((num_fr, config['n_components']))
             embed[:] = np.nan
-            embed[good_fr,:] = marker_limb_embed[start_fr:start_fr+num_good_fr]
-            np.save(f"{file['directory']}/marker_limb_embeddings.npy", embed)
+            embed[good_fr,:] = limb_kinematic_embed[start_fr:start_fr+num_good_fr]
+            np.save(f"{file['directory']}/limb_kinematic_embeddings.npy", embed)
 
         if config['include_all_kinematic']:
             embed = np.empty((num_fr, config['n_components']))
