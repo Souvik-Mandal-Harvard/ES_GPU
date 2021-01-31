@@ -89,6 +89,8 @@ for key, file in tqdm(INFO_items):
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
             limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+        if config['save_limbs']:
+            np.save(f"{save_path}/limbs.npy", limbs)
         tot_limb.append(limbs[good_fr,:])
 
 # Concat Data
@@ -122,7 +124,7 @@ for key, file in tqdm(INFO_items):
 
         marker_power = morlet(config, tot_bp_mod)
         if config['save_powers']:
-            np.save(f"{dir_path}/marker_power.npy", marker_power)
+            np.save(f"{save_path}/marker_power.npy", marker_power)
         tot_marker_pwr.append(marker_power[good_fr,:,:])
 
     # Joint Angle
@@ -132,7 +134,7 @@ for key, file in tqdm(INFO_items):
 
         angle_power = morlet(config, angles)
         if config['save_powers']:
-            np.save(f"{dir_path}/angle_power.npy", angle_power)
+            np.save(f"{save_path}/angle_power.npy", angle_power)
         tot_angle_pwr.append(angle_power[good_fr,:,:])
 
     # Limb Length
@@ -145,7 +147,7 @@ for key, file in tqdm(INFO_items):
         limbs -= np.mean(tot_limb, axis=0)
         limb_power = morlet(config, limbs)
         if config['save_powers']:
-            np.save(f"{dir_path}/limb_power.npy", limb_power)
+            np.save(f"{save_path}/limb_power.npy", limb_power)
         tot_limb_pwr.append(limb_power[good_fr,:,:])
 
 # Concat Data

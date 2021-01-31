@@ -159,6 +159,7 @@ save_scaled_bodypoints: False
 save_body_orientation_angles: False
 save_rotated_bodypoints: True
 save_angles: True
+save_limbs: True
 save_powers: True
 save_embeddings: True
 save_clusters: False
