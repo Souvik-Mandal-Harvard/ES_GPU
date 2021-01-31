@@ -138,7 +138,7 @@ f_bin: 10       # number of frequency bin
 
 # UMAP
 n_components: 2
-n_neighbors: 50
+n_neighbors: 70
 n_epochs: 5000 
 min_dist: 0.1
 spread: 1.0 # 3.0
@@ -159,6 +159,6 @@ save_scaled_bodypoints: False
 save_body_orientation_angles: False
 save_rotated_bodypoints: True
 save_angles: True
-save_powers: False
+save_powers: True
 save_embeddings: True
 save_clusters: False
