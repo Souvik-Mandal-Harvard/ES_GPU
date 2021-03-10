@@ -21,7 +21,7 @@ with open("config.yaml") as f:
 INFO = {}
 start_fr = 0
 
-for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/*.h5"))):
+for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     ### Setup Folders
     folder_name = os.path.basename(path).split("DLC")[0]
     save_path = f"{config['result_path']}/{folder_name}"
