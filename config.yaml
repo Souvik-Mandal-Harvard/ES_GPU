@@ -8,7 +8,7 @@ result_path: "results/round3"
 x_bound_std: 2.5
 y_bound_std: 2.5
 velocity_thresh: 40  # pixel/frame; a little over half the body length
-max_limb_length: 35  # 25
+# max_limb_length: 35  # 25
 # TODO set threshold based on every video
 
 ### Skeleton ###
@@ -127,6 +127,20 @@ limb_labels:
   - (L) Front Leg
   - (L) Mid Leg
   - (L) Hind Leg
+limb_threshold:
+  - 15
+  - 25
+  - 25
+  - 15
+  - 15
+  - 25
+  - 25
+  - 25
+  - 15
+  - 15
+  - 25
+  - 25
+  - 25
 
 include_all_postural: True
 include_all_kinematic: True
