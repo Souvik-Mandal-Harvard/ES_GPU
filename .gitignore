@@ -2,9 +2,7 @@ data
 results
 videos
 __pycache__
-.ipynb_checkpoints
-cache
 env
-memory
-*.ipynb
 figures
+notebook/figures
+.ipynb_checkpoints
