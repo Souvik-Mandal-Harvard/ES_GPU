@@ -48,9 +48,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     num_fr,_,_ = DLC_data.shape
     if config['save_bodypoints']:
         np.save(f"{save_path}/bodypoints.npy", DLC_data)
-
-    print("***1")
-    print(len(np.where(DLC_data[:,:,2]<0.95)[0]))
+        
     ## Reevaluate likelihood
     # Check if BP exceeds a certain range
     x_bp, y_bp = DLC_data[:,:,0], DLC_data[:,:,1]
@@ -64,38 +62,28 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     y_condition = (DLC_data[:,:,1]>y_bound[1]) | (DLC_data[:,:,1]<y_bound[0])
     (out_bound_fr, out_bound_marker) = np.where(x_condition | y_condition)
     DLC_data[out_bound_fr,out_bound_marker,2] = 0
-    print("***2")
-    print(len(np.where(DLC_data[:,:,2]<0.95)[0]))
 
     # Check if the BP moves to quickly
-    marker_change = np.diff(DLC_data[:,:,0:2], axis=0)**2
-    marker_velocity = np.sqrt(np.sum(marker_change, axis=2))
-    (above_velocity_fr, above_velocity_marker) = np.where(marker_velocity > config['velocity_thresh'])
-    above_velocity_fr+=1
-    DLC_data[above_velocity_fr, above_velocity_marker, 2] = 0
-    
-    print("***3")
-    print(len(np.where(DLC_data[:,:,2]<0.95)[0]))
+    # marker_change = np.diff(DLC_data[:,:,0:2], axis=0)**2
+    # marker_velocity = np.sqrt(np.sum(marker_change, axis=2))
+    # (above_velocity_fr, above_velocity_marker) = np.where(marker_velocity > config['velocity_thresh'])
+    # above_velocity_fr+=1
+    # DLC_data[above_velocity_fr, above_velocity_marker, 2] = 0
 
     # Check if skeleton component is too long
-    for limb_i, (joint1_idx, joint2_idx) in enumerate(config['skeleton']):
-        joint1 = DLC_data[:,joint1_idx,:]
-        joint2 = DLC_data[:,joint2_idx,:]
-        skel_i = np.sqrt((joint1[:,0]-joint2[:,0])**2 + (joint1[:,1]-joint2[:,1])**2)
-        bad_skel_fr = np.where(skel_i>config['limb_threshold'][limb_i])[0]
-        DLC_data[bad_skel_fr,joint1_idx,2] = 0
-        DLC_data[bad_skel_fr,joint2_idx,2] = 0
+    # for limb_i, (joint1_idx, joint2_idx) in enumerate(config['skeleton']):
+    #     joint1 = DLC_data[:,joint1_idx,:]
+    #     joint2 = DLC_data[:,joint2_idx,:]
+    #     skel_i = np.sqrt((joint1[:,0]-joint2[:,0])**2 + (joint1[:,1]-joint2[:,1])**2)
+    #     bad_skel_fr = np.where(skel_i>config['limb_threshold'][limb_i])[0]
+    #     DLC_data[bad_skel_fr,joint1_idx,2] = 0
+    #     DLC_data[bad_skel_fr,joint2_idx,2] = 0
     # TODO: plot_skeleton_length(skel_len)
-
-    print("***4")
-    print(len(np.where(DLC_data[:,:,2]<0.95)[0]))
 
     ### Center
     DLC_data[:,:,0:2] -= DLC_data[:,config['bp_center'],0:2][:,np.newaxis,:]
     
-    print("***5")
-    print(len(np.where(DLC_data[:,:,2]<0.95)[0]))
-    # ### Scale
+    ### Scale
     x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
     y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
     dist = np.sqrt(x_d**2+y_d**2)
@@ -105,8 +93,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     if config['save_scaled_bodypoints']:
         np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
 
-    print("***6")
-    print(len(np.where(DLC_data[:,:,2]<0.95)[0]))
     ### Data Correction
     # TODO: make everything with below threshold likelihood as (0,0)
     # TODO: do low pass filter
@@ -114,8 +100,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     ### Rotate
     DLC_data[:,:,0:2], body_orientation = _rotational(data=DLC_data[:,:,0:2], axis_bp=config['bp_rotate'])
     #DLC_data[:,:,2] = likelihood ### PROBLEM IS HERE!!!!!!
-    print("***7")
-    print(len(np.where(DLC_data[:,:,2]<0.95)[0]))
 
     if config['save_body_orientation_angles']:
         np.save(f"{save_path}/body_orientation_angles.npy", body_orientation)
