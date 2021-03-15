@@ -1,0 +1,44 @@
+# MOUSE
+# Experimental Settings
+fps: 30        # camera frame rate (units: frames/sec)
+input_data_path: "data/mouse_data"
+result_path: "results/mouse"
+
+# Signals
+bp_center: 3
+bp_scale: [1, 2]
+bp_rotate: 8
+angles:
+  - {"a": 1, "b": 0, "c": 2}     # snout angle
+  - {"a": 3, "b": 8, "c": 11}    # tail angle
+  - {"a": 0, "b": 3, "c": 8}     # head anlge
+# Morlet Wavelet Transformation
+w: 5
+f_bin: 20       # number of frequency bin
+
+# UMAP
+n_neighbors: 50
+n_epochs: 15000
+min_dist: 0.1
+negative_sample_rate: 5
+init: "spectral"
+repulsion_strength: 2
+
+# Clustering (HDBSCAN, GMM)
+method: GMM
+n_components: 12
+max_iter: 500
+BIC_n_components: 20
+
+# Figures
+figure_scaled_bp: True
+
+# Save
+save_file_refs: True
+save_bad_frames_ref: True
+save_bp_scales: True
+save_trans_bodypoints: True
+save_angles: True
+save_powers: True
+save_freqs: True
+save_embeddings: True

@@ -1,8 +1,8 @@
 ### Experimental Settings ###
 fps: 50          # camera frame rate (units: frames/sec)
 camera_scale: 60 # pixel/cm
-input_data_path: "data/ant_field_round3"
-result_path: "results/round3"
+input_data_path: "data/ant_field_final"
+result_path: "results/final"
 
 ### Bad Frames ###
 x_bound_std: 2.5
@@ -152,7 +152,7 @@ f_bin: 10       # number of frequency bin
 
 # UMAP
 n_components: 2
-n_neighbors: 70
+n_neighbors: 50
 n_epochs: 5000 
 min_dist: 0.1
 spread: 1.0 # 3.0
