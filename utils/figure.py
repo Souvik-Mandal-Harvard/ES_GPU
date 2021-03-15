@@ -15,3 +15,12 @@ def ant_model(bp, skeleton=None, skeleton_color=None, fr=0):
             ax.plot(bp[fr,skeleton_i,0], bp[fr,skeleton_i,1], alpha=0.7, c=color_i, linewidth=2)
     plt.show()
     return
+
+def plot_skeleton_length(skel_len):
+    fig, ax = plt.subplots(figsize=(10,5))
+    plt.hist(skel_len.flatten(),200, color='k')
+    # plt.xlim([0,50])
+    plt.xlabel("Length (pixel)")
+    plt.ylabel("Count")
+    plt.title("Skeleton Component Length")
+    plt.show()

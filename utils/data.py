@@ -7,7 +7,7 @@ class Dataset:
         self.project_path = project_path
         self.project_name = project_name
 
-        self.data_name = ['rotated_bodypoints', 'angles', 'limbs', 'angle_power', 'limb_power', 
+        self.data_name = ['bodypoints','rotated_bodypoints', 'angles', 'limbs', 'angle_power', 'limb_power', 
         'all_embeddings', 'all_postural_embeddings', 'maker_postural_embeddings', 'angle_postural_embeddings', 'limb_postural_embeddings',
         'all_kinematic_embeddings', 'marker_kinematic_embeddings', 'marker_limb_embeddings', 'maker_angle_embeddings']
         self.data_obj = {}

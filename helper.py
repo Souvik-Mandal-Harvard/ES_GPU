@@ -3,9 +3,6 @@ import numpy as np
 # Import Signal Processor
 from scipy.signal import morlet2, cwt
 
-# Import RAPIDS
-import cudf, cuml
-
 def _rotational(data, axis_bp):
     # rotate axis to be vertical; only works with 2 dimensions as of right now
     # data format: num_fr, num_bp, num_dim
@@ -37,7 +34,8 @@ def angle_calc(data, keys):
         
         ba = a - b
         bc = c - b
-        
+        test = np.where((np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))==0)[0]
+        print(len(test))
         cosine_angle = np.sum(ba*bc,axis=-1)/ (np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
@@ -62,6 +60,9 @@ def morlet(config, data):
     return power.T
 
 def cuml_umap(config, feature):
+    # Import RAPIDS
+    import cudf, cuml
+
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
@@ -73,6 +74,9 @@ def cuml_umap(config, feature):
     return embed
 
 def cuml_pca(config, feature, components=10):
+    # Import RAPIDS
+    import cudf, cuml
+
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, components))
     # embed = np.zeros((num_fr, config['n_components']+1))
@@ -88,17 +92,6 @@ def cuml_pca(config, feature, components=10):
     print(f"Sum of Explained Variance: {np.sum(exp_var)}")
 
     return embed, exp_var
-
-
-
-def plot_skeleton_length(skel_len):
-    fig, ax = plt.subplots(figsize=(10,5))
-    plt.hist(skel_len.flatten(),200, color='k')
-    # plt.xlim([0,50])
-    plt.xlabel("Length (pixel)")
-    plt.ylabel("Count")
-    plt.title("Skeleton Component Length")
-    plt.show()
 
 
 
