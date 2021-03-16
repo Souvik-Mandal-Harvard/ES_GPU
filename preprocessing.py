@@ -48,20 +48,24 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     num_fr,_,_ = DLC_data.shape
     if config['save_bodypoints']:
         np.save(f"{save_path}/bodypoints.npy", DLC_data)
-        
+
+
+    ### check for nan and inf
+
+
     ## Reevaluate likelihood
     # Check if BP exceeds a certain range
-    x_bp, y_bp = DLC_data[:,:,0], DLC_data[:,:,1]
-    x_mean, x_std = np.mean(x_bp), np.std(x_bp)
-    y_mean, y_std = np.mean(y_bp), np.std(y_bp)
+    # x_bp, y_bp = DLC_data[:,:,0], DLC_data[:,:,1]
+    # x_mean, x_std = np.mean(x_bp), np.std(x_bp)
+    # y_mean, y_std = np.mean(y_bp), np.std(y_bp)
 
-    x_bound = np.array([x_mean-config['x_bound_std']*x_std, x_mean+config['x_bound_std']*x_std])
-    y_bound = np.array([y_mean-config['y_bound_std']*y_std, y_mean+config['y_bound_std']*y_std])
+    # x_bound = np.array([x_mean-config['x_bound_std']*x_std, x_mean+config['x_bound_std']*x_std])
+    # y_bound = np.array([y_mean-config['y_bound_std']*y_std, y_mean+config['y_bound_std']*y_std])
 
-    x_condition = (DLC_data[:,:,0]>x_bound[1]) | (DLC_data[:,:,0]<x_bound[0])
-    y_condition = (DLC_data[:,:,1]>y_bound[1]) | (DLC_data[:,:,1]<y_bound[0])
-    (out_bound_fr, out_bound_marker) = np.where(x_condition | y_condition)
-    DLC_data[out_bound_fr,out_bound_marker,2] = 0
+    # x_condition = (DLC_data[:,:,0]>x_bound[1]) | (DLC_data[:,:,0]<x_bound[0])
+    # y_condition = (DLC_data[:,:,1]>y_bound[1]) | (DLC_data[:,:,1]<y_bound[0])
+    # (out_bound_fr, out_bound_marker) = np.where(x_condition | y_condition)
+    # DLC_data[out_bound_fr,out_bound_marker,2] = 0
 
     # Check if the BP moves to quickly
     # marker_change = np.diff(DLC_data[:,:,0:2], axis=0)**2
@@ -81,14 +85,26 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     # TODO: plot_skeleton_length(skel_len)
 
     ### Center
-    DLC_data[:,:,0:2] -= DLC_data[:,config['bp_center'],0:2][:,np.newaxis,:]
+    good_fr, good_ax = np.where(~np.isnan(DLC_data[:,config['bp_center'],0:2]))
+    good_unique_fr = np.unique(good_fr)
+    DLC_data[good_unique_fr,:,0:2] -= DLC_data[good_unique_fr,config['bp_center'],0:2][:,np.newaxis,:]
     
     ### Scale
+    # find bad fr that contains nan
+    bp_axis = DLC_data[:,config['bp_scale'],0:2]
+    bad_fr, bad_bp, bad_ax = np.where(np.isnan(bp_axis))
+    unique_bad_fr = np.unique(bad_fr)
+    # find the unique good fr
+    good_idx = np.array([True]*num_fr)
+    good_idx[unique_bad_fr] = False
+    good_bp_axis = bp_axis[good_idx,:,:]
+    # find the median of these unique good fr
     x_d = DLC_data[:,config['bp_scale'][0],0] - DLC_data[:,config['bp_scale'][1],0]
     y_d = DLC_data[:,config['bp_scale'][0],1] - DLC_data[:,config['bp_scale'][1],1]
     dist = np.sqrt(x_d**2+y_d**2)
     scale_factor = np.median(dist)
-    DLC_data[:,:,0:2] /= scale_factor    
+    DLC_data[:,:,0:2] /= scale_factor
+
     INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
     if config['save_scaled_bodypoints']:
         np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
