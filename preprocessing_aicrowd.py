@@ -23,8 +23,8 @@ start_fr = 0
 count=0
 count2=0
 for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoint.npy"))):
-    sequence_id = path.split("/")[-2]
-    save_path = f"{config['result_path']}/{sequence_id}"
+    folder_name = path.split("/")[-2]
+    save_path = f"{config['result_path']}/{folder_name}"
     if not os.path.exists(save_path):
         os.makedirs(save_path)
         
