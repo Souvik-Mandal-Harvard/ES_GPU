@@ -20,8 +20,6 @@ with open("config_aicrowd.yaml") as f:
 # Initialize
 INFO = {}
 start_fr = 0
-count=0
-count2=0
 for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoint.npy"))):
     folder_name = path.split("/")[-2]
     save_path = f"{config['result_path']}/{folder_name}"
@@ -60,10 +58,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoin
     scale_factor = np.median(dist)
     DLC_data[:,:,0:2] /= scale_factor
 
-    nan_fr,_,_ = np.where(np.isnan(DLC_data))
-    count += np.unique(nan_fr).shape[0]
-
-
     INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
     if config['save_scaled_bodypoints']:
         np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
@@ -75,8 +69,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoin
     ### Rotate
     DLC_data[:,:,0:2], body_orientation = _rotational(data=DLC_data[:,:,0:2], axis_bp=config['bp_rotate'])
     #DLC_data[:,:,2] = likelihood ### PROBLEM IS HERE!!!!!!
-    nan_fr,_,_ = np.where(np.isnan(DLC_data))
-    count2 += np.unique(nan_fr).shape[0]
     if config['save_body_orientation_angles']:
         np.save(f"{save_path}/body_orientation_angles.npy", body_orientation)
     if config['save_rotated_bodypoints']:
@@ -87,8 +79,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoin
     INFO[folder_name]['global_start_fr'] = start_fr
     INFO[folder_name]['global_stop_fr'] = start_fr+num_fr
     start_fr += num_fr
-print(count)
-print(count2)
 print(f"::: Data Preprocessing ::: Computation Time: {time.time()-start_timer}")
 
 with open(f"{config['result_path']}/INFO.yaml", 'w') as file:

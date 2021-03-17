@@ -35,7 +35,6 @@ def angle_calc(data, keys):
         ba = a - b
         bc = c - b
         test = np.where((np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))==0)[0]
-        print(len(test))
         cosine_angle = np.sum(ba*bc,axis=-1)/ (np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
