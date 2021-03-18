@@ -61,14 +61,26 @@ def morlet(config, data):
 def cuml_umap(config, feature):
     # Import RAPIDS
     import cudf, cuml
+    # Initialize UCX for high-speed transport of CUDA arrays
+    from dask_cuda import LocalCUDACluster
+    from dask.distributed import Client
 
+
+    # Create a Dask single-node CUDA cluster w/ one worker per device
+    cluster = LocalCUDACluster(protocol="ucx",
+                               enable_tcp_over_ucx=True,
+                               enable_nvlink=True,
+                               enable_infiniband=False)
+    client = Client(cluster)
+
+    
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
     df = cudf.DataFrame(feature)
     cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                     min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
-                    init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
+                    init=config['init'], repulsion_strength=config['repulsion_strength'], client=client).fit_transform(df)
     embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
     return embed
 
