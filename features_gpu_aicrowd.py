@@ -272,7 +272,7 @@ if config['include_all_kinematic'] or config['include_all_features']:
         limb_kinematic_pca
     ], axis=1)
 
-    
+    print(kinematic_features.shape)
     # UMAP Embedding
     all_kinematic_embed = cuml_umap(config, kinematic_features)
     plot_embedding(all_kinematic_embed, title="All Kinematic", fname="all_kinematic_embedding")
