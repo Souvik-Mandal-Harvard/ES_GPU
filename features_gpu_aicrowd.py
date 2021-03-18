@@ -261,10 +261,10 @@ if config['include_all_kinematic'] or config['include_all_features']:
     #     components=config['marker_kinematic_pca_components'])
     angle_kinematic_pca, _ = cuml_pca(config, 
         tot_angle_pwr.reshape(num_fr, num_freq*num_angle_feat), 
-        components=config['angle_kinematic_pca_components'])
+        n_components=config['angle_kinematic_pca_components'])
     limb_kinematic_pca, _ = cuml_pca(config, 
         tot_limb_pwr.reshape(num_fr, num_freq*num_limb_feat), 
-        components=config['limb_kinematic_pca_components'])
+        n_components=config['limb_kinematic_pca_components'])
     
     kinematic_features = np.concatenate([
         # marker_kinematic_pca,
@@ -272,7 +272,7 @@ if config['include_all_kinematic'] or config['include_all_features']:
         limb_kinematic_pca
     ], axis=1)
 
-    
+
     # UMAP Embedding
     all_kinematic_embed = cuml_umap(config, kinematic_features)
     plot_embedding(all_kinematic_embed, title="All Kinematic", fname="all_kinematic_embedding")
