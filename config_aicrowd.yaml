@@ -102,7 +102,7 @@ f_bin: 10       # number of frequency bin
 
 # UMAP
 n_components: 2
-n_neighbors: 50
+n_neighbors: 30
 n_epochs: 5000 
 min_dist: 0.1
 spread: 1.0 # 3.0
