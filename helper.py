@@ -63,11 +63,12 @@ def cuml_umap(config, feature):
     import cudf, cuml
     print("INSIDE CUML_UMAP")
     print(feature.shape)
-    print(feature.astype("float32").dtype)
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
     # embed = np.zeros((num_fr, config['n_components']+1))
-    df = cudf.DataFrame(feature.astype("float32"))
+    df = cudf.DataFrame(feature)
+
+    print(df.memory_usage())
     cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                     min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
                     init=config['init'], repulsion_strength=config['repulsion_strength'], output_type='numpy').fit_transform(df)
