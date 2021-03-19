@@ -52,16 +52,16 @@ angles:
   - {"a": 0, "b": 2, "c": 3}
   # HEAD NECK
   - {"a": 1, "b": 3, "c": 2}
-  # # HEAD
-  # - {"a": 0, "b": 3, "c": 6}
-  # # BODY NECK
-  # - {"a": 4, "b": 3, "c": 5}
-  # # LEFT HIP
-  # - {"a": 3, "b": 4, "c": 6}
-  # # RIGHT HIP
-  # - {"a": 3, "b": 5, "c": 6}
-  # # TAIL
-  # - {"a": 4, "b": 6, "c": 5}
+  # HEAD
+  - {"a": 0, "b": 3, "c": 6}
+  # BODY NECK
+  - {"a": 4, "b": 3, "c": 5}
+  # LEFT HIP
+  - {"a": 3, "b": 4, "c": 6}
+  # RIGHT HIP
+  - {"a": 3, "b": 5, "c": 6}
+  # TAIL
+  - {"a": 4, "b": 6, "c": 5}
 angle_labels:
   - nose
   - left ear
@@ -103,7 +103,7 @@ f_bin: 10       # number of frequency bin
 
 # UMAP
 n_components: 2
-n_neighbors: 30
+n_neighbors: 60
 n_epochs: 5000 
 min_dist: 0.1
 spread: 1.0 # 3.0

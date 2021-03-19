@@ -96,21 +96,12 @@ for key, file in tqdm(INFO_items):
 # Concat Data
 if config['include_marker_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_bp = np.concatenate(tot_bp)
-    print( np.max(tot_bp) )
-    print( np.min(tot_bp) )
-    print( np.where(np.isnan(tot_bp)) )
     print(f"tot_bp shape: {tot_bp.shape}")
 if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_angle = np.concatenate(tot_angle)
-    print( np.max(tot_angle) )
-    print( np.min(tot_angle) )
-    print( np.where(np.isnan(tot_angle)) )
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
-    print( np.max(tot_limb) )
-    print( np.min(tot_limb) )
-    print( np.where(np.isnan(tot_limb)) )
     print(f"tot_limb shape: {tot_limb.shape}")
 
 tot_marker_pwr, tot_angle_pwr, tot_limb_pwr = [], [], []
@@ -170,48 +161,48 @@ if config['include_limb_kinematic'] or config['include_all_kinematic'] or config
     tot_limb_pwr = np.concatenate(tot_limb_pwr) 
     print(f"tot_limb_pwr shape: {tot_limb_pwr.shape}")  
 
-# ### Postural Features ###
-# start_timer = time.time()
-# # 1) Marker Position
-# if config['include_marker_postural']:
-#     print(f"::: Marker Position ::: START")
-#     num_fr, num_bp, num_bp_dim = tot_bp.shape
-#     tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
-#     marker_postural_embed = cuml_umap(config, tot_bp_mod)
-#     plot_embedding(marker_postural_embed, title="Marker Postural",fname="marker_postural_embedding")
-#     print(f"::: Marker Position ::: Computation Time: {time.time()-start_timer}")
+### Postural Features ###
+start_timer = time.time()
+# 1) Marker Position
+if config['include_marker_postural']:
+    print(f"::: Marker Position ::: START")
+    num_fr, num_bp, num_bp_dim = tot_bp.shape
+    tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
+    marker_postural_embed = cuml_umap(config, tot_bp_mod)
+    plot_embedding(marker_postural_embed, title="Marker Postural",fname="marker_postural_embedding")
+    print(f"::: Marker Position ::: Computation Time: {time.time()-start_timer}")
 
-# # 2) Joint Angle
-# start_timer = time.time()
-# if config['include_angle_postural']:
-#     print(f"::: Joint Angle ::: START")
-#     angle_postural_embed = cuml_umap(config, tot_angle[:,:,0])
-#     plot_embedding(angle_postural_embed, title="Angle Postural", fname="angle_postural_embedding")
-#     print(f"::: Joint Angle ::: Computation Time: {time.time()-start_timer}")
+# 2) Joint Angle
+start_timer = time.time()
+if config['include_angle_postural']:
+    print(f"::: Joint Angle ::: START")
+    angle_postural_embed = cuml_umap(config, tot_angle[:,:,0])
+    plot_embedding(angle_postural_embed, title="Angle Postural", fname="angle_postural_embedding")
+    print(f"::: Joint Angle ::: Computation Time: {time.time()-start_timer}")
 
-# # 3) Limb Length
-# start_timer = time.time()
-# if config['include_limb_postural']:
-#     print(f"::: Limb Length ::: START")
-#     limb_postural_embed = cuml_umap(config, tot_limb)
-#     plot_embedding(limb_postural_embed, title="Limb Postural", fname="limb_postural_embedding")
-#     print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
+# 3) Limb Length
+start_timer = time.time()
+if config['include_limb_postural']:
+    print(f"::: Limb Length ::: START")
+    limb_postural_embed = cuml_umap(config, tot_limb)
+    plot_embedding(limb_postural_embed, title="Limb Postural", fname="limb_postural_embedding")
+    print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
 
-# # 4) Marker Position, Joint Angle, & Limb Length (TODO Later)
-# if config['include_all_postural'] or config['include_all_features']:
-#     start_timer = time.time()
-#     print(f"::: All Postural ::: START Timer")
+# 4) Marker Position, Joint Angle, & Limb Length (TODO Later)
+if config['include_all_postural'] or config['include_all_features']:
+    start_timer = time.time()
+    print(f"::: All Postural ::: START Timer")
     
-#     num_fr, num_bp, num_bp_dim = tot_bp.shape
-#     tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
+    num_fr, num_bp, num_bp_dim = tot_bp.shape
+    tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
     
-#     # UMAP Embedding
-#     # feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
-#     # postural_features = np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1)
-#     postural_features = np.concatenate([tot_angle[:,:,0], tot_limb], axis=1)
-#     all_postural_embed = cuml_umap(config, postural_features)
-#     plot_embedding(all_postural_embed, title="All Postural", fname="all_postural_embedding")
-#     print(f"::: All Postural Features ::: Time Stamp: {time.time()-start_timer}")
+    # UMAP Embedding
+    # feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
+    # postural_features = np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1)
+    postural_features = np.concatenate([tot_angle[:,:,0], tot_limb], axis=1)
+    all_postural_embed = cuml_umap(config, postural_features)
+    plot_embedding(all_postural_embed, title="All Postural", fname="all_postural_embedding")
+    print(f"::: All Postural Features ::: Time Stamp: {time.time()-start_timer}")
 
 ### Kinematic Features ###
 # 5) Marker Position Morlet
@@ -280,12 +271,6 @@ if config['include_all_kinematic'] or config['include_all_features']:
         angle_kinematic_pca,
         limb_kinematic_pca
     ], axis=1)
-
-    print(kinematic_features.shape)
-    print(np.max(kinematic_features))
-    print(np.min(kinematic_features))
-    print(np.where(np.isnan(kinematic_features)))
-    print(np.where(np.isinf(kinematic_features)))
     # UMAP Embedding
     all_kinematic_embed = cuml_umap(config, kinematic_features)
     plot_embedding(all_kinematic_embed, title="All Kinematic", fname="all_kinematic_embedding")

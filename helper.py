@@ -69,8 +69,10 @@ def cuml_umap(config, feature):
     print(feature.shape)
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
-    # embed = np.zeros((num_fr, config['n_components']+1))
-    df = cudf.DataFrame(feature, dtype='float32')
+
+    # TRY THIS LATER!!!!!!!!!!!!!!!!! IF YOU EVER RUN OUT OF SPACE; COMPARE EMBEDDINGS AND SEE IF SMALLER DATA MAKES A DIFFERENCE
+    # df = cudf.DataFrame(feature, dtype='float32')
+    df = cudf.DataFrame(feature)
 
     cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                     min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
@@ -84,7 +86,6 @@ def cuml_pca(config, feature, components=10):
 
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, components))
-    # embed = np.zeros((num_fr, config['n_components']+1))
     df = cudf.DataFrame(feature)
     pca = cuml.PCA(n_components=components, svd_solver='jacobi')
     pca.fit(df)
