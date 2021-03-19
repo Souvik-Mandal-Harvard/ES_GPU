@@ -104,6 +104,7 @@ if config['include_angle_postural'] or config['include_all_postural'] or config[
     tot_angle = np.concatenate(tot_angle)
     print( np.max(tot_angle) )
     print( np.min(tot_angle) )
+    print( tot_angle )
     print( np.where(np.isnan(tot_angle)) )
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
