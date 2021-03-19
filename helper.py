@@ -69,8 +69,8 @@ def cuml_umap(config, feature):
     df = cudf.DataFrame(feature)
     cu_embed = cuml.UMAP(n_components=config['n_components'], n_neighbors=config['n_neighbors'], n_epochs=config['n_epochs'], 
                     min_dist=config['min_dist'], spread=config['spread'], negative_sample_rate=config['negative_sample_rate'],
-                    init=config['init'], repulsion_strength=config['repulsion_strength']).fit_transform(df)
-    embed[:,0:config['n_components']] = cu_embed.to_pandas().to_numpy()
+                    init=config['init'], repulsion_strength=config['repulsion_strength'], output_type='numpy').fit_transform(df)
+    embed[:,0:config['n_components']] = cu_embed
     return embed
 
 def cuml_pca(config, feature, components=10):
