@@ -274,7 +274,7 @@ if config['include_all_kinematic'] or config['include_all_features']:
 
     print(kinematic_features.shape)
     # UMAP Embedding
-    all_kinematic_embed = cuml_umap(config, kinematic_features[:500000])
+    all_kinematic_embed = cuml_umap(config, kinematic_features[:100000])
     plot_embedding(all_kinematic_embed, title="All Kinematic", fname="all_kinematic_embedding")
     print(f"::: All Kinematic ::: Computation Time: {time.time()-start_timer}")
 
