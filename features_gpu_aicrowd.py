@@ -287,7 +287,7 @@ if config['include_all_kinematic'] or config['include_all_features']:
     print(np.where(np.isnan(kinematic_features)))
     print(np.where(np.isinf(kinematic_features)))
     # UMAP Embedding
-    all_kinematic_embed = cuml_umap(config, kinematic_features[:100000])
+    all_kinematic_embed = cuml_umap(config, kinematic_features)
     plot_embedding(all_kinematic_embed, title="All Kinematic", fname="all_kinematic_embedding")
     print(f"::: All Kinematic ::: Computation Time: {time.time()-start_timer}")
 
