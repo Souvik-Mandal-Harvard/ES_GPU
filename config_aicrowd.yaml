@@ -29,6 +29,7 @@ bad_fr_pad: 20
 bp_center: 3
 bp_scale: [3,6]
 bp_rotate: 6
+bp_scale: 121
 
 ### Postural Features ###
 # Marker Position

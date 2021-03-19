@@ -46,20 +46,23 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoin
     DLC_data[good_idx,:,0:2] -= DLC_data[good_idx,config['bp_center'],0:2][:,np.newaxis,:]
     
     ### Scale
-    # find bad fr that contains nan
-    bp_axis = DLC_data[:,config['bp_scale'],0:2]
-    bad_fr, bad_bp, bad_ax = np.where(np.isnan(bp_axis))
-    unique_bad_fr = np.unique(bad_fr)
-    # find the unique good fr
-    good_idx = np.array([True]*num_fr)
-    good_idx[unique_bad_fr] = False
-    good_bp_axis = bp_axis[good_idx,:,:]
-    # find the median of these unique good fr
-    x_d = good_bp_axis[:,0,0] - good_bp_axis[:,1,0]
-    y_d = good_bp_axis[:,0,1] - good_bp_axis[:,1,1]
-    dist = np.sqrt(x_d**2+y_d**2)
-    scale_factor = np.median(dist)
-    DLC_data[:,:,0:2] /= scale_factor
+    if config['bp_scale']:
+        DLC_data[:,:,0:2] /= config['bp_scale']
+    else:
+        # find bad fr that contains nan
+        bp_axis = DLC_data[:,config['bp_scale'],0:2]
+        bad_fr, bad_bp, bad_ax = np.where(np.isnan(bp_axis))
+        unique_bad_fr = np.unique(bad_fr)
+        # find the unique good fr
+        good_idx = np.array([True]*num_fr)
+        good_idx[unique_bad_fr] = False
+        good_bp_axis = bp_axis[good_idx,:,:]
+        # find the median of these unique good fr
+        x_d = good_bp_axis[:,0,0] - good_bp_axis[:,1,0]
+        y_d = good_bp_axis[:,0,1] - good_bp_axis[:,1,1]
+        dist = np.sqrt(x_d**2+y_d**2)
+        scale_factor = np.median(dist)
+        DLC_data[:,:,0:2] /= scale_factor
 
     INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
     if config['save_scaled_bodypoints']:
