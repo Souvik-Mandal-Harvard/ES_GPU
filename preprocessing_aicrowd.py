@@ -38,12 +38,12 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoin
         np.save(f"{save_path}/bodypoints.npy", DLC_data)
 
     ### Center
-    bad_fr, bad_ax = np.where(np.isnan(DLC_data[:,bp_center,0:2]))
+    bad_fr, bad_ax = np.where(np.isnan(DLC_data[:,config['bp_center'],0:2]))
     unique_bad_fr = np.unique(bad_fr)
     # find the unique good fr
     good_idx = np.array([True]*num_fr)
     good_idx[unique_bad_fr] = False
-    DLC_data[good_idx,:,0:2] -= DLC_data[good_idx,bp_center,0:2][:,np.newaxis,:]
+    DLC_data[good_idx,:,0:2] -= DLC_data[good_idx,config['bp_center'],0:2][:,np.newaxis,:]
     
     ### Scale
     # find bad fr that contains nan
