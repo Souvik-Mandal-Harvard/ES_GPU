@@ -33,7 +33,7 @@ tot_bp, tot_angle, tot_limb = [], [], []
 # Compute Postural Features
 for key, file in tqdm(INFO_items):
     save_path = file['directory']
-    bp = np.load(f"{save_path}/rotated_bodypoints.npy")
+    bp = np.load(f"{save_path}/rotated_bodypoints.npy").astype("float32")
     num_fr, num_bp, _ = bp.shape
     likelihood = bp[:,:,2]
 
