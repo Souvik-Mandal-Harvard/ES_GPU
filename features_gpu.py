@@ -363,9 +363,11 @@ if config['save_embeddings']:
 print(f"::: Embedding Data Saving ::: Computation Time: {time.time()-start_timer}")
 
 start_timer = time.time()
-print(f"::: INFO Saving ::: START")
-with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
-    documents = yaml.dump(dict(INFO_items), file)
+
+# TODO : SAVING GOOD_FR AND BAD_FR IN INFO IS NOT A GOOD IDEA. TAKES TOO LONG TO LOAD
+# print(f"::: INFO Saving ::: START")
+# with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
+#     documents = yaml.dump(dict(INFO_items), file)
 print(f"::: INFO Saving ::: Computation Time: {time.time()-start_timer}")
 
 

@@ -80,8 +80,9 @@ limb_kinematic_pca_components: 30
 limbs:
   - [0,3]
   - [1,2]
-  - [4,5]
   - [3,6]
+  - [4,5]
+
 limb_labels:
   - head x
   - head y
@@ -99,7 +100,7 @@ include_all_features: True
 
 # Morlet Wavelet Transformation
 w: 5
-f_bin: 10       # number of frequency bin
+f_bin: 20       # number of frequency bin
 
 # UMAP
 n_components: 2
