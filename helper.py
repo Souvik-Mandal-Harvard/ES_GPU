@@ -23,7 +23,6 @@ def _rotate(data, angle):
     return np.einsum('ijk,jk ->ik', 
         np.array([[np.cos(angle), -1*np.sin(angle)], [np.sin(angle), np.cos(angle)]]), data)
 def angle_calc(data, keys):
-    (num_bp, num_dim, num_fr) = data.shape
     (num_fr, num_bp, num_dim) = data.shape
     num_feat = len(keys)
     angles = np.zeros((num_fr, num_feat))
@@ -34,8 +33,13 @@ def angle_calc(data, keys):
         
         ba = a - b
         bc = c - b
-        test = np.where((np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))==0)[0]
         cosine_angle = np.sum(ba*bc,axis=-1)/ (np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))
+        # fix nan data
+        nan_idx, = np.where(np.isnan(cosine_angle))
+        cosine_angle[nan_idx] = 0.0
+        # fix out of domain data
+        cosine_angle[cosine_angle>1] = 1.0
+        cosine_angle[cosine_angle<-1] = -1.0
         angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
 
