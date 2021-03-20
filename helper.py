@@ -40,7 +40,7 @@ def angle_calc(data, keys):
         # fix out of domain data
         cosine_angle[cosine_angle>1] = 1.0
         cosine_angle[cosine_angle<-1] = -1.0
-        angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
+        # angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
 
 def morlet(config, data):
