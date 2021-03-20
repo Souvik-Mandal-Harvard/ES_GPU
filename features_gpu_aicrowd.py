@@ -99,9 +99,11 @@ if config['include_marker_postural'] or config['include_all_postural'] or config
     print(f"tot_bp shape: {tot_bp.shape}")
 if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_angle = np.concatenate(tot_angle)
+    tot_angle /= np.pi # normalize
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
+    tot_limb /= np.max(tot_limb, axis=0) # normalize
     print(f"tot_limb shape: {tot_limb.shape}")
 
 tot_marker_pwr, tot_angle_pwr, tot_limb_pwr = [], [], []
@@ -130,6 +132,7 @@ for key, file in tqdm(INFO_items):
     # Joint Angle
     if config['include_angle_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
         angles = angle_calc(bp[:,:,0:2], config['angles'])
+        angles /= np.pi # normalize
         angles -= np.mean(tot_angle[:,:,0], axis=0)
 
         angle_power = morlet(config, angles)
@@ -143,7 +146,7 @@ for key, file in tqdm(INFO_items):
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
             limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-        
+        limbs /= np.max(tot_limb, axis=0) # normalize
         limbs -= np.mean(tot_limb, axis=0)
         limb_power = morlet(config, limbs)
         if config['save_powers']:
