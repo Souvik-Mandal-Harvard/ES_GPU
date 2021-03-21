@@ -86,31 +86,33 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     # TODO: plot_skeleton_length(skel_len)
 
     ### Center
-    good_fr, good_ax = np.where(~np.isnan(DLC_data[:,config['bp_center'],0:2]))
-    good_unique_fr = np.unique(good_fr)
-    DLC_data[good_unique_fr,:,0:2] -= DLC_data[good_unique_fr,config['bp_center'],0:2][:,np.newaxis,:]
-    
-    ### Scale
-    # find bad fr that contains nan
-    bp_axis = DLC_data[:,config['bp_scale'],0:2]
-    bad_fr, bad_bp, bad_ax = np.where(np.isnan(bp_axis))
+    bad_fr, bad_ax = np.where(np.isnan(DLC_data[:,config['bp_center'],0:2]))
     unique_bad_fr = np.unique(bad_fr)
     # find the unique good fr
     good_idx = np.array([True]*num_fr)
     good_idx[unique_bad_fr] = False
-    good_bp_axis = bp_axis[good_idx,:,:]
-    # find the median of these unique good fr
-    x_d = good_bp_axis[0,0] - good_bp_axis[1,0]
-    y_d = good_bp_axis[0,1] - good_bp_axis[1,1]
-    dist = np.sqrt(x_d**2+y_d**2)
-    scale_factor = np.median(dist)
-    DLC_data[:,:,0:2] /= scale_factor
-
-    nan_fr,_,_ = np.where(np.isnan(DLC_data))
-    count += np.unique(nan_fr).shape[0]
-
-
-    INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
+    DLC_data[good_idx,:,0:2] -= DLC_data[good_idx,config['bp_center'],0:2][:,np.newaxis,:]
+    
+    ### Scale
+    if config['bp_scale']:
+        DLC_data[:,:,0:2] /= config['bp_scale']
+        INFO[folder_name]['scale_factor'] = config['bp_scale']
+    else:
+        # find bad fr that contains nan
+        bp_axis = DLC_data[:,config['bp_scale'],0:2]
+        bad_fr, bad_bp, bad_ax = np.where(np.isnan(bp_axis))
+        unique_bad_fr = np.unique(bad_fr)
+        # find the unique good fr
+        good_idx = np.array([True]*num_fr)
+        good_idx[unique_bad_fr] = False
+        good_bp_axis = bp_axis[good_idx,:,:]
+        # find the median of these unique good fr
+        x_d = good_bp_axis[:,0,0] - good_bp_axis[:,1,0]
+        y_d = good_bp_axis[:,0,1] - good_bp_axis[:,1,1]
+        dist = np.sqrt(x_d**2+y_d**2)
+        scale_factor = np.median(dist)
+        DLC_data[:,:,0:2] /= scale_factor
+        INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
     if config['save_scaled_bodypoints']:
         np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
 
@@ -121,8 +123,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     ### Rotate
     DLC_data[:,:,0:2], body_orientation = _rotational(data=DLC_data[:,:,0:2], axis_bp=config['bp_rotate'])
     #DLC_data[:,:,2] = likelihood ### PROBLEM IS HERE!!!!!!
-    nan_fr,_,_ = np.where(np.isnan(DLC_data))
-    count2 += np.unique(nan_fr).shape[0]
     if config['save_body_orientation_angles']:
         np.save(f"{save_path}/body_orientation_angles.npy", body_orientation)
     if config['save_rotated_bodypoints']:
