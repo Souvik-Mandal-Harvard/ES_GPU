@@ -97,16 +97,8 @@ for key, file in tqdm(INFO_items):
             bp_good_fr = bp[good_fr,:,:]
 
             limb_i = bp_good_fr[:,limb_pts,:]
-            print("********************")
-
-            print(np.where(np.isinf(np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2))))
             inf_fr, = np.where(np.isinf(np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)))
-            print(limb_i[inf_fr,:,:])
-            print((limb_i[inf_fr,0,0]-limb_i[inf_fr,1,0])**2)
-            print((limb_i[inf_fr,0,1]-limb_i[inf_fr,1,1])**2)
-
             limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-        print(np.where(np.isinf(limbs)))
         if config['save_limbs']:
             np.save(f"{save_path}/limbs.npy", limbs)
         tot_limb.append(limbs[good_fr,:])
@@ -167,8 +159,14 @@ for key, file in tqdm(INFO_items):
     if config['include_limb_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
-            limb_i = bp[:,limb_pts,0:2]
-            limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+            bp_good_fr = bp[good_fr,:,:]
+            limb_i = bp_good_fr[:,limb_pts,:]
+            limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+            # limb_i = bp[:,limb_pts,0:2]
+            # limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+        print("******")
+        print(np.max(tot_limb, axis=0) )
+        print(np.mean(tot_limb, axis=0))
         limbs /= np.max(tot_limb, axis=0) # normalize
         limbs -= np.mean(tot_limb, axis=0)
         limb_power = morlet(config, limbs)
