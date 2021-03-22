@@ -91,7 +91,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     
     ### Scale
     if config['scale']:
-        print("hello")
         DLC_data[:,:,0:2] /= config['scale']
         INFO[folder_name]['scale_factor'] = config['scale']
     else:
@@ -108,11 +107,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
         y_d = good_bp_axis[:,0,1] - good_bp_axis[:,1,1]
         dist = np.sqrt(x_d**2+y_d**2)
         scale_factor = np.median(dist)
-        print("*******")
-        print(scale_factor)
-        print(np.max(DLC_data))
         DLC_data[:,:,0:2] /= scale_factor
-        print(np.max(DLC_data))
         INFO[folder_name]['scale_factor'] = round(scale_factor.tolist(), 3)
     if config['save_scaled_bodypoints']:
         np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
