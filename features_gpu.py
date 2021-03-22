@@ -95,7 +95,10 @@ for key, file in tqdm(INFO_items):
         for i, limb_pts in enumerate(config['limbs']):
             bp_good_fr = bp[good_fr,:,:]
             limb_i = bp_good_fr[:,limb_pts,0:2]
+            print("********************")
+            print(np.where(np.isinf(limb_i)))
             limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+        print(np.where(np.isinf(limbs)))
         if config['save_limbs']:
             np.save(f"{save_path}/limbs.npy", limbs)
         tot_limb.append(limbs[good_fr,:])
