@@ -109,17 +109,12 @@ if config['include_marker_postural'] or config['include_all_postural'] or config
     print(f"tot_bp shape: {tot_bp.shape}")
 if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_angle = np.concatenate(tot_angle)
-    angle_norm_factor = np.pi 
-    tot_angle /= angle_norm_factor # normalize
+    norm_tot_angle = tot_angle / np.pi  # normalize
     print( np.where(np.isnan(tot_angle)) )
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
-    print( np.where(np.isnan(tot_limb)) )
-    print( np.where(np.isinf(tot_limb)) )
-    print( np.max(tot_limb, axis=0) )
-    limb_norm_factor = np.max(tot_limb, axis=0)
-    tot_limb /= limb_norm_factor # normalize
+    norm_tot_limb = tot_limb / np.max(tot_limb, axis=0) # normalize
     print( np.where(np.isnan(tot_limb)) )
     print(f"tot_limb shape: {tot_limb.shape}")
 
@@ -167,10 +162,10 @@ for key, file in tqdm(INFO_items):
             # limb_i = bp[:,limb_pts,0:2]
             # limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
         print("******")
-        print(np.max(limb_norm_factor, axis=0) )
-        print(np.mean(limb_norm_factor, axis=0))
-        limbs /= np.max(limb_norm_factor, axis=0) # normalize
-        limbs -= np.mean(limb_norm_factor, axis=0)
+        print(np.max(tot_limb, axis=0) )
+        print(np.mean(tot_limb, axis=0))
+        limbs /= np.max(tot_limb, axis=0) # normalize
+        limbs -= np.mean(tot_limb, axis=0)
         limb_power = morlet(config, limbs)
         if config['save_powers']:
             np.save(f"{save_path}/limb_power.npy", limb_power)
@@ -204,7 +199,7 @@ if config['include_marker_postural']:
 start_timer = time.time()
 if config['include_angle_postural']:
     print(f"::: Joint Angle ::: START")
-    angle_postural_embed = cuml_umap(config, tot_angle[:,:,0])
+    angle_postural_embed = cuml_umap(config, norm_tot_angle[:,:,0])
     plot_embedding(angle_postural_embed, title="Angle Postural", fname="angle_postural_embedding")
     print(f"::: Joint Angle ::: Computation Time: {time.time()-start_timer}")
 
@@ -212,7 +207,7 @@ if config['include_angle_postural']:
 start_timer = time.time()
 if config['include_limb_postural']:
     print(f"::: Limb Length ::: START")
-    limb_postural_embed = cuml_umap(config, tot_limb)
+    limb_postural_embed = cuml_umap(config, norm_tot_limb)
     plot_embedding(limb_postural_embed, title="Limb Postural", fname="limb_postural_embedding")
     print(f"::: Limb Length ::: Computation Time: {time.time()-start_timer}")
 
@@ -226,8 +221,8 @@ if config['include_all_postural'] or config['include_all_features']:
     
     # UMAP Embedding
     # feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
-    # postural_features = np.concatenate([tot_bp_mod, tot_angle[:,:,0], tot_limb], axis=1)
-    postural_features = np.concatenate([tot_angle[:,:,0], tot_limb], axis=1)
+    # postural_features = np.concatenate([tot_bp_mod, norm_tot_angle[:,:,0], tot_limb], axis=1)
+    postural_features = np.concatenate([norm_tot_angle[:,:,0], norm_tot_limb], axis=1)
     all_postural_embed = cuml_umap(config, postural_features)
     plot_embedding(all_postural_embed, title="All Postural", fname="all_postural_embedding")
     print(f"::: All Postural Features ::: Time Stamp: {time.time()-start_timer}")
