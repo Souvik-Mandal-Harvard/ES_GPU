@@ -52,8 +52,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
 
 
     ### check for nan and inf
-
-
     ## Reevaluate likelihood
     # Check if BP exceeds a certain range
     # x_bp, y_bp = DLC_data[:,:,0], DLC_data[:,:,1]

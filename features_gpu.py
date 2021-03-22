@@ -44,8 +44,14 @@ for key, file in tqdm(INFO_items):
     cnt_array = np.array(list(cnt.items()))
     # check if above marker threshold
     try:
+        # set low likelihood fr as bad fr
         bad_fr_idx = np.where(cnt_array[:,1] > config['marker_thresh'])[0]
         bad_fr = cnt_array[bad_fr_idx,0]
+        # set nan fr as bad fr
+        nan_fr, _, _ = np.where( np.isnan(bp) )
+        unique_nan_fr = np.unique(nan_fr)
+        bad_fr = np.concatenate([bad_fr, unique_nan_fr])
+        bad_fr = np.unique(bad_fr)
         # append pads
         padded_fr = np.array([ list(range(fr-config['bad_fr_pad'], fr+config['bad_fr_pad']+1)) for fr in bad_fr])
         disregard_fr = np.unique(padded_fr.flatten())
@@ -75,10 +81,10 @@ for key, file in tqdm(INFO_items):
         # compute angle
         num_angles = len(config['angles'])
         angles = np.zeros((num_fr, num_angles, 2))
-        angles[:,:,0] = angle_calc(bp[:,:,0:2], config['angles'])
+        angles[good_fr,:,0] = angle_calc(bp[good_fr,:,0:2], config['angles'])
         # measure angle likelihood
         for ang_idx, angle_key in enumerate(config['angles']):
-            angles[:,ang_idx,1] = likelihood[:,angle_key['a']] * likelihood[:,angle_key['b']] * likelihood[:,angle_key['c']]
+            angles[good_fr,ang_idx,1] = likelihood[good_fr,angle_key['a']] * likelihood[good_fr,angle_key['b']] * likelihood[good_fr,angle_key['c']]
         if config['save_angles']:
             np.save(f"{save_path}/angles.npy", angles)
         tot_angle.append(angles[good_fr,:,:])
@@ -87,8 +93,8 @@ for key, file in tqdm(INFO_items):
     if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
-            limb_i = bp[:,limb_pts,0:2]
-            limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+            limb_i = bp[good_fr,limb_pts,0:2]
+            limbs[good_fr,i] = np.sqrt((limb_i[good_fr,0,0]-limb_i[good_fr,1,0])**2 + (limb_i[good_fr,0,1]-limb_i[good_fr,1,1])**2)
         if config['save_limbs']:
             np.save(f"{save_path}/limbs.npy", limbs)
         tot_limb.append(limbs[good_fr,:])
@@ -96,17 +102,16 @@ for key, file in tqdm(INFO_items):
 # Concat Data
 if config['include_marker_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_bp = np.concatenate(tot_bp)
-    print(np.where(np.isnan(tot_bp)))
     print(f"tot_bp shape: {tot_bp.shape}")
 if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_angle = np.concatenate(tot_angle)
     tot_angle /= np.pi # normalize
-    print(np.where(np.isnan(tot_angle)))
+    print( np.where(np.isnan(tot_angle)) )
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
     tot_limb /= np.max(tot_limb, axis=0) # normalize
-    print(np.where(np.isnan(tot_limb)))
+    print( np.where(np.isnan(tot_limb)) )
     print(f"tot_limb shape: {tot_limb.shape}")
 
 tot_marker_pwr, tot_angle_pwr, tot_limb_pwr = [], [], []
@@ -162,9 +167,11 @@ if config['include_marker_kinematic'] or config['include_all_kinematic'] or conf
     print(f"tot_marker_pwr shape: {tot_marker_pwr.shape}")
 if config['include_angle_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
     tot_angle_pwr = np.concatenate(tot_angle_pwr)
+    print( np.where(np.isnan(tot_angle_pwr)) )
     print(f"tot_angle_pwr shape: {tot_angle_pwr.shape}")
 if config['include_limb_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
     tot_limb_pwr = np.concatenate(tot_limb_pwr) 
+    print( np.where(np.isnan(tot_limb_pwr)) )
     print(f"tot_limb_pwr shape: {tot_limb_pwr.shape}")  
 
 ### Postural Features ###
