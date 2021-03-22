@@ -95,9 +95,7 @@ for key, file in tqdm(INFO_items):
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
             bp_good_fr = bp[good_fr,:,:]
-
             limb_i = bp_good_fr[:,limb_pts,:]
-            inf_fr, = np.where(np.isinf(np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)))
             limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
         if config['save_limbs']:
             np.save(f"{save_path}/limbs.npy", limbs)
@@ -143,7 +141,11 @@ for key, file in tqdm(INFO_items):
 
     # Joint Angle
     if config['include_angle_kinematic'] or config['include_all_kinematic'] or config['include_all_features']:
-        angles = angle_calc(bp[:,:,0:2], config['angles'])
+        num_angles = len(config['angles'])
+        angles = np.zeros((num_fr, num_angles))
+        angles[good_fr,:] = angle_calc(bp[good_fr,:,0:2], config['angles'])
+
+        # angles = angle_calc(bp[:,:,0:2], config['angles'])
         angles /= np.pi # normalize
         angles -= np.mean(tot_angle[:,:,0], axis=0)
 
@@ -161,9 +163,6 @@ for key, file in tqdm(INFO_items):
             limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
             # limb_i = bp[:,limb_pts,0:2]
             # limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-        print("******")
-        print(np.max(tot_limb, axis=0) )
-        print(np.mean(tot_limb, axis=0))
         limbs /= np.max(tot_limb, axis=0) # normalize
         limbs -= np.mean(tot_limb, axis=0)
         limb_power = morlet(config, limbs)
@@ -217,7 +216,7 @@ if config['include_all_postural'] or config['include_all_features']:
     print(f"::: All Postural ::: START Timer")
     
     num_fr, num_bp, num_bp_dim = tot_bp.shape
-    tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
+    # tot_bp_mod = tot_bp[:,:,0:num_bp_dim-1].reshape(num_fr, num_bp*(num_bp_dim-1))
     
     # UMAP Embedding
     # feature = np.concatenate([bp_pca, bp_angle, bp_limb], axis=1)
