@@ -109,7 +109,8 @@ if config['include_marker_postural'] or config['include_all_postural'] or config
     print(f"tot_bp shape: {tot_bp.shape}")
 if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_angle = np.concatenate(tot_angle)
-    tot_angle /= np.pi # normalize
+    angle_norm_factor = np.pi 
+    tot_angle /= angle_norm_factor # normalize
     print( np.where(np.isnan(tot_angle)) )
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
@@ -117,7 +118,8 @@ if config['include_limb_postural'] or config['include_all_postural'] or config['
     print( np.where(np.isnan(tot_limb)) )
     print( np.where(np.isinf(tot_limb)) )
     print( np.max(tot_limb, axis=0) )
-    tot_limb /= np.max(tot_limb, axis=0) # normalize
+    limb_norm_factor = np.max(tot_limb, axis=0)
+    tot_limb /= limb_norm_factor # normalize
     print( np.where(np.isnan(tot_limb)) )
     print(f"tot_limb shape: {tot_limb.shape}")
 
@@ -165,10 +167,10 @@ for key, file in tqdm(INFO_items):
             # limb_i = bp[:,limb_pts,0:2]
             # limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
         print("******")
-        print(np.max(tot_limb, axis=0) )
-        print(np.mean(tot_limb, axis=0))
-        limbs /= np.max(tot_limb, axis=0) # normalize
-        limbs -= np.mean(tot_limb, axis=0)
+        print(np.max(limb_norm_factor, axis=0) )
+        print(np.mean(limb_norm_factor, axis=0))
+        limbs /= np.max(limb_norm_factor, axis=0) # normalize
+        limbs -= np.mean(limb_norm_factor, axis=0)
         limb_power = morlet(config, limbs)
         if config['save_powers']:
             np.save(f"{save_path}/limb_power.npy", limb_power)
