@@ -90,10 +90,10 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     DLC_data[good_idx,:,0:2] -= DLC_data[good_idx,config['bp_center'],0:2][:,np.newaxis,:]
     
     ### Scale
-    if config['bp_scale']:
+    if config['scale']:
         print("hello")
-        DLC_data[:,:,0:2] /= config['bp_scale']
-        INFO[folder_name]['scale_factor'] = config['bp_scale']
+        DLC_data[:,:,0:2] /= config['scale']
+        INFO[folder_name]['scale_factor'] = config['scale']
     else:
         # find bad fr that contains nan
         bp_axis = DLC_data[:,config['bp_scale'],0:2]
