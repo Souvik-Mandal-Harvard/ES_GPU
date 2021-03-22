@@ -111,6 +111,8 @@ if config['include_angle_postural'] or config['include_all_postural'] or config[
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
+    print( np.where(np.isnan(tot_limb)) )
+    print( np.where(np.isinf(tot_limb)) )
     print( np.max(tot_limb, axis=0) )
     tot_limb /= np.max(tot_limb, axis=0) # normalize
     print( np.where(np.isnan(tot_limb)) )
