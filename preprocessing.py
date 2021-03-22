@@ -20,8 +20,6 @@ with open("config.yaml") as f:
 # Initialize
 INFO = {}
 start_fr = 0
-count=0
-count2=0
 for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     ### Setup Folders
     folder_name = os.path.basename(path).split("DLC")[0]
@@ -93,6 +91,7 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     
     ### Scale
     if config['bp_scale']:
+        print("hello")
         DLC_data[:,:,0:2] /= config['bp_scale']
         INFO[folder_name]['scale_factor'] = config['bp_scale']
     else:
@@ -135,8 +134,6 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/*.h5"))):
     INFO[folder_name]['global_start_fr'] = start_fr
     INFO[folder_name]['global_stop_fr'] = start_fr+num_fr
     start_fr += num_fr
-print(count)
-print(count2)
 print(f"::: Data Preprocessing ::: Computation Time: {time.time()-start_timer}")
 
 with open(f"{config['result_path']}/INFO.yaml", 'w') as file:
