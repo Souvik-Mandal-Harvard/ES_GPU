@@ -97,9 +97,11 @@ for key, file in tqdm(INFO_items):
 
             limb_i = bp_good_fr[:,limb_pts,0:2]
             print("********************")
-            print(np.where(np.isnan(limb_i)))
-            print(np.where(np.isinf(limb_i)))
+
             print(np.where(np.isinf(np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2))))
+            inf_fr, = np.where(np.isinf(np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)))
+            print(limb_i[inf_fr,:,:])
+
             limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
         print(np.where(np.isinf(limbs)))
         if config['save_limbs']:
