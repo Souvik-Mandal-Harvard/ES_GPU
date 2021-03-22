@@ -34,6 +34,7 @@ tot_bp, tot_angle, tot_limb = [], [], []
 for key, file in tqdm(INFO_items):
     save_path = file['directory']
     bp = np.load(f"{save_path}/rotated_bodypoints.npy")
+    bp = bp.astype("float64")
     num_fr, num_bp, _ = bp.shape
     likelihood = bp[:,:,2]
 
