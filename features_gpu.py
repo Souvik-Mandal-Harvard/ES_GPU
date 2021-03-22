@@ -94,10 +94,8 @@ for key, file in tqdm(INFO_items):
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
             bp_good_fr = bp[good_fr,:,:]
-            print( np.where(np.isnan(bp_good_fr)))
             limb_i = bp_good_fr[:,limb_pts,0:2]
             limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-        print( np.where( np.isnan(limbs)))
         if config['save_limbs']:
             np.save(f"{save_path}/limbs.npy", limbs)
         tot_limb.append(limbs[good_fr,:])
@@ -113,6 +111,7 @@ if config['include_angle_postural'] or config['include_all_postural'] or config[
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
+    print( np.max(tot_limb, axis=0) )
     tot_limb /= np.max(tot_limb, axis=0) # normalize
     print( np.where(np.isnan(tot_limb)) )
     print(f"tot_limb shape: {tot_limb.shape}")
