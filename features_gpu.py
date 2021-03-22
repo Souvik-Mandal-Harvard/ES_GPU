@@ -95,12 +95,14 @@ for key, file in tqdm(INFO_items):
         for i, limb_pts in enumerate(config['limbs']):
             bp_good_fr = bp[good_fr,:,:]
 
-            limb_i = bp_good_fr[:,limb_pts,0:2]
+            limb_i = bp_good_fr[:,limb_pts,:]
             print("********************")
 
             print(np.where(np.isinf(np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2))))
             inf_fr, = np.where(np.isinf(np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)))
             print(limb_i[inf_fr,:,:])
+            print((limb_i[inf_fr,0,0]-limb_i[inf_fr,1,0])**2)
+            print((limb_i[inf_fr,0,1]-limb_i[inf_fr,1,1])**2)
 
             limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
         print(np.where(np.isinf(limbs)))
