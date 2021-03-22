@@ -96,14 +96,17 @@ for key, file in tqdm(INFO_items):
 # Concat Data
 if config['include_marker_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_bp = np.concatenate(tot_bp)
+    print(np.where(np.isnan(tot_bp)))
     print(f"tot_bp shape: {tot_bp.shape}")
 if config['include_angle_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_angle = np.concatenate(tot_angle)
     tot_angle /= np.pi # normalize
+    print(np.where(np.isnan(tot_angle)))
     print(f"tot_angle shape: {tot_angle.shape}")
 if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
     tot_limb = np.concatenate(tot_limb)
     tot_limb /= np.max(tot_limb, axis=0) # normalize
+    print(np.where(np.isnan(tot_limb)))
     print(f"tot_limb shape: {tot_limb.shape}")
 
 tot_marker_pwr, tot_angle_pwr, tot_limb_pwr = [], [], []
