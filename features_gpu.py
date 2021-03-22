@@ -93,8 +93,9 @@ for key, file in tqdm(INFO_items):
     if config['include_limb_postural'] or config['include_all_postural'] or config['include_all_features']:
         limbs = np.zeros((num_fr, len(config['limbs'])))
         for i, limb_pts in enumerate(config['limbs']):
-            limb_i = bp[good_fr,limb_pts,0:2]
-            limbs[good_fr,i] = np.sqrt((limb_i[good_fr,0,0]-limb_i[good_fr,1,0])**2 + (limb_i[good_fr,0,1]-limb_i[good_fr,1,1])**2)
+            bp_good_fr = bp[good_fr,:,:]
+            limb_i = bp_good_fr[:,limb_pts,0:2]
+            limbs[good_fr,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
         if config['save_limbs']:
             np.save(f"{save_path}/limbs.npy", limbs)
         tot_limb.append(limbs[good_fr,:])
