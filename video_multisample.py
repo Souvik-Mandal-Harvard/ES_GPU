@@ -26,7 +26,7 @@ def main():
         tot_bp_scaled.append( np.load(f"{file['directory']}/scaled_bodypoints.npy") )
         tot_angles.append( np.load(f"{file['directory']}/angles.npy") )
         tot_embed.append( np.load(f"{file['directory']}/all_embeddings.npy") )
-        tot_clusters.append( np.load(f"{file['directory']}/clusters.npy") )
+        tot_clusters.append( np.load(f"{file['directory']}/cluster.npy") )
     tot_bp = np.concatenate(tot_bp)
     # tot_bp_scaled= tot_bp
     tot_bp_scaled = np.concatenate(tot_bp_scaled)
