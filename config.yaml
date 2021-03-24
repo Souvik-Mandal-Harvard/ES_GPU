@@ -153,7 +153,7 @@ f_bin: 20       # number of frequency bin
 
 # UMAP
 n_components: 2
-n_neighbors: 60
+n_neighbors: 40
 n_epochs: 10000 
 min_dist: 0.001
 spread: 1.0 # 3.0
@@ -170,7 +170,7 @@ max_video_length: 80
 
 # Save
 save_bodypoints: True
-save_scaled_bodypoints: False
+save_scaled_bodypoints: True
 save_body_orientation_angles: False
 save_rotated_bodypoints: True
 save_angles: True
