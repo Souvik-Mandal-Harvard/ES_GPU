@@ -8,7 +8,7 @@ import skvideo.io
 from glob import glob
 
 def main():
-    result_path = "results/round3_antennae"
+    result_path = "results/final"
 
     # Load Config Files
     with open(f"{result_path}/INFO.yaml") as f:
