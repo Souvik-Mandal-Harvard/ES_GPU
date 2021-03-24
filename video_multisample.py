@@ -20,19 +20,17 @@ def main():
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     # Format Data
-    tot_bp, tot_bp_scaled, tot_angles, tot_rotations, tot_power, tot_embed, tot_clusters = [], [], [], [], [], [], []
+    tot_bp, tot_bp_scaled, tot_angles, tot_rotations, tot_embed, tot_clusters = [], [], [], [], [], [], []
     for file in tqdm(INFO_values, desc="Collecting Data"):
         tot_bp.append( np.load(f"{file['directory']}/bodypoints.npy") )
         tot_bp_scaled.append( np.load(f"{file['directory']}/scaled_bodypoints.npy") )
         tot_angles.append( np.load(f"{file['directory']}/angles.npy") )
-        tot_power.append( np.load(f"{file['directory']}/power.npy") )
-        tot_embed.append( np.load(f"{file['directory']}/embeddings.npy") )
+        tot_embed.append( np.load(f"{file['directory']}/all_embeddings.npy") )
         tot_clusters.append( np.load(f"{file['directory']}/clusters.npy") )
     tot_bp = np.concatenate(tot_bp)
     # tot_bp_scaled= tot_bp
     tot_bp_scaled = np.concatenate(tot_bp_scaled)
     tot_angles = np.concatenate(tot_angles)
-    tot_power = np.concatenate(tot_power, axis=2)
     tot_embed = np.concatenate(tot_embed)
     tot_clusters = np.concatenate(tot_clusters)
     num_clusters = int(np.max(tot_clusters))+1
