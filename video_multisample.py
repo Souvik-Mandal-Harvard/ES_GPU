@@ -12,7 +12,6 @@ from utils.data import Dataset
 def main():
     PROJECT_PATH = "/rapids/notebooks/host"
     VIDEO_PATH = "/home/dong/Research/dong/Ant_Videos/ant_field_final"
-    SAVE_PATH=f"videos/final/mutivideo_cluster{clust_i}.mp4"
     num_videos_per_clusters = 16
     video_duration = 100 # frames
 
@@ -76,7 +75,7 @@ def main():
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
         writer = FFMpegWriter(fps=10)
-
+        SAVE_PATH=f"videos/final/mutivideo_cluster{clust_i}.mp4"
         with writer.saving(fig, SAVE_PATH, dpi=300):
             for fr_i in tqdm(np.arange(0, video_duration), desc=f"Cluster {clust_i} Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
