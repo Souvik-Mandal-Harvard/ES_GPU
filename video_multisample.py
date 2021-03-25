@@ -30,7 +30,7 @@ def main():
     tot_bp = np.concatenate(tot_bp)
     # tot_bp_scaled= tot_bp
     tot_bp_scaled = np.concatenate(tot_bp_scaled)
-    tot_angles = np.concatenate(tot_angles)
+    tot_angles = np.concatenate(tot_angles) 
     tot_embed = np.concatenate(tot_embed)
     tot_clusters = np.concatenate(tot_clusters)
     num_clusters = int(np.max(tot_clusters))+1
@@ -38,15 +38,15 @@ def main():
     num_videos_per_clusters = 16
 
     # Determine Which frames to Abstract
-    num_clusters = int(np.max(tot_clusters[:,0]).item()) + 1
+    num_clusters = int(np.max(tot_clusters).item()) + 1
     cluster_distribution = []
     for clust_i in range(num_clusters):
-        clust_idx = np.where(tot_clusters[:,0] == clust_i)[0]
+        clust_idx = np.where(tot_clusters == clust_i)[0]
         cluster_distribution.append(len(clust_idx))
 
     video_cluster_idx = {}
     for clust_i in range(num_clusters):
-        clust_idx = np.where(tot_clusters[:,0] ==clust_i)[0]
+        clust_idx = np.where(tot_clusters ==clust_i)[0]
         difference = np.diff(clust_idx)
 
         # Find consecutive break
