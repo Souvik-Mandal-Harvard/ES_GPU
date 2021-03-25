@@ -94,7 +94,7 @@ def main():
 
                         for skeleton_i, color_i in zip(skeleton, skeleton_color):
                             ax[i//4,i%4].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
-                                linewidth=1, alpha=0.6, c=color_i, linewidth=2)
+                                linewidth=2, alpha=0.6, c=color_i)
 
                 writer.grab_frame()
             plt.close()
