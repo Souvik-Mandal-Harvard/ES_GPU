@@ -74,24 +74,24 @@ def main():
     
     for clust_i in range(0, num_clusters):
         # animal video data
-        # video_i, file_start_fr = {}, {}
-        # for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
-        #     file_bool = start > global_start_frames
-        #     if any(file_bool):
-        #         file_start_fr[i] = global_start_frames[file_bool][-1]
-        #         file_path = global_directories[file_bool][-1]
-        #         file_key = file_path.split("/")[-1]
-        #         # video_path = glob(f"{file_path}/*.avi")[0]
-        #         video_path = glob(f"/home/murthyhacker/dong/Ant_Videos/ant_field_round3/{file_key}.avi")[0]
-        #         video = skvideo.io.vread(video_path)
-        #         video_i[i] = video
-        #     else:
-        #         return # don't create a video
+        video_i, file_start_fr = {}, {}
+        for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
+            file_bool = start > global_start_frames
+            if any(file_bool):
+                file_start_fr[i] = global_start_frames[file_bool][-1]
+                file_path = global_directories[file_bool][-1]
+                file_key = file_path.split("/")[-1]
+                # video_path = glob(f"{file_path}/*.avi")[0]
+                video_path = glob(f"/home/dong/Research/dong/Ant_Videos/ant_field_final/{file_key}.avi")[0]
+                video = skvideo.io.vread(video_path)
+                video_i[i] = video
+            else:
+                return # don't create a video
 
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
         writer = FFMpegWriter(fps=10)
-        save_path=f"videos/round3_antennae/mutivideo_cluster{clust_i}.mp4"
+        save_path=f"videos/final/mutivideo_cluster{clust_i}.mp4"
         with writer.saving(fig, save_path, dpi=300):
             for fr_i in tqdm(np.arange(0, 100), desc=f"Cluster {clust_i} Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
@@ -106,35 +106,36 @@ def main():
                     ax[i//4,i%4].set_axis_off()
                     ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
 
-                    # ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
+                    ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
 
+                    bp = tot_bp
                     # left side
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,0:4,0], tot_bp_scaled[fr+shadow_i,0:4,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,0:4,0], bp[fr+shadow_i,0:4,1], 
                              c='w', alpha=alpha, 
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,5:8,0], tot_bp_scaled[fr+shadow_i,5:8,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,5:8,0], bp[fr+shadow_i,5:8,1], 
                              c=ang_palette[0], alpha=alpha, 
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,8:11,0], tot_bp_scaled[fr+shadow_i,8:11,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,8:11,0], bp[fr+shadow_i,8:11,1], 
                              c=ang_palette[1], alpha=alpha, 
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,11:14,0], tot_bp_scaled[fr+shadow_i,11:14,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,11:14,0], bp[fr+shadow_i,11:14,1], 
                              c=ang_palette[2], alpha=alpha, 
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,14:17,0], tot_bp_scaled[fr+shadow_i,14:17,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,14:17,0], bp[fr+shadow_i,14:17,1], 
                              c=ang_palette[3], alpha=alpha, 
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
                     # right side
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,18:21,0], tot_bp_scaled[fr+shadow_i,18:21,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,18:21,0], bp[fr+shadow_i,18:21,1], 
                              c=ang_palette[4], alpha=alpha,
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,21:24,0], tot_bp_scaled[fr+shadow_i,21:24,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,21:24,0], bp[fr+shadow_i,21:24,1], 
                              c=ang_palette[5], alpha=alpha,
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,24:27,0], tot_bp_scaled[fr+shadow_i,24:27,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,24:27,0], bp[fr+shadow_i,24:27,1], 
                              c=ang_palette[6], alpha=alpha,
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
-                    ax[i//4,i%4].plot(tot_bp_scaled[fr+shadow_i,27:30,0], tot_bp_scaled[fr+shadow_i,27:30,1], 
+                    ax[i//4,i%4].plot(bp[fr+shadow_i,27:30,0], bp[fr+shadow_i,27:30,1], 
                              c=ang_palette[7], alpha=alpha,
                              marker="o", linewidth=bp_linewidth, markersize=bp_markersize)
 
