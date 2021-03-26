@@ -57,6 +57,8 @@ def main():
     for clust_i in range(0, num_clusters):
         # Create video
         fig, ax = plt.subplots(3,3,figsize=(10,10))
+        fig.suptitle(f"Cluster {clust_i} Sample Videos")
+        fig.tight_layout(rect=[0, 0.03, 1, 0.95])
 
         # animal video data
         video_i, file_start_fr = {}, {}
@@ -66,9 +68,6 @@ def main():
                 file_start_fr[i] = global_start_frames[file_bool][-1]
                 file_path = global_directories[file_bool][-1]
                 file_key = file_path.split("/")[-1]
-                print("***********")
-                print(file_key)
-                print(VIDEO_PATH)
                 video_path = glob(f"{VIDEO_PATH}/{file_key}.avi")[0]
                 video = skvideo.io.vread(video_path)
 
@@ -96,6 +95,7 @@ def main():
                         # configure plot
                         ax[i//3,i%3].clear()
                         ax[i//3,i%3].set_axis_off()
+                        ax[i//3,i%3].set(title=f"C - {tot_clusters[fr]}")
                         # ax[i//3,i%3].set(xlim=(-3,3), ylim=(-3,3))
 
                         ax[i//3,i%3].imshow(video_i[i][fr_i])
