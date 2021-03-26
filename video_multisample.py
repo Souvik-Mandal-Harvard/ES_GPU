@@ -13,7 +13,7 @@ def main():
     PROJECT_PATH = "/rapids/notebooks/host/BM_GPU"
     VIDEO_PATH = "/rapids/notebooks/host/Ant_Videos/ant_field_final"
     num_videos_per_clusters = 9
-    video_duration = 100 # frames
+    video_duration = 200 # frames
 
     Data = Dataset(PROJECT_PATH, 'final')
     Data.load_data()
@@ -82,7 +82,7 @@ def main():
 
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
-        writer = FFMpegWriter(fps=10)
+        writer = FFMpegWriter(fps=25)
         SAVE_PATH=f"videos/final/mutivideo_cluster{clust_i}.mp4"
         with writer.saving(fig, SAVE_PATH, dpi=300):
             for fr_i in tqdm(np.arange(0, video_duration), desc=f"Cluster {clust_i} Frame Loop"):
