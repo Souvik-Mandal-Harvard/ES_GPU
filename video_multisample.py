@@ -10,8 +10,8 @@ from glob import glob
 from utils.data import Dataset
 
 def main():
-    PROJECT_PATH = "/rapids/notebooks/host"
-    VIDEO_PATH = "/home/dong/Research/dong/Ant_Videos/ant_field_final"
+    PROJECT_PATH = "/rapids/notebooks/host/BM_GPU"
+    VIDEO_PATH = "/rapids/notebooks/host/Ant_Videos/ant_field_final"
     num_videos_per_clusters = 16
     video_duration = 100 # frames
 
@@ -66,6 +66,9 @@ def main():
                 file_start_fr[i] = global_start_frames[file_bool][-1]
                 file_path = global_directories[file_bool][-1]
                 file_key = file_path.split("/")[-1]
+                print("***********")
+                print(file_key)
+                print(VIDEO_PATH)
                 video_path = glob(f"{VIDEO_PATH}/{file_key}.avi")[0]
                 video = skvideo.io.vread(video_path)
 
