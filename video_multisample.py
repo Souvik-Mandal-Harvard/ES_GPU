@@ -68,7 +68,13 @@ def main():
                 file_key = file_path.split("/")[-1]
                 video_path = glob(f"{VIDEO_PATH}/{file_key}.avi")[0]
                 video = skvideo.io.vread(video_path)
-                video_i[i] = video
+
+                video_start = start-file_start_fr[i]
+                video_stop = video_start+video_duration
+                if video_stop < len(video_i[i]):
+                    video_i[i] = video[video_start:video_stop]
+                else:
+                    video_i[i] = video[video_start:]
             else:
                 return # don't create a video
 
@@ -81,15 +87,15 @@ def main():
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
                     fr = start+fr_i
 
-                    if fr-file_start_fr[i] >= len(video_i[i]): 
+                    if fr_i >= len(video_i[i]):
                         continue
                     else:
                         # configure plot
                         ax[i//4,i%4].clear()
                         ax[i//4,i%4].set_axis_off()
-                        ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
+                        # ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
 
-                        ax[i//4,i%4].imshow(video_i[i][fr-file_start_fr[i]])
+                        ax[i//4,i%4].imshow(video_i[i][fr_i])
 
                         for skeleton_i, color_i in zip(skeleton, skeleton_color):
                             ax[i//4,i%4].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
