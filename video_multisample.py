@@ -95,7 +95,7 @@ def main():
                         # configure plot
                         ax[i//3,i%3].clear()
                         ax[i//3,i%3].set_axis_off()
-                        ax[i//3,i%3].set(title=f"C - {int(tot_clusters[fr])}")
+                        ax[i//3,i%3].set(title=f"Cluster {int(tot_clusters[fr])}")
                         # ax[i//3,i%3].set(xlim=(-3,3), ylim=(-3,3))
 
                         ax[i//3,i%3].imshow(video_i[i][fr_i])
