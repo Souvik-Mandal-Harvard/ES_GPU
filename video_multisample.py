@@ -12,7 +12,7 @@ from utils.data import Dataset
 def main():
     PROJECT_PATH = "/rapids/notebooks/host/BM_GPU"
     VIDEO_PATH = "/rapids/notebooks/host/Ant_Videos/ant_field_final"
-    num_videos_per_clusters = 16
+    num_videos_per_clusters = 9
     video_duration = 100 # frames
 
     Data = Dataset(PROJECT_PATH, 'final')
@@ -56,7 +56,7 @@ def main():
     
     for clust_i in range(0, num_clusters):
         # Create video
-        fig, ax = plt.subplots(4,4,figsize=(10,10))
+        fig, ax = plt.subplots(3,3,figsize=(10,10))
 
         # animal video data
         video_i, file_start_fr = {}, {}
@@ -94,14 +94,14 @@ def main():
                         continue
                     else:
                         # configure plot
-                        ax[i//4,i%4].clear()
-                        ax[i//4,i%4].set_axis_off()
-                        # ax[i//4,i%4].set(xlim=(-3,3), ylim=(-3,3))
+                        ax[i//3,i%3].clear()
+                        ax[i//3,i%3].set_axis_off()
+                        # ax[i//3,i%3].set(xlim=(-3,3), ylim=(-3,3))
 
-                        ax[i//4,i%4].imshow(video_i[i][fr_i])
+                        ax[i//3,i%3].imshow(video_i[i][fr_i])
 
                         for skeleton_i, color_i in zip(skeleton, skeleton_color):
-                            ax[i//4,i%4].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
+                            ax[i//3,i%3].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
                                 linewidth=2, alpha=0.6, c=color_i)
 
                 writer.grab_frame()
