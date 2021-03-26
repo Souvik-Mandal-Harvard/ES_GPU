@@ -74,7 +74,7 @@ def main():
 
                 video_start = start-file_start_fr[i]
                 video_stop = video_start+video_duration
-                if video_stop < len(video_i[i]):
+                if video_stop < len(video):
                     video_i[i] = video[video_start:video_stop]
                 else:
                     video_i[i] = video[video_start:]
