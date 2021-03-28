@@ -28,7 +28,7 @@ def main():
     skeleton_color= config['skeleton_color']
 
     # features
-    tot_bp = Data.data_obj['bodypoints']
+    tot_bp = Data.data_obj['rotated_bodypoints']
     # embeddings
     tot_embed = Data.data_obj['all_embeddings']
     # cluster
