@@ -91,20 +91,17 @@ def main():
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
                     fr = start+fr_i
 
-                    if fr_i >= len(video_i[i]):
-                        continue
-                    else:
-                        # configure plot
-                        ax[i//3,i%3].clear()
-                        ax[i//3,i%3].set_axis_off()
-                        ax[i//3,i%3].set(title=f"Cluster {int(tot_clusters[fr])}")
-                        ax[i//3,i%3].set(xlim=(-3,3), ylim=(-3,3))
+                    # configure plot
+                    ax[i//3,i%3].clear()
+                    ax[i//3,i%3].set_axis_off()
+                    ax[i//3,i%3].set(title=f"Cluster {int(tot_clusters[fr])}")
+                    ax[i//3,i%3].set(xlim=(-3,3), ylim=(-3,3))
 
-                        # ax[i//3,i%3].imshow(video_i[i][fr_i])
+                    # ax[i//3,i%3].imshow(video_i[i][fr_i])
 
-                        for skeleton_i, color_i in zip(skeleton, skeleton_color):
-                            ax[i//3,i%3].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
-                                linewidth=2, alpha=0.6, c=color_i)
+                    for skeleton_i, color_i in zip(skeleton, skeleton_color):
+                        ax[i//3,i%3].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
+                            linewidth=2, alpha=0.6, c=color_i)
 
                 writer.grab_frame()
             plt.close()
