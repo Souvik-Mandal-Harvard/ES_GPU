@@ -40,8 +40,8 @@ marker_kinematic_pca_components: 170
 marker_labels: ['nose', 'left ear', 'right ear', 'neck', 'left hip', 'right hip', 'tail']
 
 # Joint Angle
-include_angle_postural: True
-include_angle_kinematic: True
+include_angle_postural: False
+include_angle_kinematic: False
 angle_kinematic_pca_components: 60
 angles:
   # 0 - NOSE
@@ -74,8 +74,8 @@ angle_labels:
   - tail
 
 # Limb Length
-include_limb_postural: True
-include_limb_kinematic: True
+include_limb_postural: False
+include_limb_kinematic: False
 limb_kinematic_pca_components: 30
 limbs:
   - [0,3]
@@ -94,14 +94,14 @@ limb_threshold:
   - 50
   - 50
 
-include_all_postural: True
+include_all_postural: False
 include_all_kinematic: True
 include_all_features: True
 
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin
-f_min: 0.3
+f_min: 1
 
 # Kinematic & Postural Influence
 postural_weight: 1 # try 1.5, 2, 2.5, 3
