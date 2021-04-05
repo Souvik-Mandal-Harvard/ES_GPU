@@ -8,7 +8,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Import Helper Function
-from helper import cuml_umap, cuml_pca
+from helper import locate_bad_fr, cuml_umap, cuml_pca
 from utils.data import Dataset
 
 def plot_embeddings(embed, title="Embedding", fname="embedding"):
@@ -19,13 +19,15 @@ def plot_embeddings(embed, title="Embedding", fname="embedding"):
     return
 
 def main():
-    PROJECT_PATH = 
+    PROJECT_PATH = "/rapids/notebooks/host/BM_GPU"
     config_path = f"{PROJECT_PATH}/config_aicrowd.yaml"
     Data = Dataset(PROJECT_PATH, 'task1_etho', config_path)
     Data.load_data()
 
     # configuration
-    INFO_items = Data.info_values
+    INFO = Data.info
+    INFO_items = list(INFO.items())
+    INFO_items.sort(key=lambda x: x[1]['order'])
     config = Data.config
 
     # features
