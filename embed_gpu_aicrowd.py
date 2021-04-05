@@ -187,10 +187,10 @@ def save_embeddings(config, INFO_items, embeddings, fname="embeddings"):
         good_fr, bad_fr, disregard_fr = locate_bad_fr(config, bp)
         num_good_fr = len(good_fr)
         # bad frames default to nan
-        embeddings = np.empty((num_fr, config['n_components']))
-        embeddings[:] = np.nan
-        embeddings[good_fr,:] = embeddings[start_fr:start_fr+num_good_fr]
-        np.save(f"{save_path}/{fname}.npy", embeddings)
+        full_embeddings = np.empty((num_fr, config['n_components']))
+        full_embeddings[:] = np.nan
+        full_embeddings[good_fr,:] = embeddings[start_fr:start_fr+num_good_fr]
+        np.save(f"{save_path}/{fname}.npy", full_embeddings)
         start_fr += num_good_fr
     return
 
