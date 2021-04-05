@@ -33,7 +33,13 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoin
 
     ### Format
     DLC_data = np.load(path)
-    num_fr,_,_ = DLC_data.shape
+    num_fr, num_bp, num_dim = DLC_data.shape
+    
+    # if no likelihood, append one at the end
+    if num_dim != 3:
+        likelihood = np.ones((num_fr, num_bp, 1))
+        DLC_data = np.concatenate((DLC_data, likelihood),axis=2)
+    
     if config['save_bodypoints']:
         np.save(f"{save_path}/bodypoints.npy", DLC_data)
 
@@ -68,13 +74,8 @@ for path_i, path in tqdm(enumerate(glob(f"{config['input_data_path']}/**/keypoin
     if config['save_scaled_bodypoints']:
         np.save(f"{save_path}/scaled_bodypoints.npy", DLC_data)
 
-    ### Data Correction
-    # TODO: make everything with below threshold likelihood as (0,0)
-    # TODO: do low pass filter
-
     ### Rotate
     DLC_data[:,:,0:2], body_orientation = _rotational(data=DLC_data[:,:,0:2], axis_bp=config['bp_rotate'])
-    #DLC_data[:,:,2] = likelihood ### PROBLEM IS HERE!!!!!!
     if config['save_body_orientation_angles']:
         np.save(f"{save_path}/body_orientation_angles.npy", body_orientation)
     if config['save_rotated_bodypoints']:

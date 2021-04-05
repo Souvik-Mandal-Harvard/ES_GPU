@@ -40,28 +40,28 @@ marker_kinematic_pca_components: 170
 marker_labels: ['nose', 'left ear', 'right ear', 'neck', 'left hip', 'right hip', 'tail']
 
 # Joint Angle
-include_angle_postural: False
-include_angle_kinematic: False
+include_angle_postural: True
+include_angle_kinematic: True
 angle_kinematic_pca_components: 60
 angles:
-  # NOSE
-  - {"a": 1, "b": 0, "c": 2}
-  # LEFT EAR
-  - {"a": 0, "b": 1, "c": 3}
-  # RIGHT EAR
-  - {"a": 0, "b": 2, "c": 3}
-  # HEAD NECK
-  - {"a": 1, "b": 3, "c": 2}
-  # HEAD
-  - {"a": 0, "b": 3, "c": 6}
-  # BODY NECK
-  - {"a": 4, "b": 3, "c": 5}
-  # LEFT HIP
-  - {"a": 3, "b": 4, "c": 6}
-  # RIGHT HIP
-  - {"a": 3, "b": 5, "c": 6}
-  # TAIL
-  - {"a": 4, "b": 6, "c": 5}
+  # 0 - NOSE
+  - {"a": 2, "b": 0, "c": 1, "method": 0}
+  # 1 - LEFT EAR
+  - {"a": 0, "b": 1, "c": 3, "method": 1}
+  # 2 - RIGHT EAR
+  - {"a": 3, "b": 2, "c": 0, "method": 1}
+  # 3 - HEAD NECK
+  - {"a": 1, "b": 3, "c": 2, "method": 1}
+  # 4 - HEAD
+  - {"a": 0, "b": 3, "c": 6, "method": 1}
+  # 5 - BODY NECK
+  - {"a": 5, "b": 3, "c": 4, "method": 0}
+  # 6 - LEFT HIP
+  - {"a": 3, "b": 4, "c": 6, "method": 1}
+  # 7 - RIGHT HIP
+  - {"a": 6, "b": 5, "c": 3, "method": 1}
+  # 8 - TAIL
+  - {"a": 4, "b": 6, "c": 5, "method": 1}
 angle_labels:
   - nose
   - left ear
@@ -74,8 +74,8 @@ angle_labels:
   - tail
 
 # Limb Length
-include_limb_postural: False
-include_limb_kinematic: False
+include_limb_postural: True
+include_limb_kinematic: True
 limb_kinematic_pca_components: 30
 limbs:
   - [0,3]
@@ -101,6 +101,7 @@ include_all_features: True
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin
+f_min: 0.3
 
 # UMAP
 n_components: 2
@@ -124,8 +125,5 @@ save_bodypoints: True
 save_scaled_bodypoints: False
 save_body_orientation_angles: False
 save_rotated_bodypoints: True
-save_angles: True
-save_limbs: True
-save_powers: True
 save_embeddings: True
 save_clusters: False

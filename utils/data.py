@@ -3,9 +3,10 @@ import yaml, pickle, tqdm
 from os import path
 
 class Dataset:
-    def __init__(self, project_path, project_name):
+    def __init__(self, project_path, project_name,config_path):
         self.project_path = project_path
         self.project_name = project_name
+        self.config_path = config_path
 
         self.data_name = ['bodypoints','rotated_bodypoints', 'angles', 'limbs', 'angle_power', 'limb_power', 
         'all_embeddings', 'all_postural_embeddings', 'maker_postural_embeddings', 'angle_postural_embeddings', 'limb_postural_embeddings',
@@ -26,7 +27,7 @@ class Dataset:
         
     def load_config(self):
         print("Loading config.yaml ...")
-        with open(f"{self.project_path}/config.yaml") as f:
+        with open(f"{self.config_path}") as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
         print("Finished loading config")
         return config

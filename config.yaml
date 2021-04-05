@@ -150,6 +150,7 @@ include_all_features: True
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin
+f_min: 1
 
 # UMAP
 n_components: 2

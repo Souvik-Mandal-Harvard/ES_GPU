@@ -1,7 +1,32 @@
+import collections
 import numpy as np
 
 # Import Signal Processor
 from scipy.signal import morlet2, cwt
+
+def locate_bad_fr(config, bp):
+    num_fr,_,_ = bp.shape
+    likelihood = bp[:,:,2]
+    # check if below likelihood threshold
+    (below_thresh_fr, below_thresh_marker) = np.where(likelihood < config['likelihood_thresh'])
+    cnt = collections.Counter(below_thresh_fr)
+    cnt_array = np.array(list(cnt.items()))
+    # check if above marker threshold
+    try:
+        bad_fr_idx = np.where(cnt_array[:,1] > config['marker_thresh'])[0]
+        bad_fr = cnt_array[bad_fr_idx,0]
+        # append pads
+        padded_fr = np.array([ list(range(fr-config['bad_fr_pad'], fr+config['bad_fr_pad']+1)) for fr in bad_fr])
+        disregard_fr = np.unique(padded_fr.flatten())
+        disregard_fr = disregard_fr[(disregard_fr >= 0) & (disregard_fr < num_fr)]
+        good_fr_idx = np.array([True]*num_fr)
+        good_fr_idx[disregard_fr] = False
+        good_fr = np.where(good_fr_idx==True)[0]
+    except:
+        bad_fr = np.array([])
+        disregard_fr = np.array([])
+        good_fr = np.arange(num_fr)
+    return good_fr, bad_fr, disregard_fr
 
 def _rotational(data, axis_bp):
     # rotate axis to be vertical; only works with 2 dimensions as of right now
@@ -30,18 +55,37 @@ def angle_calc(data, keys):
         a = data[:,ele['a'],:]
         b = data[:,ele['b'],:]
         c = data[:,ele['c'],:]
-        
+        # compute vector
         ba = a - b
         bc = c - b
-        cosine_angle = np.sum(ba*bc,axis=-1)/ (np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))
-        # fix nan data
-        nan_idx, = np.where(np.isnan(cosine_angle))
-        cosine_angle[nan_idx] = 0.0
-        # fix out of domain data
-        cosine_angle[cosine_angle>1] = 1.0
-        cosine_angle[cosine_angle<-1] = -1.0
-        angles[:,feat] = np.arccos(cosine_angle) # normalize
-        # angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
+        # find normalize dot and cross product
+        ba_norm = ba / np.linalg.norm(ba,axis=1,keepdims=True)
+        bc_norm = bc / np.linalg.norm(bc,axis=1,keepdims=True)
+        ba_bc_dot = (ba_norm*bc_norm).sum(axis=1)
+        ba_bc_cross = bc_norm[:,0]*ba_norm[:,1]-bc_norm[:,1]*ba_norm[:,0]
+        # compute angle between two vectors
+        if ele['method'] == 0: #[-pi,pi]; cw - positive, ccw - negative
+            ang_meas = np.arctan2(ba_bc_cross,ba_bc_dot)
+            
+        elif ele['method'] == 1: #[0,2pi]; cw - positive, ccw - negative
+            ang_meas = np.arctan2(ba_bc_cross,ba_bc_dot)
+            neg_idx = (np.sign(ang_meas)==-1)
+            ang_meas[neg_idx] += 2*np.pi 
+        # account for nan frames
+        nan_idx, = np.where(np.isnan(ang_meas))
+        ang_meas[nan_idx] = 0.0
+        angles[:,feat] = ang_meas
+
+        # # OLD ANGLE METHOD
+        # cosine_angle = np.sum(ba*bc,axis=-1)/ (np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1))
+        # # fix nan data
+        # nan_idx, = np.where(np.isnan(cosine_angle))
+        # cosine_angle[nan_idx] = 0.0
+        # # fix out of domain data
+        # cosine_angle[cosine_angle>1] = 1.0
+        # cosine_angle[cosine_angle<-1] = -1.0
+        # angles[:,feat] = np.arccos(cosine_angle) # normalize
+        # # angles[:,feat] = np.arccos(cosine_angle)/np.pi # normalize
     return angles
 
 def morlet(config, data):
@@ -49,7 +93,7 @@ def morlet(config, data):
     # Morlet Wavelet
     num_fr, num_feat = data.shape
     power = np.zeros((num_feat, config['f_bin'], num_fr))
-    max_freq, min_freq = config['fps']/2, 1 # Nyquist Frequency
+    max_freq, min_freq = config['fps']/2, config['f_min']# Nyquist Frequency
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*
         (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1))
     widths = config['w']*config['fps'] / (2*freq*np.pi)
