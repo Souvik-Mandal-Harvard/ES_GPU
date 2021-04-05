@@ -103,11 +103,15 @@ w: 5
 f_bin: 20       # number of frequency bin
 f_min: 0.3
 
+# Kinematic & Postural Influence
+postural_weight: 1 # try 1.5, 2, 2.5, 3
+kinematic_weight: 1
+
 # UMAP
 n_components: 2
 n_neighbors: 60
-n_epochs: 10000 
-min_dist: 0.001
+n_epochs: 30000 
+min_dist: 0.0001
 spread: 1.0 # 3.0
 negative_sample_rate: 5
 init: "spectral"

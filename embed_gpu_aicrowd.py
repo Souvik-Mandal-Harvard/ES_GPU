@@ -30,13 +30,18 @@ def main():
     INFO_items.sort(key=lambda x: x[1]['order'])
     config = Data.config
 
+    with open (f"{config['result_path']}/angle_scale_model.pickle", 'rb') as file:
+        angle_scaler = pickle.load(file)
+    with open (f"{config['result_path']}/limb_scale_model.pickle", 'rb') as file:
+        limb_scaler = pickle.load(file)
+
     # features
-    tot_bp = Data.data_obj['rotated_bodypoints']
-    tot_angle = Data.data_obj['angles']
-    tot_limb = Data.data_obj['limbs']
+    tot_bp = Data.data_obj['rotated_bodypoints']*config['postural_weight']
+    tot_angle = angle_scaler.transform(Data.data_obj['angles'])*config['postural_weight']
+    tot_limb = limb_scaler.transform(Data.data_obj['limbs'])*config['postural_weight']
     tot_marker_pwr = None # Implement this later maybe
-    tot_angle_pwr = Data.data_obj['angle_power']
-    tot_limb_pwr = Data.data_obj['limb_power']
+    tot_angle_pwr = Data.data_obj['angle_power']*config['kinematic_weight']
+    tot_limb_pwr = Data.data_obj['limb_power']*config['kinematic_weight']
 
     # Postural Embedding
     if config['include_marker_postural']:
