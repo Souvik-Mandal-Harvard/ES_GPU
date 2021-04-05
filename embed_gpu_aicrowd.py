@@ -1,4 +1,5 @@
 import time
+import pickle
 import yaml
 import numpy as np
 from tqdm import tqdm
@@ -30,9 +31,9 @@ def main():
     INFO_items.sort(key=lambda x: x[1]['order'])
     config = Data.config
 
-    with open (f"{config['result_path']}/angle_scale_model.pickle", 'rb') as file:
+    with open (f"{PROJECT_PATH}/{config['result_path']}/angle_scale_model.pickle", 'rb') as file:
         angle_scaler = pickle.load(file)
-    with open (f"{config['result_path']}/limb_scale_model.pickle", 'rb') as file:
+    with open (f"{PROJECT_PATH}/{config['result_path']}/limb_scale_model.pickle", 'rb') as file:
         limb_scaler = pickle.load(file)
 
     # features
