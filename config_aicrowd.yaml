@@ -110,7 +110,7 @@ kinematic_weight: 1
 # UMAP
 n_components: 2
 n_neighbors: 60
-n_epochs: 30000 
+n_epochs: 10000 
 min_dist: 0.0001
 spread: 1.0 # 3.0
 negative_sample_rate: 5
