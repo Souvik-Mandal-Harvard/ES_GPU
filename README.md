@@ -30,7 +30,7 @@ STEP 2: preproessing.py
 Animals can show same behavior while they have different body orientation. Also, their body size can look different to the camera due to theor distance from the camera. Due to these two factors, same behavior can be flagged as different behavior for an automated system. This preprocessing step accounts for these variations by centering, rotating and scaling the body poses by transforming the raw data for the next steps.
 
 STEP 3: features.py
-
+something random.
 
 STEP 4: embed_gpu.py
 
