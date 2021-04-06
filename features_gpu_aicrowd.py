@@ -27,8 +27,8 @@ def postural_features(config, INFO_items):
     num_angles = len(config['angles'])
     num_limbs = len(config['limbs'])
     # Standardizing Model (Robust Scaling - only using good frames)
-    angle_scaler = MinMaxScaler(feature_range=(-1,1))
-    limb_scaler = MinMaxScaler(feature_range=(-1,1))
+    angle_scaler = MinMaxScaler(feature_range=(0,1))
+    limb_scaler = MinMaxScaler(feature_range=(0,1))
     angle_sum, limb_sum = np.zeros(num_angles), np.zeros(num_limbs)
     tot_fr_number = 0
 
