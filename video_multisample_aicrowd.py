@@ -26,7 +26,8 @@ def main():
     # config = Data.config
     skeleton = config['skeleton']
     skeleton_color= config['skeleton_color']
-
+    skeleton_fill = config['skeleton_fill']
+    
     # features
     tot_bp = Data.data_obj['rotated_bodypoints']
     # embeddings
@@ -102,6 +103,9 @@ def main():
                     for skeleton_i, color_i in zip(skeleton, skeleton_color):
                         ax[i//3,i%3].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
                             linewidth=2, alpha=0.6, c=color_i)
+                    for fill_obj in skeleton_fill:   
+                        ax[i//3,i%3].add_patch(matplotlib.patches.Polygon(xy=tot_bp[fr,fill_obj['trapezoid'],0:2], fill=True, 
+                            alpha=0.7, color=fill_obj['fill']))
 
                 writer.grab_frame()
             plt.close()
