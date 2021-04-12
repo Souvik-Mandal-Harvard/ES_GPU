@@ -91,8 +91,8 @@ def kinematic_features(config, INFO_items):
         np.save(f"{save_path}/angle_power.npy", angle_power)
 
         # Limb Length
-        stand_limbs = limb_scaler.transform(limbs) - limb_scaler.scaled_means_  # scale
-        limb_power = morlet(config, stand_limbs)
+        # stand_limbs = limb_scaler.transform(limbs) - limb_scaler.scaled_means_  # scale
+        limb_power = morlet(config, limbs)
         np.save(f"{save_path}/limb_power.npy", limb_power)
 
     # Save Standardization Model
