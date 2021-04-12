@@ -11,7 +11,7 @@ from helper import locate_bad_fr, angle_calc, morlet
 def main():
     # grab arguments
     config_name = sys.argv[1]
-    
+
     with open(config_name) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     with open(f"{config['result_path']}/INFO.yaml") as f:
@@ -46,7 +46,8 @@ def postural_features(config, INFO_items):
         # Compute Joint Angle
         angles = np.zeros((num_fr, num_angles))
         angles = angle_calc(bp[:,:,0:2], config['angles'])
-        angle_scaler.partial_fit(angles[good_fr,:]) # collect normalization info
+        if len(good_fr) != 0
+            angle_scaler.partial_fit(angles[good_fr,:]) # collect normalization info
         angle_sum += np.sum(angles, axis=0)
         np.save(f"{save_path}/angles.npy", angles)
         
@@ -55,7 +56,8 @@ def postural_features(config, INFO_items):
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
             limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-        limb_scaler.partial_fit(limbs[good_fr,:]) # collect normalization info
+        if len(good_fr) != 0
+            limb_scaler.partial_fit(limbs[good_fr,:]) # collect normalization info
         limb_sum += np.sum(limbs, axis=0)
         np.save(f"{save_path}/limbs.npy", limbs)
 
