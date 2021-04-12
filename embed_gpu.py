@@ -58,6 +58,13 @@ def main():
     tot_angle_pwr = tot_angle_pwr[tot_good_fr]
     tot_limb_pwr = tot_limb_pwr[tot_good_fr]
 
+    print("******************")
+    print(np.where(np.isnan(tot_angle)))
+    print(np.where(np.isnan(tot_limb)))
+    print(np.where(np.isnan(tot_angle_pwr)))
+    print(np.where(np.isnan(tot_limb_pwr)))
+    print("******************")
+    
     # Postural Embedding
     if config['include_marker_postural']:
         start_timer = time.time()
@@ -162,9 +169,6 @@ def k_limb_embed(config, INFO_items, tot_limb_pwr):
 def k_angle_limb_embed(config, INFO_items, tot_angle_pwr, tot_limb_pwr):
     num_fr, num_freq, num_angle_feat = tot_angle_pwr.shape
     num_fr, num_freq, num_limb_feat = tot_limb_pwr.shape
-    print("******************")
-    print(np.where(np.isnan(tot_angle_pwr)))
-    print(np.where(np.isnan(tot_limb_pwr)))
     angle_kinematic_pca, _ = cuml_pca(config, 
         tot_angle_pwr.reshape(num_fr, num_freq*num_angle_feat), 
         components=config['angle_kinematic_pca_components'])
