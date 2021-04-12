@@ -11,10 +11,11 @@ from utils.data import Dataset
 
 def main():
     PROJECT_PATH = "/rapids/notebooks/host/BM_GPU"
+    config_path = f"{PROJECT_PATH}/config_aicrowd.yaml"
     num_videos_per_clusters = 9
     video_duration = 200 # frames
 
-    Data = Dataset(PROJECT_PATH, 'task1_etho')
+    Data = Dataset(PROJECT_PATH, 'task1_etho', config_path)
     Data.load_data()
 
     # configuration
@@ -29,7 +30,8 @@ def main():
     skeleton_fill = config['skeleton_fill']
     
     # features
-    tot_bp = Data.data_obj['rotated_bodypoints']
+    #tot_bp = Data.data_obj['rotated_bodypoints']
+    tot_bp = Data.data_obj['scaled_bodypoints']
     # embeddings
     tot_embed = Data.data_obj['all_embeddings']
     # cluster

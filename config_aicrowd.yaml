@@ -42,7 +42,7 @@ marker_labels: ['nose', 'left ear', 'right ear', 'neck', 'left hip', 'right hip'
 
 # Joint Angle
 include_angle_postural: False
-include_angle_kinematic: False
+include_angle_kinematic: True
 angle_kinematic_pca_components: 60
 angles:
   # 0 - NOSE
@@ -76,7 +76,7 @@ angle_labels:
 
 # Limb Length
 include_limb_postural: False
-include_limb_kinematic: False
+include_limb_kinematic: True
 limb_kinematic_pca_components: 30
 limbs:
   - [0,3]
@@ -95,8 +95,8 @@ limb_threshold:
   - 50
   - 50
 
-include_all_postural: False
-include_all_kinematic: False
+include_all_postural: True
+include_all_kinematic: True
 include_all_features: True
 
 # Morlet Wavelet Transformation
@@ -127,7 +127,7 @@ max_video_length: 80
 
 # Save
 save_bodypoints: True
-save_scaled_bodypoints: False
+save_scaled_bodypoints: True
 save_body_orientation_angles: False
 save_rotated_bodypoints: True
 save_embeddings: True
