@@ -42,6 +42,10 @@ def main():
         likelihood = df.xs('likelihood', level="coords", axis=1).to_numpy()
         store.close()
 
+        ### nan bp should have low likelihood
+        nan_bp_fr = np.where(np.isnan(x_data)|np.isnan(y_data))[0]
+        likelihood[nan_bp_fr] = 0.0
+
         ### Format
         DLC_data = np.concatenate((
             np.expand_dims(x_data, axis=-1), 
