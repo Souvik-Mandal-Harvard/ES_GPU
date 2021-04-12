@@ -83,6 +83,8 @@ def kinematic_features(config, INFO_items):
         save_path = file['directory']
         angles = np.load(f"{save_path}/angles.npy")
         limbs = np.load(f"{save_path}/limbs.npy")
+        print("###################")
+        print(np.where(np.isnan(limbs)))
 
         # Joint Angle
         stand_angles = angle_scaler.transform(angles) - angle_scaler.scaled_means_ # scale
