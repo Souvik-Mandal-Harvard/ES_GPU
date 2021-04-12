@@ -1,5 +1,5 @@
 import sys, time
-import yaml
+import yaml, pickle
 import numpy as np
 from tqdm import tqdm
 from sklearn.preprocessing import MinMaxScaler
