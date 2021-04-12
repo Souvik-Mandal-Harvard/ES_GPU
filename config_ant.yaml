@@ -30,7 +30,7 @@ skeleton_fill: []
 
 likelihood_thresh: 0.98
 marker_thresh: 1
-bad_fr_pad: 30
+bad_fr_pad: 50
 
 ### Signals ###
 bp_center: 2
