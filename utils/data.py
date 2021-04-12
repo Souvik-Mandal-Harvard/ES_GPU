@@ -11,13 +11,13 @@ class Dataset:
         'all_embeddings', 'all_postural_embeddings', 'maker_postural_embeddings', 'angle_postural_embeddings', 'limb_postural_embeddings',
         'all_kinematic_embeddings', 'marker_kinematic_embeddings', 'limb_kinematic_embeddings', 'angle_kinematic_embeddings', 'cluster']
         self.data_obj = {}
-
-        self.info, self.info_values = self.load_info()
+        
         self.config = self.load_config()
+        self.info, self.info_values = self.load_info()
 
     def load_info(self):
         print("Loading INFO.yaml ...")
-        with open(f"{self.project_path}/{self.config_path['result_path']}/INFO.yaml") as f:
+        with open(f"{self.project_path}/{self.config['result_path']}/INFO.yaml") as f:
             INFO = yaml.load(f, Loader=yaml.FullLoader)
             INFO_values = list(INFO.values())
             INFO_values.sort(key=lambda x: x['order'])
