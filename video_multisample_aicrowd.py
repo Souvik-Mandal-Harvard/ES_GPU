@@ -30,7 +30,8 @@ def main():
     skeleton_fill = config['skeleton_fill']
     
     # features
-    tot_bp = Data.data_obj['rotated_bodypoints']
+    #tot_bp = Data.data_obj['rotated_bodypoints']
+    tot_bp = Data.data_obj['scaled_bodypoints']
     # embeddings
     tot_embed = Data.data_obj['all_embeddings']
     # cluster
