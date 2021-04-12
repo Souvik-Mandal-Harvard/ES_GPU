@@ -15,6 +15,7 @@ from helper import _rotational
 def main():
     # grab arguments
     config_name = sys.argv[1]
+    data_format = sys.argv[2]
 
     start_timer = time.time()
 
@@ -37,7 +38,10 @@ def main():
 
         ### Format
         DLC_data = np.load(path)
-        print(DLC_data.shape)
+        if data_format == "mostafizur":
+            num_fr, num_dim = DLC_data.shape
+            num_bp = 15
+            DLC_data = DLC_data.reshape(num_fr, num_bp, int(num_dim/num_bp))
         num_fr, num_bp, num_dim = DLC_data.shape
         
         # if no likelihood, append one at the end
