@@ -40,15 +40,15 @@ def postural_features(config, INFO_items):
         save_path = file['directory']
         bp = np.load(f"{save_path}/rotated_bodypoints.npy")
         num_fr, _, _ = bp.shape
-        tot_fr_number += num_fr
         good_fr, bad_fr, disregard_fr = locate_bad_fr(config, bp)
-
+        tot_fr_number += good_fr
+        
         # Compute Joint Angle
         angles = np.zeros((num_fr, num_angles))
         angles = angle_calc(bp[:,:,0:2], config['angles'])
         if len(good_fr) != 0:
             angle_scaler.partial_fit(angles[good_fr,:]) # collect normalization info
-        angle_sum += np.sum(angles, axis=0)
+        angle_sum += np.sum(angles[good_fr,:], axis=0)
         np.save(f"{save_path}/angles.npy", angles)
         
         # Compute Limb Length
@@ -59,11 +59,13 @@ def postural_features(config, INFO_items):
 
         if len(good_fr) != 0:
             limb_scaler.partial_fit(limbs[good_fr,:]) # collect normalization info
-        limb_sum += np.sum(limbs, axis=0)
+        limb_sum += np.sum(limbs[good_fr,:], axis=0)
         np.save(f"{save_path}/limbs.npy", limbs)
 
     angle_scaler.means_ = angle_sum/tot_fr_number
     limb_scaler.means_ = limb_sum/tot_fr_number
+    print(limb_sum)
+    print(limb_scaler.means_)
 
     # Save Standardization Model
     with open(f"{config['result_path']}/angle_scale_model.pickle", 'wb') as file:
