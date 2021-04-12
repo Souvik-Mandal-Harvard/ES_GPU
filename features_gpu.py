@@ -64,8 +64,6 @@ def postural_features(config, INFO_items):
 
     angle_scaler.means_ = angle_sum/tot_fr_number
     limb_scaler.means_ = limb_sum/tot_fr_number
-    print(limb_sum)
-    print(limb_scaler.means_)
 
     # Save Standardization Model
     with open(f"{config['result_path']}/angle_scale_model.pickle", 'wb') as file:
@@ -93,13 +91,8 @@ def kinematic_features(config, INFO_items):
         np.save(f"{save_path}/angle_power.npy", angle_power)
 
         # Limb Length
-        print("TESTINGINGNGNGNGNG")
-        print(np.where(np.isnan(limbs))[0].shape)
         stand_limbs = limb_scaler.transform(limbs) - limb_scaler.scaled_means_  # scale
-        print(np.where(np.isnan(stand_limbs))[0].shape)
-        print(limb_scaler.scaled_means_ )
         limb_power = morlet(config, limbs)
-        print(np.where(np.isnan(limb_power))[0].shape)
         np.save(f"{save_path}/limb_power.npy", limb_power)
 
     # Save Standardization Model
