@@ -60,7 +60,7 @@ def main():
 
     print("******************")
     nan_fr = np.where(np.isnan(tot_limb_pwr))[0]
-    print(np.unique(nan_fr))
+    print(len(np.unique(nan_fr)))
     print("******************")
 
     # Postural Embedding
