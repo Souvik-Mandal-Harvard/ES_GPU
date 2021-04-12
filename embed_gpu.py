@@ -50,6 +50,14 @@ def main():
     tot_angle_pwr = Data.data_obj['angle_power']*config['kinematic_weight']
     tot_limb_pwr = Data.data_obj['limb_power']*config['kinematic_weight']
 
+    # take out bad frames
+    tot_good_fr, tot_bad_fr, tot_disregard_fr = locate_bad_fr(config, tot_bp)
+
+    tot_angle = tot_angle[tot_good_fr]
+    tot_limb = tot_limb[tot_good_fr]
+    tot_angle_pwr = tot_angle_pwr[tot_good_fr]
+    tot_limb_pwr = tot_limb_pwr[tot_good_fr]
+
     # Postural Embedding
     if config['include_marker_postural']:
         start_timer = time.time()

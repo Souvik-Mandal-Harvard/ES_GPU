@@ -56,9 +56,7 @@ def postural_features(config, INFO_items):
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
             limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
-            print("###################")
-            print(np.where(np.isnan(limb_i)))
-            
+
         if len(good_fr) != 0:
             limb_scaler.partial_fit(limbs[good_fr,:]) # collect normalization info
         limb_sum += np.sum(limbs, axis=0)
