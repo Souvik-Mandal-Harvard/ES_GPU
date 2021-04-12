@@ -3,9 +3,8 @@ import yaml, pickle, tqdm
 from os import path
 
 class Dataset:
-    def __init__(self, project_path, project_name,config_path):
+    def __init__(self, project_path, config_path):
         self.project_path = project_path
-        self.project_name = project_name
         self.config_path = config_path
 
         self.data_name = ['bodypoints','scaled_bodypoints', 'rotated_bodypoints', 'angles', 'limbs', 'angle_power', 'limb_power', 
@@ -18,7 +17,7 @@ class Dataset:
 
     def load_info(self):
         print("Loading INFO.yaml ...")
-        with open(f"{self.project_path}/results/{self.project_name}/INFO.yaml") as f:
+        with open(f"{self.project_path}/{self.config_path['result_path']}/INFO.yaml") as f:
             INFO = yaml.load(f, Loader=yaml.FullLoader)
             INFO_values = list(INFO.values())
             INFO_values.sort(key=lambda x: x['order'])

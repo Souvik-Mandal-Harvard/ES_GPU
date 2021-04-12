@@ -28,7 +28,7 @@ def main():
 
     config_path = f"{config['GPU_project_path']}/{config_name}"
     PROJECT_PATH = config['GPU_project_path']
-    Data = Dataset(PROJECT_PATH, 'task1_etho', config_path)
+    Data = Dataset(PROJECT_PATH, config_path)
     Data.load_data()
 
     # configuration
