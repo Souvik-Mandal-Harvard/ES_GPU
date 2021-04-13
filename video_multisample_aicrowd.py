@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib, random, yaml, sys
+import matplotlib, random, yaml, sys, os
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
@@ -90,7 +90,9 @@ def main():
         # video format        
         FFMpegWriter = animation.writers['ffmpeg']
         writer = FFMpegWriter(fps=25)
-        SAVE_PATH=f"videos/task1_etho/mutivideo_cluster{clust_i}.mp4"
+        SAVE_PATH=f"{config['save_video_path']}/mutivideo_cluster{clust_i}.mp4"
+        if not os.path.exists(SAVE_PATH):
+            os.makedirs(SAVE_PATH)
         with writer.saving(fig, SAVE_PATH, dpi=300):
             for fr_i in tqdm(np.arange(0, video_duration), desc=f"Cluster {clust_i} Frame Loop"):
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
