@@ -105,7 +105,7 @@ def main():
                     ax[i//3,i%3].set(xlim=(-3,3), ylim=(-3,3))
 
                     # ax[i//3,i%3].imshow(video_i[i][fr_i])
-
+                    print(tot_bp[fr,:,:].shape)
                     for skeleton_i, color_i in zip(skeleton, skeleton_color):
                         ax[i//3,i%3].plot(tot_bp[fr,skeleton_i,0], tot_bp[fr,skeleton_i,1], marker="o", markersize=2,
                             linewidth=2, alpha=0.6, c=color_i)
