@@ -112,7 +112,8 @@ def main():
                     for fill_obj in skeleton_fill:   
                         ax[i//3,i%3].add_patch(matplotlib.patches.Polygon(xy=tot_bp[fr,fill_obj['trapezoid'],0:2], fill=True, 
                             alpha=0.7, color=fill_obj['fill']))
-
+                print(fr_i)
+                print(video_cluster_idx[clust_i])
                 writer.grab_frame()
             plt.close()
 
