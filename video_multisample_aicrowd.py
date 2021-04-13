@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib, random, yaml
+import matplotlib, random, yaml, sys
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
@@ -10,20 +10,22 @@ from glob import glob
 from utils.data import Dataset
 
 def main():
-    PROJECT_PATH = "/rapids/notebooks/host/BM_GPU"
-    config_path = f"{PROJECT_PATH}/config_aicrowd.yaml"
+    config_name = sys.argv[1]
+    with open(config_name) as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+
+    PROJECT_PATH = config['GPU_project_path']
+    config_path = f"{PROJECT_PATH}/{config_name}"
     num_videos_per_clusters = 9
     video_duration = 200 # frames
 
-    Data = Dataset(PROJECT_PATH, 'task1_etho', config_path)
+    Data = Dataset(PROJECT_PATH, config_path)
     Data.load_data()
 
     # configuration
     INFO = Data.info
     INFO_values = Data.info_values
 
-    with open(f"{PROJECT_PATH}/config_aicrowd.yaml") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
     # config = Data.config
     skeleton = config['skeleton']
     skeleton_color= config['skeleton_color']
