@@ -43,12 +43,18 @@ def main():
         limb_scaler = pickle.load(file)
 
     # features
-    tot_bp = Data.data_obj['rotated_bodypoints']*config['postural_weight']
-    tot_angle = angle_scaler.transform(Data.data_obj['angles'])*config['postural_weight']
-    tot_limb = limb_scaler.transform(Data.data_obj['limbs'])*config['postural_weight']
+    tot_bp = Data.data_obj['rotated_bodypoints']
+    tot_angle = angle_scaler.transform(Data.data_obj['angles'])
+    tot_limb = limb_scaler.transform(Data.data_obj['limbs'])
     tot_marker_pwr = None # Implement this later maybe
-    tot_angle_pwr = Data.data_obj['angle_power']*config['kinematic_weight']
-    tot_limb_pwr = Data.data_obj['limb_power']*config['kinematic_weight']
+    tot_angle_pwr = Data.data_obj['angle_power']
+    tot_limb_pwr = Data.data_obj['limb_power']
+
+    # postural and kinematic scaling
+    angle_pk_scale = np.max(tot_angle_pwr, axis=(0,1))/np.max(tot_angle, axis=(0))
+    limb_pk_scale = np.max(tot_limb_pwr, axis=(0,1))/np.max(tot_limb, axis=(0))
+    tot_angle *= angle_pk_scale
+    tot_limb *= limb_pk_scale
 
     # take out bad frames
     tot_good_fr, tot_bad_fr, tot_disregard_fr = locate_bad_fr(config, tot_bp)
