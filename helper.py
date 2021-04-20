@@ -47,6 +47,7 @@ def _rotational(data, axis_bp):
 def _rotate(data, angle):
     return np.einsum('ijk,jk ->ik', 
         np.array([[np.cos(angle), -1*np.sin(angle)], [np.sin(angle), np.cos(angle)]]), data)
+    
 def angle_calc(data, keys):
     (num_fr, num_bp, num_dim) = data.shape
     num_feat = len(keys)

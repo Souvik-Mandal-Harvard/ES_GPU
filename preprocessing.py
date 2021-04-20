@@ -5,10 +5,6 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 
-# Import Visualization
-import matplotlib
-import matplotlib.pyplot as plt
-
 # Import Helper Function
 from helper import _rotational
 
@@ -16,6 +12,7 @@ def main():
     # grab arguments
     config_name = sys.argv[1]
 
+    # load config file
     with open(config_name) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     start_timer = time.time()
@@ -29,6 +26,7 @@ def main():
         save_path = f"{config['result_path']}/{folder_name}"
         if not os.path.exists(save_path):
             os.makedirs(save_path)
+        
         ## Setup INFO
         INFO[folder_name] = {}
         INFO[folder_name]['directory'] = save_path
@@ -54,6 +52,7 @@ def main():
         num_fr,_,_ = DLC_data.shape
         if config['save_bodypoints']:
             np.save(f"{save_path}/bodypoints.npy", DLC_data)
+        # TODO: filter
 
         ### Center
         bad_fr, bad_ax = np.where(np.isnan(DLC_data[:,config['bp_center'],0:2]))
@@ -61,6 +60,7 @@ def main():
         # find the unique good fr
         good_idx = np.array([True]*num_fr)
         good_idx[unique_bad_fr] = False
+
         DLC_data[good_idx,:,0:2] -= DLC_data[good_idx,config['bp_center'],0:2][:,np.newaxis,:]
         
         ### Scale
@@ -68,6 +68,7 @@ def main():
             DLC_data[:,:,0:2] /= config['scale']
             INFO[folder_name]['scale_factor'] = config['scale']
         else:
+            # TODO: see if this is necessary
             # find bad fr that contains nan
             bp_axis = DLC_data[:,config['bp_scale'],0:2]
             bad_fr, bad_bp, bad_ax = np.where(np.isnan(bp_axis))
@@ -76,6 +77,7 @@ def main():
             good_idx = np.array([True]*num_fr)
             good_idx[unique_bad_fr] = False
             good_bp_axis = bp_axis[good_idx,:,:]
+
             # find the median of these unique good fr
             x_d = good_bp_axis[:,0,0] - good_bp_axis[:,1,0]
             y_d = good_bp_axis[:,0,1] - good_bp_axis[:,1,1]

@@ -27,6 +27,7 @@ This file contains the parameters necessary to set-up the pipeline - users can c
 
 ##STEP 2: preproessing.py
 Animals can show same behavior while they have different body orientations. Also, their body size can look different to the camera due to their distance from the camera. Due to these two factors, same behavior can be flagged as different behavior by an automated system. This preprocessing step accounts for these variations by centering, rotating and scaling the body poses by transforming the raw data for the next steps.
+ '''python preprocessing.py config_NAME.yaml'''
 
 ##STEP 3: features.py
 Behavior is defined by combinations of diffrent behavioral syllables (imagine behavioral syalllable as letters, different combination of which produce different words, or in our case, different behaviors). Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances, one for teh angular data, and two for the kinematics power spectrogram.
@@ -34,3 +35,9 @@ Behavior is defined by combinations of diffrent behavioral syllables (imagine be
 ##STEP 4: embed_gpu.py
 **THIS STEP REQUIRES A GPU on a local computer In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**
 Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it two-dimension using the various dimensional-reduction methods (i.e. UMAP, PCA).
+
+
+
+
+
+
