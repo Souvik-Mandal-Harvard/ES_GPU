@@ -1,5 +1,6 @@
 # ES_GPU
 ### Version 1.0.0
+
 ---
 # Overview
 **Ethoscope is a "free for academic use" software which extracts behaviors from positional bodypoints, extracted from pose estimators like DeepLabCut, DeepPoseKit, and SLEAP, that uses unsupervised models.** 
@@ -24,10 +25,11 @@ Then, Ethoscope uses these multi-dimensional postural and kinematic feature data
 **This step may require a GPU depending on the clustering model you select**
 
 Using the low-dimensional embedding of the behavioral space, one can use one of many different clustering methods to label each frame. These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
+***Although this Ethoscope version 1.0.0 requires GPU, we are also in the process of integrating the pipeline to utilize cloud GPU***
 
 ---
 # How to Get Started
-### <u>Setup Environment</u>
+### Setup Environment
 Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries with GPU compatibile models. This allows for us to compute the behavioral space significantly quicker compared to other pipelines, which primarily uses CPU or multi-CPU. To create a rapids.ai Docker container one should follow the instructions clearly outlined on their [website](https://rapids.ai/start.html).
 #### Step 1: Create RapidsAI Docker Container
 `docker run --gpus all -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
@@ -43,30 +45,28 @@ Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries
 `pip install scikit-video`
 
 ### Run Docker Container
-Once you have created your Docker contianer, the libraries' versions and environment should all be set for you to run through our pipeline.
+Once you have created your Docker contianer, the libraries' versions and environment should all be set for you to run through our pipeline.  
+### Step 1: Start/Restart Container    
+`docker start -i <CONTAINER_NAME>`
 
-*Although this Ethoscope version 1.0.0 requires GPU, we are also in the process of integrating the pipeline to utilize cloud GPU*
 
-python -m ipykernel install --user --name=notebook_analysis
-
-conda activate notebook_analysis
-
-> TODO: dong; create instructions for setting up the environment
-
-conda env export > environment.yml
-
-conda env create -f environment.yml
 
 
 ---
 # For Developers
 
-%load_ext autoreload
-
+If you don't want to restart your kernel in jupyterlab to update your functions, use the following python codes so that your function of concern is updated whenever changes are made.   
+%load_ext autoreload   
 * %autoreload 0 - disables the auto-reloading. This is the default setting.
 * %autoreload 1 - it will only auto-reload modules that were imported using the %aimport function (e.g %aimport my_module). It’s a good option if you want to specifically auto-reload only a selected module.
 * %autoreload 2 - auto-reload all the modules. Great way to make writing and testing your modules much easier.
 
+### TODO
+- [X] TODO 1
+- [ ] TODO 2
+- [ ] TODO 3
+- [ ] TODO 4
+- [ ] TODO 5
 
 
 
