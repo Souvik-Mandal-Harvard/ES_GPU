@@ -35,7 +35,12 @@ Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries
    -v /home/dong/Research/dong:/rapids/notebooks/host \
    -w /rapids/notebooks/host \
     rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8`
-
+#### Step 2: Install Other Third Party Libraries Into Your Contianer
+* Installing [ffmpeg (linux)](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/)
+`apt update`
+`apt install ffmpeg`
+* Installing Skvideo
+`pip install scikit-video`
 
 *Although this Ethoscope version 1.0.0 requires GPU, we are also in the process of integrating the pipeline to utilize cloud GPU*
 
