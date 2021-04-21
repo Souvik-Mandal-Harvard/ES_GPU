@@ -8,9 +8,16 @@ skeleton: [
     [0,1],[0,2],[1,2],[6,7],
     [6,8],[8,12],[12,10],[10,11],[11,7]]
 skeleton_color: [
-    'tab:blue','tab:blue','tab:blue','tab:blue',
-    'tab:blue','tab:blue','tab:blue','tab:blue','tab:blue']
-skeleton_fill: []
+    'blue','blue','blue','blue',
+    'blue','blue','blue','blue','blue']
+skeleton_fill: [{
+        "trapezoid":[0,1,2],
+        "fill": "blue"
+    },
+    {
+        "trapezoid":[6,8,12,10,11,7],
+        "fill": "blue"
+    }]
 
 likelihood_thresh: 0.98
 marker_thresh: 1
