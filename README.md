@@ -11,7 +11,6 @@ This file contains the parameters necessary to set-up the pipeline - users can c
 
 ## STEP 2: preproessing.py
 Animals can show same behavior while they have different body orientations. Also, their body size can look different to the camera due to their distance from the camera. Due to these two factors, same behavior can be flagged as different behavior by an automated system. This preprocessing step accounts for these variations by centering, rotating and scaling the body poses by transforming the raw data for the next steps.
- '''python preprocessing.py config_NAME.yaml'''
 
 ## STEP 3: features.py
 Behavior is defined by combinations of diffrent behavioral syllables (imagine behavioral syalllable as letters, different combination of which produce different words, or in our case, different behaviors). Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances, one for teh angular data, and two for the kinematics power spectrogram.
@@ -23,11 +22,9 @@ Then, Ethoscope uses these multi-dimensional postural and kinematic feature data
 ## Step 5: cluster.py
 **This step may require a GPU depending on the clustering model you select**
 Using the low-dimensional embedding of the behavioral space, one can use one of many different clustering methods to label each frame. These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
+
 ---
-
 # How to Get Started
-
-
 python -m ipykernel install --user --name=notebook_analysis
 conda activate notebook_analysis
 
