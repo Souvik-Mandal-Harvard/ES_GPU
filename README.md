@@ -31,16 +31,19 @@ Using the low-dimensional embedding of the behavioral space, one can use one of 
 Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries with GPU compatibile models. This allows for us to compute the behavioral space significantly quicker compared to other pipelines, which primarily uses CPU or multi-CPU. To create a rapids.ai Docker container one should follow the instructions clearly outlined on their [website](https://rapids.ai/start.html).
 #### Step 1: Create RapidsAI Docker Container
 `docker run --gpus all -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-   --name DongRapids \
-   -v /home/dong/Research/dong:/rapids/notebooks/host \
+   --name <CONTAINER_NAME> \
+   -v <PROJECT_PATH>:/rapids/notebooks/host \
    -w /rapids/notebooks/host \
-    rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8`
+    rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8`   
 #### Step 2: Install Other Third Party Libraries Into Your Contianer
 * Installing [ffmpeg (linux)](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/)   
 `apt update`   
 `apt install ffmpeg`   
-* Installing Skvideo
+* Installing [scikit-video](http://www.scikit-video.org/stable/)   
 `pip install scikit-video`
+
+### Run Docker Container
+Once you have created your Docker contianer, the libraries' versions and environment should all be set for you to run through our pipeline.
 
 *Although this Ethoscope version 1.0.0 requires GPU, we are also in the process of integrating the pipeline to utilize cloud GPU*
 
