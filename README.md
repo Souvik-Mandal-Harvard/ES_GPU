@@ -36,9 +36,9 @@ Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries
    -w /rapids/notebooks/host \
     rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8`
 #### Step 2: Install Other Third Party Libraries Into Your Contianer
-* Installing [ffmpeg (linux)](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/)
-`apt update`
-`apt install ffmpeg`
+* Installing [ffmpeg (linux)](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/)   
+`apt update`   
+`apt install ffmpeg`   
 * Installing Skvideo
 `pip install scikit-video`
 
