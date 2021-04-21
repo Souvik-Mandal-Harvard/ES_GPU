@@ -1,6 +1,6 @@
 import collections
 import numpy as np
-import hdbscan
+# import hdbscan
 # Import Signal Processor
 from scipy.signal import morlet2, cwt
 
@@ -91,12 +91,13 @@ def angle_calc(data, keys):
 
 def morlet(config, data):
     # data - (frames, features)
+
     # Morlet Wavelet
     num_fr, num_feat = data.shape
     power = np.zeros((num_feat, config['f_bin'], num_fr))
-    max_freq, min_freq = config['fps']/2, config['f_min']# Nyquist Frequency
+    max_freq, min_freq = config['fps']/2, config['f_min'] # Nyquist Frequency
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*
-        (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1))
+        (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1)) # dyadic frequency bins
     widths = config['w']*config['fps'] / (2*freq*np.pi)
     # Normalization Factor
     s = (config['w'] + np.sqrt(2+config['w']**2))/(4*np.pi*freq)
@@ -146,27 +147,27 @@ def cuml_pca(config, feature, components=10):
     return embed, exp_var
 
 
-def HDBSCAN(embed, min_cluster_size=7000, min_samples=10, cluster_selection_epsilon=0, cluster_selection_method="leaf", memory="memory"):
-    # HDBSCAN
-    num_fr = len(embed)
-    (good_fr, good_bp) = np.where( ~np.isnan(embed) )
-    good_fr = np.unique(good_fr)
-    labels = np.ones(num_fr)*-2
+# def HDBSCAN(embed, min_cluster_size=7000, min_samples=10, cluster_selection_epsilon=0, cluster_selection_method="leaf", memory="memory"):
+#     # HDBSCAN
+#     num_fr = len(embed)
+#     (good_fr, good_bp) = np.where( ~np.isnan(embed) )
+#     good_fr = np.unique(good_fr)
+#     labels = np.ones(num_fr)*-2
 
-    # hdbscan clustering
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, 
-                                min_samples=min_samples,
-                                cluster_selection_epsilon=cluster_selection_epsilon,
-                                cluster_selection_method=cluster_selection_method,
-                                memory=memory
-                               ).fit(embed[good_fr,:])
-    # parameters
-    labels[good_fr] = clusterer.labels_
-    num_clusters = int(np.max(labels)+1)
-    outlier_pts = np.where(labels== -1)[0]
-    print(f"Frac Outlier: {len(outlier_pts)/len(labels)}")
-    print(f"# Clusters: {num_clusters}")
+#     # hdbscan clustering
+#     clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, 
+#                                 min_samples=min_samples,
+#                                 cluster_selection_epsilon=cluster_selection_epsilon,
+#                                 cluster_selection_method=cluster_selection_method,
+#                                 memory=memory
+#                                ).fit(embed[good_fr,:])
+#     # parameters
+#     labels[good_fr] = clusterer.labels_
+#     num_clusters = int(np.max(labels)+1)
+#     outlier_pts = np.where(labels== -1)[0]
+#     print(f"Frac Outlier: {len(outlier_pts)/len(labels)}")
+#     print(f"# Clusters: {num_clusters}")
     
-    return labels, num_clusters
+#     return labels, num_clusters
 
 

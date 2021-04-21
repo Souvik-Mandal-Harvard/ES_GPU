@@ -47,8 +47,8 @@ Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries
 ### Run Docker Container
 Once you have created your Docker contianer, the libraries' versions and environment should all be set for you to run through our pipeline.  
 ### Step 1: Start/Restart Container    
-`docker start -i <CONTAINER_NAME>`
-
+`docker start -i <CONTAINER_NAME>`   
+### Step 2: Upload Your Dataset
 
 
 
