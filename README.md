@@ -1,5 +1,5 @@
 # ES_GPU
-
+### Version 1.0.0
 ---
 # Overview
 **Ethoscope is a "free for academic use" software which extracts behaviors from positional bodypoints, extracted from pose estimators like DeepLabCut, DeepPoseKit, and SLEAP, that uses unsupervised models.** 
@@ -16,29 +16,40 @@ Animals can show same behavior while they have different body orientations. Also
 Behavior is defined by combinations of diffrent behavioral syllables (imagine behavioral syalllable as letters, different combination of which produce different words, or in our case, different behaviors). Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances, one for teh angular data, and two for the kinematics power spectrogram.
 
 ### STEP 4: embed_gpu.py
-**THIS STEP REQUIRES A GPU on a local computer In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**   
+**THIS STEP REQUIRES A GPU on a local computer In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**
+
 Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it two-dimension using the various dimensional-reduction methods (i.e. UMAP, PCA).
 
 ### Step 5: cluster.py
-**This step may require a GPU depending on the clustering model you select**   
+**This step may require a GPU depending on the clustering model you select**
+
 Using the low-dimensional embedding of the behavioral space, one can use one of many different clustering methods to label each frame. These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
 
 ---
 # How to Get Started
+### Setup Environment
+Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries with GPU compatibile models. This allows for us to compute the behavioral space significantly quicker compared to other pipelines, which primarily uses CPU or multi-CPU. To create a rapids.ai Docker container one should follow the instructions clearly outlined on their [website](https://rapids.ai/start.html).
+*Although this Ethoscope version 1.0.0 requires GPU, we are also in the process of integrating the pipeline to utilize cloud GPU*
+
 python -m ipykernel install --user --name=notebook_analysis
+
 conda activate notebook_analysis
 
 > TODO: dong; create instructions for setting up the environment
+
 conda env export > environment.yml
+
 conda env create -f environment.yml
 
 
+---
+# For Developers
 
 %load_ext autoreload
----
-%autoreload 0 - disables the auto-reloading. This is the default setting.
-%autoreload 1 - it will only auto-reload modules that were imported using the %aimport function (e.g %aimport my_module). It’s a good option if you want to specifically auto-reload only a selected module.
-%autoreload 2 - auto-reload all the modules. Great way to make writing and testing your modules much easier.
+
+* %autoreload 0 - disables the auto-reloading. This is the default setting.
+* %autoreload 1 - it will only auto-reload modules that were imported using the %aimport function (e.g %aimport my_module). It’s a good option if you want to specifically auto-reload only a selected module.
+* %autoreload 2 - auto-reload all the modules. Great way to make writing and testing your modules much easier.
 
 
 
