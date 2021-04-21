@@ -27,7 +27,7 @@ Using the low-dimensional embedding of the behavioral space, one can use one of 
 
 ---
 # How to Get Started
-### Setup Environment
+### <u>Setup Environment</u>
 Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries with GPU compatibile models. This allows for us to compute the behavioral space significantly quicker compared to other pipelines, which primarily uses CPU or multi-CPU. To create a rapids.ai Docker container one should follow the instructions clearly outlined on their [website](https://rapids.ai/start.html).
 #### Step 1: Create RapidsAI Docker Container
 `docker run --gpus all -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
