@@ -95,7 +95,7 @@ def morlet(config, data):
     # Morlet Wavelet
     num_fr, num_feat = data.shape
     power = np.zeros((num_feat, config['f_bin'], num_fr))
-    max_freq, min_freq = config['fps']/2, config['f_min'] # Nyquist Frequency
+    max_freq, min_freq = config['f_max'], config['f_min'] # Nyquist Frequency
     freq = max_freq*2**(-1*np.log2(max_freq/min_freq)*
         (np.arange(config['f_bin'],0,-1)-1)/(config['f_bin']-1)) # dyadic frequency bins
     widths = config['w']*config['fps'] / (2*freq*np.pi)

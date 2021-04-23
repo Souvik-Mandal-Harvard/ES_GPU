@@ -83,7 +83,10 @@ include_all_features: True
 # Morlet Wavelet Transformation
 w: 5
 f_bin: 20       # number of frequency bin
+f_max:          # the max is half of your fps
 f_min: 0.5
+period_max: 8    # unit: s
+period_min: 0.5    # unit: s ; cannot be lower than 2/fps
 
 # Kinematic & Postural Influence
 postural_weight: 4 # try 1.5, 2, 2.5, 3
