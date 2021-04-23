@@ -141,7 +141,7 @@ def cuml_pca(config, feature, components=10):
     embed[:,0:components] = cu_embed.to_pandas().to_numpy()
     
     print("*** PCA ***")
-    # print(exp_var)
+    print(exp_var)
     print(f"Sum of Explained Variance: {np.sum(exp_var)}")
 
     return embed, exp_var
