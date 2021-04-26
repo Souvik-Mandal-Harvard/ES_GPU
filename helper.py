@@ -113,6 +113,7 @@ def cuml_umap(config, feature):
     import cudf, cuml
     print("INSIDE CUML_UMAP")
     print(feature.shape)
+    print(np.where(np.isnan(feature)))
     num_fr = feature.shape[0]
     embed = np.zeros((num_fr, config['n_components']))
 

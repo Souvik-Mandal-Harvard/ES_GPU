@@ -43,10 +43,13 @@ Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries
 `apt install ffmpeg`   
 * Installing [scikit-video](http://www.scikit-video.org/stable/)   
 `pip install scikit-video`
+* Installing tables
+`pip install tables   
+
 
 ### Run Docker Container
-Once you have created your Docker contianer, the libraries' versions and environment should all be set for you to run through our pipeline.  
-### Step 1: Start/Restart Container    
+Once you have created your Docker contianer, the libraries' versions and environment should all be set for you to run through our pipeline. You do not have to recreate the container after you have everything setup.
+### Step 1: Start/Restart Container   
 `docker start -i <CONTAINER_NAME>`   
 ### Step 2: Upload Your Dataset
 
