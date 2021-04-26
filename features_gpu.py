@@ -55,7 +55,11 @@ def postural_features(config, INFO_items):
         limbs = np.zeros((num_fr, num_limbs))
         for i, limb_pts in enumerate(config['limbs']):
             limb_i = bp[:,limb_pts,0:2]
-            limbs[:,i] = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+            limb_i_calc = np.sqrt((limb_i[:,0,0]-limb_i[:,1,0])**2 + (limb_i[:,0,1]-limb_i[:,1,1])**2)
+            limbs[:,i] = limb_i_calc
+            # make nans zero (takes up a lot of memory space)
+            nan_idx, = np.where(np.isnan(limb_i_calc))
+            limbs[nan_idx,:] = 0.0
 
         if len(good_fr) != 0:
             limb_scaler.partial_fit(limbs[good_fr,:]) # collect normalization info
