@@ -41,7 +41,4 @@ class Dataset:
                     self.data_obj[file_name].append( np.load(abs_data_path) )
         for file_name in self.data_name:
             if self.data_obj[file_name]:
-                print(len(self.data_obj[file_name]))
-                print(len(self.data_obj[file_name][0]))
-                print(len(self.data_obj[file_name][0][0]))
                 self.data_obj[file_name] = np.concatenate(self.data_obj[file_name])
