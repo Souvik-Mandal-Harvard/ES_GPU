@@ -1,11 +1,10 @@
-### Experimental Settings ###
+############ Experimental Settings ############
 fps: 50          # camera frame rate (units: frames/sec)
 camera_scale: 60 # pixel/cm
 input_data_path: "data/ant_field_final"
 result_path: "results/final"
 GPU_project_path: "/rapids/notebooks/host/BM_GPU"
-
-### Skeleton ###
+############ Skeleton ############
 skeleton: [
     [0,1],[1,2],[2,3],
     [4,5],[5,6],[6,7],
@@ -28,19 +27,16 @@ skeleton_color: [
     'tab:gray','tab:gray',
     'tab:olive','tab:olive']
 skeleton_fill: []
-
-### identifying bad frames ###
 likelihood_thresh: 0.98
 marker_thresh: 1
 bad_fr_pad: 100
-
-### Signals ###
+########### Signals ############
 bp_center: 2
 bp_scale: [1, 2]
 bp_rotate: 1
 scale: False # int
 
-### Postural Features ###
+########### Postural Features ############
 # Marker Position
 # include_marker_postural: False
 # include_marker_kinematic: False
@@ -143,16 +139,14 @@ include_all_postural: True
 include_all_kinematic: True
 include_all_features: True
 
-# Morlet Wavelet Transformation
+########### Morlet Wavelet Transformation ###########
 w: 5
 f_bin: 20       # number of frequency bin
 f_min: 1
+period_max: 1    # unit: s
+period_min: 0.08  # unit: s ; cannot be lower than 2/fps
 
-# Kinematic & Postural Influence
-# postural_weight: 4 # try 1.5, 2, 2.5, 3
-# kinematic_weight: 1
-
-# UMAP
+########### UMAP ###########
 n_components: 2
 n_neighbors: 40
 n_epochs: 10000 
@@ -162,14 +156,14 @@ negative_sample_rate: 5
 init: "spectral"
 repulsion_strength: 3.0 # 10
 
-# Clustering (HDBSCAN, GMM)
+########### Clustering ###########
 
-# Figures
+########### Figures ###########
 save_video_path: "videos/round2_legs_antennae"
 num_sample_videos: 3
 max_video_length: 80
 
-# Save
+########### Save Path ###########
 save_bodypoints: True
 save_scaled_bodypoints: True
 save_body_orientation_angles: False
