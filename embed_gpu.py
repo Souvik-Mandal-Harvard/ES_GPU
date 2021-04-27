@@ -64,11 +64,6 @@ def main():
     tot_angle_pwr = tot_angle_pwr[tot_good_fr]
     tot_limb_pwr = tot_limb_pwr[tot_good_fr]
 
-    print("******************")
-    nan_fr = np.where(np.isnan(tot_limb_pwr))[0]
-    print(len(np.unique(nan_fr)))
-    print("******************")
-
     # Postural Embedding
     if config['include_marker_postural']:
         start_timer = time.time()
