@@ -93,6 +93,10 @@ def main():
                 for i, (start, stop) in enumerate(video_cluster_idx[clust_i]):
                     fr = start+fr_i
 
+                    # stop animation if video ends
+                    if (video_type==0) & (fr>=len(video_i[i])):
+                        continue
+                        
                     # configure plot
                     ax[i//3,i%3].clear()
                     ax[i//3,i%3].set_axis_off()
