@@ -15,7 +15,8 @@ def main():
     num_videos_per_clusters = 9
     video_duration = 200 # frames
 
-    Data = Dataset(PROJECT_PATH, 'final')
+    config_path = f"{PROJECT_PATH}/config_ant.yaml"
+    Data = Dataset(PROJECT_PATH, config_path)
     Data.load_data()
 
     # configuration

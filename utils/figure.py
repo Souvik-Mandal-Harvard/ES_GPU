@@ -51,16 +51,16 @@ def plot_HDBSCAN(ax, embed, labels, color_palette, marker_size=1, alpha=0.005, x
             cluster_mean.append(np.mean(embed[labels==i,:], axis=0).tolist())
         cluster_mean = np.array(cluster_mean)
     
-    if (xlim!=None) | (ylim!=None):
-        ax.set(xlim=xlim, ylim=ylim)
-        
-        # plot numbering
-        x_cond = (cluster_mean[:,0]>xlim[0]) & (cluster_mean[:,0]<xlim[1])
-        y_cond = (cluster_mean[:,1]>ylim[0]) & (cluster_mean[:,1]<ylim[1])
-        clust_numb_disp = np.where(x_cond&y_cond)[0]
-        for i in tqdm(clust_numb_disp):
-            ax.annotate(i, cluster_mean[i], fontsize=10, fontweight='bold')
-    else:
-        for i in tqdm(range(num_clusters)):
-            ax.annotate(i, cluster_mean[i], fontsize=10, fontweight='bold')
+        if (xlim!=None) | (ylim!=None):
+            ax.set(xlim=xlim, ylim=ylim)
+            
+            # plot numbering
+            x_cond = (cluster_mean[:,0]>xlim[0]) & (cluster_mean[:,0]<xlim[1])
+            y_cond = (cluster_mean[:,1]>ylim[0]) & (cluster_mean[:,1]<ylim[1])
+            clust_numb_disp = np.where(x_cond&y_cond)[0]
+            for i in tqdm(clust_numb_disp):
+                ax.annotate(i, cluster_mean[i], fontsize=10, fontweight='bold')
+        else:
+            for i in tqdm(range(num_clusters)):
+                ax.annotate(i, cluster_mean[i], fontsize=10, fontweight='bold')
     return cluster_mean

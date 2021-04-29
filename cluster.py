@@ -22,4 +22,4 @@ def HDBSCAN(embed, min_cluster_size=7000, min_samples=10, cluster_selection_epsi
     print(f"Frac Outlier: {len(outlier_pts)/len(labels)}")
     print(f"# Clusters: {num_clusters}")
     
-    return labels, num_clusters
+    return labels, num_clusters, clusterer
