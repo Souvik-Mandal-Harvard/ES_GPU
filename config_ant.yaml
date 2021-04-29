@@ -159,7 +159,7 @@ repulsion_strength: 3.0 # 10
 ########### Clustering ###########
 
 ########### Figures ###########
-raw_video_path: "/home/dong/Research/dong/Ant_Videos/ant_field"
+raw_video_path: "/rapids/notebooks/host/Ant_Videos/ant_field"
 save_video_path: "videos/final"
 num_sample_videos: 9
 max_video_length: 100
