@@ -64,7 +64,7 @@ def main():
         good_fr_global_idx = good_fr+start_fr
         tot_good_fr.append(good_fr_global_idx)
     tot_good_fr=np.concatenate(tot_good_fr)
-    print(f"Number of Good Frames: {tot_good_fr}")
+    print(f"Number of Good Frames: {len(tot_good_fr)}")
 
     tot_angle = tot_angle[tot_good_fr]
     tot_limb = tot_limb[tot_good_fr]
