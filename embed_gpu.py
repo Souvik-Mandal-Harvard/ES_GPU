@@ -57,7 +57,14 @@ def main():
     tot_limb *= limb_pk_scale
 
     # take out bad frames
-    tot_good_fr, tot_bad_fr, tot_disregard_fr = locate_bad_fr(config, tot_bp)
+    tot_good_fr = []
+    for key, file in tqdm(INFO_items):
+        start_fr, stop_fr = file["global_start_fr"], file["global_stop_fr"]
+        good_fr, bad_fr, disregard_fr = locate_bad_fr(config, rot_bp[start_fr:stop_fr])
+        good_fr_global_idx = good_fr+start_fr
+        tot_good_fr.append(good_fr_global_idx)
+    tot_good_fr=np.concatenate(tot_good_fr)
+    print(f"Number of Good Frames: {tot_good_fr}")
 
     tot_angle = tot_angle[tot_good_fr]
     tot_limb = tot_limb[tot_good_fr]
