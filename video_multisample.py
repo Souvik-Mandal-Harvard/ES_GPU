@@ -47,7 +47,7 @@ def main():
     # Determine Which frames to Abstract
     video_cluster_idx = {}
     for clust_i in range(num_clusters):
-        sorted_list_idx = sorted((list(y) for (x,y) in itertools.groupby((enumerate(labels)),operator.itemgetter(1)) if x == clust_i), key=len, reverse=True)
+        sorted_list_idx = sorted((list(y) for (x,y) in itertools.groupby((enumerate(tot_clusters)),operator.itemgetter(1)) if x == clust_i), key=len, reverse=True)
         top_start_stop_idx = map(lambda x: [x[0][0], x[-1][0]], sorted_list_idx[0:num_videos_per_clusters])
         video_cluster_idx[clust_i] = np.array(list(top_start_stop_idx))
     
