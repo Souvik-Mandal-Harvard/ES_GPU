@@ -62,7 +62,7 @@ def main():
         fig.tight_layout(rect=[0, 0.03, 1, 0.95])
 
         # animal video data
-        if video_type == 3:
+        if video_type == 0:
             video_i, file_start_fr = {}, {}
             for i, (start, stop) in enumerate(tqdm(video_cluster_idx[clust_i], desc="Collecting Videos")):
                 file_bool = start > global_start_frames
