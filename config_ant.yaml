@@ -159,9 +159,11 @@ repulsion_strength: 3.0 # 10
 ########### Clustering ###########
 
 ########### Figures ###########
-save_video_path: "videos/round2_legs_antennae"
-num_sample_videos: 3
-max_video_length: 80
+raw_video_path: "/home/dong/Research/dong/Ant_Videos/ant_field"
+save_video_path: "videos/final"
+num_sample_videos: 9
+max_video_length: 100
+video_type: 0
 
 ########### Save Path ###########
 save_bodypoints: True
