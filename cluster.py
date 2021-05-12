@@ -108,4 +108,10 @@ def Watershed(data, grid_dim=100, grid_padding=2, verbose=False, ROI_thresh=0.00
         ax[1,2].set(xlim=[xmin, xmax], ylim=[ymin, ymax])
         ax[1,2].set(title="Watershed Labels", xlabel="X Coord", ylabel="Y Coord")
         plt.show()
+
+    # shift labels down one. undefined is currently set to 0
+    watershed_labels -= 1
     return watershed_labels
+
+
+
