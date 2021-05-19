@@ -197,14 +197,15 @@ def kp_angle_limb_embed(config, INFO_items, tot_angle, tot_limb, tot_angle_pwr, 
     angle_kinematic_pca, _ = cuml_pca(config, 
         tot_angle_pwr.reshape(num_fr, num_freq*num_angle_feat), 
         components=config['angle_kinematic_pca_components'])
-    limb_kinematic_pca, _ = cuml_pca(config, 
-        tot_limb_pwr.reshape(num_fr, num_freq*num_limb_feat), 
-        components=config['limb_kinematic_pca_components'])
-    kinematic_features = np.concatenate([
-        angle_kinematic_pca,
-        limb_kinematic_pca], axis=1)
+    # limb_kinematic_pca, _ = cuml_pca(config, 
+    #     tot_limb_pwr.reshape(num_fr, num_freq*num_limb_feat), 
+    #     components=config['limb_kinematic_pca_components'])
+    # kinematic_features = np.concatenate([
+    #     angle_kinematic_pca,
+    #     limb_kinematic_pca], axis=1)
 
-    kp_angle_limb_features = np.concatenate([postural_features, kinematic_features], axis=1)
+    # kp_angle_limb_features = np.concatenate([postural_features, kinematic_features], axis=1)
+    kp_angle_limb_features = np.concatenate([tot_angle, angle_kinematic_pca], axis=1)
     embeddings = cuml_umap(config, kp_angle_limb_features)
     plot_embeddings(embeddings, title="Kinematic & Postural, Angle & Limb Feature", fname="kp_angle_limb_embeddings")
     save_embeddings(config, INFO_items, embeddings, fname="all_embeddings")
