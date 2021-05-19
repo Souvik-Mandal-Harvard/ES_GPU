@@ -35,9 +35,12 @@ class Dataset:
         for file_name in self.data_name:
             self.data_obj[file_name] = []
         for file in tqdm.tqdm(self.info_values):
+            # print(file)
             for file_name in self.data_name:
+                # print(file_name)
                 abs_data_path = f"{self.project_path}/{file['directory']}/{file_name}.npy"
                 if path.exists(abs_data_path):
+                    # print(np.load(abs_data_path).shape)
                     self.data_obj[file_name].append( np.load(abs_data_path) )
         for file_name in self.data_name:
             if self.data_obj[file_name]:
