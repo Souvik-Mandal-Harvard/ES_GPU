@@ -51,10 +51,10 @@ def main():
     tot_limb_pwr = Data.data_obj['limb_power']
 
     # postural and kinematic scaling
-    angle_pk_scale = np.max(tot_angle_pwr, axis=(0,1))/np.max(tot_angle, axis=(0))
-    limb_pk_scale = np.max(tot_limb_pwr, axis=(0,1))/np.max(tot_limb, axis=(0))
-    tot_angle *= angle_pk_scale
-    tot_limb *= limb_pk_scale
+    #angle_pk_scale = np.max(tot_angle_pwr, axis=(0,1))/np.max(tot_angle, axis=(0))
+    #limb_pk_scale = np.max(tot_limb_pwr, axis=(0,1))/np.max(tot_limb, axis=(0))
+    #tot_angle *= angle_pk_scale
+    #tot_limb *= limb_pk_scale
 
     # take out bad frames
     tot_good_fr = []

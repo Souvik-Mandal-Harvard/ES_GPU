@@ -27,7 +27,7 @@ skeleton_color: [
     'tab:gray','tab:gray',
     'tab:olive','tab:olive']
 skeleton_fill: []
-likelihood_thresh: 0.98
+likelihood_thresh: 0.8
 marker_thresh: 1
 bad_fr_pad: 100
 ########### Signals ############
@@ -144,7 +144,7 @@ w: 5
 f_bin: 20       # number of frequency bin
 f_min: 1
 period_max: 1    # unit: s
-period_min: 0.08  # unit: s ; cannot be lower than 2/fps
+period_min: 0.04  # unit: s ; cannot be lower than 2/fps
 
 ########### UMAP ###########
 n_components: 2
@@ -154,7 +154,7 @@ min_dist: 0.001
 spread: 1.0 # 3.0
 negative_sample_rate: 5
 init: "spectral"
-repulsion_strength: 3.0 # 10
+repulsion_strength: 1.0 # 10
 
 ########### Clustering ###########
 

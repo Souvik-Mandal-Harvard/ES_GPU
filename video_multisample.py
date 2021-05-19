@@ -94,9 +94,8 @@ def main():
                     fr = start+fr_i
 
                     # stop animation if video ends
-                    if (video_type==0) & (fr>=len(video_i[i])):
+                    if (video_type==0) & (fr_i>=len(video_i[i])):
                         continue
-                        
                     # configure plot
                     ax[i//3,i%3].clear()
                     ax[i//3,i%3].set_axis_off()
