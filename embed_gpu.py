@@ -66,10 +66,10 @@ def main():
     tot_limb_pwr = tot_limb_pwr[tot_good_fr]
 
     # postural and kinematic scaling
-    angle_pk_scale = np.max(tot_angle_pwr, axis=(0,1))/np.max(tot_angle, axis=(0))
-    limb_pk_scale = np.max(tot_limb_pwr, axis=(0,1))/np.max(tot_limb, axis=(0))
-    tot_angle *= angle_pk_scale
-    tot_limb *= limb_pk_scale
+    # angle_pk_scale = np.max(tot_angle_pwr, axis=(0,1))/np.max(tot_angle, axis=(0))
+    # limb_pk_scale = np.max(tot_limb_pwr, axis=(0,1))/np.max(tot_limb, axis=(0))
+    # tot_angle *= angle_pk_scale
+    # tot_limb *= limb_pk_scale
 
     # Postural Embedding
     if config['include_marker_postural']:
@@ -197,15 +197,14 @@ def kp_angle_limb_embed(config, INFO_items, tot_angle, tot_limb, tot_angle_pwr, 
     angle_kinematic_pca, _ = cuml_pca(config, 
         tot_angle_pwr.reshape(num_fr, num_freq*num_angle_feat), 
         components=config['angle_kinematic_pca_components'])
-    # limb_kinematic_pca, _ = cuml_pca(config, 
-    #     tot_limb_pwr.reshape(num_fr, num_freq*num_limb_feat), 
-    #     components=config['limb_kinematic_pca_components'])
-    # kinematic_features = np.concatenate([
-    #     angle_kinematic_pca,
-    #     limb_kinematic_pca], axis=1)
+    limb_kinematic_pca, _ = cuml_pca(config, 
+        tot_limb_pwr.reshape(num_fr, num_freq*num_limb_feat), 
+        components=config['limb_kinematic_pca_components'])
+    kinematic_features = np.concatenate([
+        angle_kinematic_pca,
+        limb_kinematic_pca], axis=1)
 
-    # kp_angle_limb_features = np.concatenate([postural_features, kinematic_features], axis=1)
-    kp_angle_limb_features = np.concatenate([tot_angle, angle_kinematic_pca], axis=1)
+    kp_angle_limb_features = np.concatenate([postural_features, kinematic_features], axis=1)
     embeddings = cuml_umap(config, kp_angle_limb_features)
     plot_embeddings(embeddings, title="Kinematic & Postural, Angle & Limb Feature", fname="kp_angle_limb_embeddings")
     save_embeddings(config, INFO_items, embeddings, fname="all_embeddings")
