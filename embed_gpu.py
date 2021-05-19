@@ -66,10 +66,10 @@ def main():
     tot_limb_pwr = tot_limb_pwr[tot_good_fr]
 
     # postural and kinematic scaling
-    # angle_pk_scale = np.max(tot_angle_pwr, axis=(0,1))/np.max(tot_angle, axis=(0))
-    # limb_pk_scale = np.max(tot_limb_pwr, axis=(0,1))/np.max(tot_limb, axis=(0))
-    # tot_angle *= angle_pk_scale
-    # tot_limb *= limb_pk_scale
+    angle_pk_scale = np.max(tot_angle_pwr, axis=(0,1))/np.max(tot_angle, axis=(0))
+    limb_pk_scale = np.max(tot_limb_pwr, axis=(0,1))/np.max(tot_limb, axis=(0))
+    tot_angle = tot_angle*angle_pk_scale*0.5
+    tot_limb = tot_limb*limb_pk_scale*0.5
 
     # Postural Embedding
     if config['include_marker_postural']:
