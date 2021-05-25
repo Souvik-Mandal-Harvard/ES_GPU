@@ -123,7 +123,7 @@ def Watershed(data, grid_dim=100, grid_padding=2, bw_method=None, verbose=False,
     watershed_labels -= 1
     labels = np.ones(num_fr)*-1
     labels[good_fr] = watershed_labels
-    return labels
+    return labels, Z, markers, segmented
 
 
 
