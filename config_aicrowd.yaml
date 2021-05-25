@@ -4,6 +4,7 @@ camera_scale: 60                              # pixel/cm
 input_data_path: "data/task1_etho"            # folder path of body pose H5 files
 result_path: "results/task1_etho"             # folder path of analyzed results and figures
 GPU_project_path: "/rapids/notebooks/host/BM_GPU"
+
 ############ Skeleton ########################################################
 skeleton: [
     [0,1],[0,2],[1,3],[2,3],
@@ -42,7 +43,7 @@ marker_labels: ['nose', 'left ear', 'right ear', 'neck', 'left hip', 'right hip'
 
 # Joint Angle
 include_angle_postural: False
-include_angle_kinematic: True
+include_angle_kinematic: False
 angle_kinematic_pca_components: 60
 angles:
   # 0 - NOSE
@@ -76,7 +77,7 @@ angle_labels:
 
 # Limb Length
 include_limb_postural: False
-include_limb_kinematic: True
+include_limb_kinematic: False
 limb_kinematic_pca_components: 30
 limbs:
   - [0,3]
@@ -103,6 +104,8 @@ include_all_features: True
 w: 5
 f_bin: 20       # number of frequency bin
 f_min: 0.3
+period_max: 3.33    # unit: s
+period_min: 0.07  # unit: s ; cannot be lower than 2/fps
 
 # Kinematic & Postural Influence
 postural_weight: 4 # try 1.5, 2, 2.5, 3
@@ -111,12 +114,12 @@ kinematic_weight: 1
 # UMAP
 n_components: 2
 n_neighbors: 60
-n_epochs: 10000 
+n_epochs: 20000 
 min_dist: 0.0001
 spread: 1.0 # 3.0
 negative_sample_rate: 5
 init: "spectral"
-repulsion_strength: 3.0 # 10
+repulsion_strength: 1.0 # 10
 
 # Clustering (HDBSCAN, GMM)
 
