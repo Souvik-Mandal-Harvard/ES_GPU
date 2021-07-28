@@ -17,7 +17,7 @@ Animals can show same behavior while they have different body orientations. Also
 Behavior is defined by combinations of diffrent behavioral syllables (imagine behavioral syalllable as letters, different combination of which produce different words, or in our case, different behaviors). Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances, one for the angular data, and two for the kinematics power spectrogram.
 
 ### STEP 4: embed_gpu.py
-**THIS STEP REQUIRES A GPU on a local computer In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**
+**THIS STEP REQUIRES A GPU on a local computer. In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**
 
 Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it two-dimension using the various dimensional-reduction methods (i.e. UMAP, PCA).
 
@@ -25,18 +25,22 @@ Then, Ethoscope uses these multi-dimensional postural and kinematic feature data
 **This step may require a GPU depending on the clustering model you select**
 
 Using the low-dimensional embedding of the behavioral space, one can use one of many different clustering methods to label each frame. These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
+
 ***Although this Ethoscope version 1.0.0 requires GPU, we are also in the process of integrating the pipeline to utilize cloud GPU***
 
 ---
-# How to Get Started
+# Getting Started
+
 ### Setup Environment
 Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries with GPU compatibile models. This allows for us to compute the behavioral space significantly quicker compared to other pipelines, which primarily uses CPU or multi-CPU. To create a rapids.ai Docker container one should follow the instructions clearly outlined on their [website](https://rapids.ai/start.html).
+
 #### Step 1: Create RapidsAI Docker Container
 `docker run --gpus all -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
    --name <CONTAINER_NAME> \
    -v <PROJECT_PATH>:/rapids/notebooks/host \
    -w /rapids/notebooks/host \
     rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8`   
+
 #### Step 2: Install Other Third Party Libraries Into Your Contianer
 * Installing [ffmpeg (linux)](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/)   
 `apt update`   
