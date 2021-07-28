@@ -5,7 +5,7 @@
 # Overview
 **Ethoscope is a "free for academic use" software which extracts behaviors from positional bodypoints, extracted from pose estimators like DeepLabCut, DeepPoseKit, and SLEAP, that uses unsupervised models.** 
 
-Ethoscope can be largely divided into 5 different steps:
+The workflow in Ethoscope is largely divided into 5 consecutive steps:
 
 ### STEP 1: config.yaml
 This file contains the parameters necessary to set-up the pipeline - users can change the parameters according to the need. For details of the parameters, please read this and/or open the config file and follow the instructions.
