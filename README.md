@@ -24,9 +24,9 @@ Then, Ethoscope uses these multi-dimensional postural and kinematic feature data
 ### Step 5: cluster.py
 **This step may require a GPU depending on the clustering model users select**
 
-Taking the low-dimensional embedding of the behavioral space, users can label each frame as a behavioral syllable using one of the clustering methods (i.e. Watershed, HDBSCAN). These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
+Taking the low-dimensional embedding of the behavioral space, this step labels each frame as a behavioral syllable using one of the clustering methods (i.e. Watershed, HDBSCAN). These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
 
-***Although this Ethoscope version 1.0.0 requires GPU, we are in the process of integrating the pipeline to utilize cloud GPU like Google CoLab***
+***Although this version (1.0.0) of Ethoscope requires a GPU-enabled computer, we are in the process of integrating the pipeline to utilize cloud GPU like Google CoLab***
 
 ---
 # Getting Started
