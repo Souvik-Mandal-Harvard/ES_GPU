@@ -3,7 +3,7 @@
 
 ---
 # Overview
-**Ethoscope is a "free for academic use" software which extracts behaviors from positional bodypoints, extracted from pose estimators like DeepLabCut, DeepPoseKit, and SLEAP, that uses unsupervised models.** 
+**Ethoscope is a "free for academic use" software that extracts behaviors from positional bodypoints, derived from pose estimator software (like DeepLabCut, DeepPoseKit, SLEAP etc.), using unsupervised models.** 
 
 The workflow in Ethoscope is largely divided into 5 consecutive steps:
 
@@ -19,14 +19,14 @@ Behavior is defined by combinations of diffrent body movements called behavioral
 ### STEP 4: embed_gpu.py
 **THIS STEP REQUIRES A GPU on a local computer. In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**
 
-Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it two-dimension using the various dimensional-reduction methods (i.e. UMAP, PCA). *Users can determine the preferred method in the config.yaml file.*
+Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it two-dimension using the various dimensional-reduction methods (i.e. UMAP, PCA).
 
 ### Step 5: cluster.py
-**This step may require a GPU depending on the clustering model you select**
+**This step may require a GPU depending on the clustering model users select**
 
-Using the low-dimensional embedding of the behavioral space, one can use one of many different clustering methods to label each frame. These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
+Taking the low-dimensional embedding of the behavioral space, users can label each frame as a behavioral syllable using one of the clustering methods (i.e. Watershed, HDBSCAN). These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
 
-***Although this Ethoscope version 1.0.0 requires GPU, we are also in the process of integrating the pipeline to utilize cloud GPU***
+***Although this Ethoscope version 1.0.0 requires GPU, we are in the process of integrating the pipeline to utilize cloud GPU like Google CoLab***
 
 ---
 # Getting Started
