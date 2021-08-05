@@ -42,7 +42,7 @@ Taking the low-dimensional embedding of the behavioral space, this step labels e
 ---
 # Getting Started
 
-### Setup Environment
+## Setup Environment
 Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries with GPU compatibile models. Currently, RapidAI is compatible only with Linux (Ubuntu 16.04 and up) system. The GPU compatible models from RapidsAI significantly reduces the computation time to get the behavioral space compared to other pipelines (that primarily uses CPU or multi-CPU). To create a rapids.ai Docker container, users will first need to install Docker onto their computer. If you look at their website [RapidsAI](https://rapids.ai/start.html), RapidsAI has several prerequisites that must be met so that their program will seamlessly function with your GPU. Therefore, please check to make sure that you have compatible GPUs, CUDA, Nvidia Drivers, and OS system installed onto your computer.
 
 Below, we have provided a shorter, succinct version of getting started with running Rapids Docker environment, but if you would like more details, then please visit their ["Getting Started"](https://rapids.ai/start.html) site. We also highly recommend that you visit Docker's main [website](https://www.docker.com/) to gain a better understanding of why we create containers and how it works.
@@ -89,17 +89,18 @@ apt install ffmpeg
 ```sh
 pip install scikit-video
 ```
-* Installing tables
+* Installing [tables](http://www.pytables.org/)
 ```sh
 pip install tables
 ```
 
 
-### Run Docker Container
-Once you have created your Docker contianer, the libraries' versions and environment should all be set for you to run through our pipeline. You do not have to recreate the container after you have everything setup.
-### Step 1: Start/Restart Container   
-`docker start -i <CONTAINER_NAME>`   
-### Step 2: Upload Your Dataset
+## Run Ethoscope
+
+### Step 1: Upload Your Dataset
+> Upload your bodypoint dataset into the *data* folder inside BM_GPU under a single folder. You should name this folder to whatever you would like to call the overall project name or iteration.
+### Step 2: Update *config.yaml*
+> Update the configuration file so that the proper features and parameters are set to create a behavioral space based on the bodypoints you have provided. Specific information regarding each parameter of *config.yaml* can be found in this [document](docs/config.md).
 
 
 
