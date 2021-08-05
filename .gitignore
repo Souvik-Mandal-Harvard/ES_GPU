@@ -1,11 +1,13 @@
 data
 results
 videos
-__pycache__
 env
 figures
+
 notebook/figures
-.ipynb_checkpoints
 notebook/dong/4_all_features/memory/
 notebook/mostafizur
 notebook/dong/2_postural_features/memory/
+
+__pycache__
+.ipynb_checkpoints
