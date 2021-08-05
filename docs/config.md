@@ -13,14 +13,14 @@ Furthermore, it is highly recommend that you get as high of a fps camera so that
 ### input_data_path
 This parameter simply defines the path to your data, which we recommend you place in the data folder. However, in theory, you can place the data anywhere on your computer so long as your provide the entire, absolute path and link the folder with Docker. Moreover, please format your data by placing all of your body pose estimation data (e.g. data.h5 files, etc) in one folder under the name of whatever you would like to call the project or iteration. For example:
 * BM_GPU
-	* data
-		* ants_iter1
-		* ants_iter2
-		* dogs_iter1
-		* cats
-	* results
-	* utils
-	* config.yaml
+	* __data__
+		* *ants_iter1*
+		* *ants_iter2*
+		* *dogs_iter1*
+		* *cats*
+	* **results**
+	* **utils**
+	* *config.yaml*
 	* ...
 
 ### result_path
