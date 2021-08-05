@@ -47,13 +47,13 @@ Ethoscope uses [RapidsAI](https://rapids.ai/), an open-source software libraries
 
 Below, we have provided a shorter, succinct version of getting started with running Rapids Docker environment, but if you would like more details, then please visit their ["Getting Started"](https://rapids.ai/start.html) site. We also highly recommend that you visit Docker's main [website](https://www.docker.com/) to gain a better understanding of why we create containers and how it works.
 
-### Step : Pull the RapidsAI Image from DockerHub
+### Step 1: Pull the RapidsAI Image from DockerHub
 > RapidsAI Image is located on DockerHub Website, which you can conveniently **pull** from the cloud to your computer using the following command. Please note that this pulls the Linux, CUDA 11.0, Ubuntu 18.04, and Python 3.7 environment that was compatible with our computer. Visit RapidsAI [website](https://rapids.ai/start.html) to get the specific image link you should download for your computer setup.
 ```sh
 docker pull rapidsai/rapidsai:21.06-cuda11.0-runtime-ubuntu18.04-py3.7
 ```
 
-#### Step 1: Create RapidsAI Docker Container
+### Step 2: Create RapidsAI Docker Container
 > After you have successfully pulled a copy of RapidsAI image from DockerHub to your computer, you want to unravel it and create a proper container for you to run Ethoscope. Images are not enough for you to run a program because it only contains the bare bone information and instructions necessary for Docker to install the proper program into your container. Don't worry about having duplicate software or version conflict while Docker is creating the container because the installed product will only be contained with the container and not your main computer root environment. 
 
 > Change the **<CONTAINER_NAME>** and **<PROJECT_PATH>** depending on what you want to call your container and where your BM_GPU directory path is on your computer respectively. Also make sure to change the RapidsAI image name (rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8) what you pulled from the previous step.
@@ -66,16 +66,33 @@ docker run --gpus all -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
    -v <PROJECT_PATH>:/rapids/notebooks/host \
    -w /rapids/notebooks/host \
     rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8
-```   
+```
 
-#### Step 2: Install Other Third Party Libraries Into Your Contianer
+### Step 3: Start Your Docker Container
+> Now that you have successfully created your container and linked your project path to it, you want to now enter the container environment to start analyzing your data. You can do this by simpally running the following code and replacing *<CONTAINER_NAME>* with whatever you decided on from the previous step.
+> If at any moment you want to exit the container and go back to your root environment just run ```docker stop``` or click "Control-C"
+
+```sh
+docker start -i <CONTAINER_NAME>
+```
+
+### Step 4: Install Other Libraries Into Your Contianer
+> Now that you are in your container, please install the following packages into your container. You will need them when you are analyzing your videos later on. You do not have to install these packages every time your start your Docker. The Container will maintain all of the updates and installs you have done even when you close out of it.
 * Installing [ffmpeg (linux)](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/)   
-`apt update`   
-`apt install ffmpeg`   
+```sh
+apt update
+```   
+```sh
+apt install ffmpeg
+```
 * Installing [scikit-video](http://www.scikit-video.org/stable/)   
-`pip install scikit-video`
+```sh
+pip install scikit-video
+```
 * Installing tables
-`pip install tables   
+```sh
+pip install tables
+```
 
 
 ### Run Docker Container
