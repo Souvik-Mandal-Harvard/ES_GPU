@@ -1,6 +1,6 @@
 ### Experimental Settings ###
 fps: 50          # camera frame rate (units: frames/sec)
-camera_scale: 60 # pixel/cm
+# camera_scale: 60 # pixel/cm
 input_data_path: "data/ant_field_final"
 result_path: "results/final"
 GPU_project_path: "/rapids/notebooks/host/BM_GPU"
