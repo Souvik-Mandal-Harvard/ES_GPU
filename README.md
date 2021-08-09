@@ -31,7 +31,6 @@ Then, Ethoscope uses these multi-dimensional postural and kinematic feature data
 By default, these outcome files of this step will be a two-dimentional behavioral space. However, users can change the number of final dimention by editing the parameter "n_components" under UMAP heading in the config.yaml file.
 
 
-
 ### Step 5: cluster.py
 **This step may require a GPU depending on the clustering model users select**
 
