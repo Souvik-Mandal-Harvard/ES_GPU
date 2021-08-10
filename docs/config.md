@@ -30,8 +30,8 @@ This parameter simply defines the path to your data, which we recommend you plac
 	* *config.yaml*
 	* ...
 
-### result_path
-**(str) - "data path"**
+### result_path | **(str) - "data path"**
+
 This is where Ethoscope will place all of the data and figures for each project you run. Similar to *input_data_path* you can define a separate directory, but we recommend you keep it in the results folder for organization purpose. We also recommend that you keep the same project name directory so that you know exactly which results correspond to the dataset in the *data* folder.
 
 ### skeleton
