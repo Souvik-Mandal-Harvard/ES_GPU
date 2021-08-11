@@ -5,7 +5,7 @@ input_data_path: "data/ant_field_final_filtered"
 result_path: "results/ant_antennae"
 GPU_project_path: "/rapids/notebooks/host/BM_GPU"
 
-############ Skeleton ############
+########### Skeleton ############
 skeleton: [
     [0,1],[1,2],[2,3],
     [4,5],[5,6],[6,7],
