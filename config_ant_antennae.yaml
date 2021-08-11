@@ -47,7 +47,7 @@ marker_labels: [head, thorax, abdomen,
 (L) Antennae Tip, (L) Antennae Mid, (L) Antennae Base,
 (L) FL Tip, (L) FL Mid, (L) ML Tip, (L) ML Mid, (L) HL Tip, (L) HL Mid]
 
-# Joint Angle
+# Joint Angle ("method": 0 applies for angles ranging from -180 to 180, and "method":1 is 0-360)
 angle_kinematic_pca_components: 70
 angles:
   # (R) ANTENNAE
@@ -61,6 +61,7 @@ angles:
   # HEAD
   - {"a": 0, "b": 1, "c": 2, "method": 0}
 
+# Doesn't matter for pipeline but creates labels on figures.
 angle_labels:
   - (R) Antennae
   - (R) Antennae 2 
