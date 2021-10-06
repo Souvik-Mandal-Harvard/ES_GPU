@@ -8,7 +8,7 @@
 The workflow in Ethoscope is largely divided into 5 consecutive steps:
 
 ### STEP 1: Editing config.yaml
-Each animal system and experimental setup can be unique and defined by some parameters. This file contains such parameters necessary to be defined for the proper functioning of the rest of the workflow; users can change the parameters according to the need. For details of the parameters, please click here open the config.yaml file and follow the instructions.
+Each animal system and experimental setup can be unique and defined by some parameters. This file contains such parameters necessary to be defined for the proper functioning of the rest of the workflow; users can change the parameters according to the need. For details of the parameters, please open the config.yaml file and follow the instructions.
 
 <!-- ### STEP 2: data_formatting.py
 * config parameter: 
@@ -21,12 +21,12 @@ Each animal system and experimental setup can be unique and defined by some para
 Animals can show same behavior while they have different body orientations. Also, their body size can appear different to the camera due to their distance from the camera. Due to these two factors, same behavior can be flagged as different by an automated system. This preprocessing step accounts for these variations by centering, rotating and scaling the body poses by transforming the raw data for the next steps.
 
 ### STEP 3: Run features.py
-Behavior is defined by combinations of diffrent body movements called behavioral syllables. Imagine behavioral syalllable as letters - different combination of which produce different words, or in the context of behavior science, different behaviors. Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances between the labeled body points (limbs.npy), one for the angular data (angles.npy), and two for the kinematics power spectrogram (limb_power.npy, angle_power.npy).
+Behavior is defined by combinations of diffrent body movements called behavioral syllables. Imagine different body postures and movements as letters - different combinations of which produce different words, or in the context of behavior science, different behavioral syllables. Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances between the labeled body points (limbs.npy), one for the angular data (angles.npy), and two for the kinematics power spectrogram (limb_power.npy, angle_power.npy).
 
 ### STEP 4: embed_gpu.py
 **THIS STEP REQUIRES A GPU on a local computer. In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**
 
-Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it to two-dimension first using PCA (to reduce the dimention of kinamatics data) and then UMAP (to reduce the dimension of the kinematic principal components and the postural data). Users can get three different files by running this file - all_embeddings.npy, all_kinematic_embeddings.npy, and all_postural_embeddings.npy.
+Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it to two-dimension first using PCA (to reduce the dimention of kinamatics data) and then UMAP (to reduce the dimension of the kinematic principal components and the postural data). Running this step generates three different files - all_embeddings.npy, all_kinematic_embeddings.npy, and all_postural_embeddings.npy.
 
 By default, these outcome files of this step will be a two-dimentional behavioral space. However, users can change the number of final dimention by editing the parameter "n_components" under UMAP heading in the config.yaml file.
 
