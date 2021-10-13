@@ -49,7 +49,7 @@ Below, we have provided a shorter, succinct version of getting started with runn
 ### Step 1: Pull the RapidsAI Image from DockerHub
 > RapidsAI Image is located on DockerHub Website, which you can conveniently **pull** from the cloud to your computer using the following command. Please note that this pulls the Linux, CUDA 11.0, Ubuntu 18.04, and Python 3.7 environment that was compatible with our computer. Visit RapidsAI [website](https://rapids.ai/start.html) to get the specific image link you should download for your computer setup.
 ```sh
-docker pull rapidsai/rapidsai:21.06-cuda11.0-runtime-ubuntu18.04-py3.7
+docker pull rapidsai/rapidsai:21.06-cuda11.0-runtime-ubuntu18.04-py3.8
 ```
 
 ### Step 2: Create RapidsAI Docker Container
