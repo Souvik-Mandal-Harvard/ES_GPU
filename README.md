@@ -97,11 +97,14 @@ pip install tables
 ## Run Ethoscope
 
 ### Step 1: Upload Your Dataset
-> Upload your bodypoint dataset into the *data* folder inside BM_GPU under a single folder. You should name this folder to whatever you would like to call the overall project name or iteration.
+> Create a folder named *data* inside BM_GPU, and create another folder inside the *data* with a name you prefer (without space). You should name this folder to whatever you would like to call the overall project name or iteration. Upload your bodypoint dataset (like the .h5 files) into the inner-most folder.
+
+
 ### Step 2: Update *config.yaml*
 > Update the configuration file so that the proper features and parameters are set to create a behavioral space based on the bodypoints you have provided. Specific information regarding each parameter of *config.yaml* can be found in this [document](docs/config.md).
 
-
+### Step 3: Run preproessing.py
+> 
 
 ---
 # For Developers
