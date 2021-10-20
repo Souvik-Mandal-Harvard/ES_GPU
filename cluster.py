@@ -1,6 +1,13 @@
-# HDBSCAN Clustering
-import hdbscan
+import time, sys
+import pickle
+import yaml
 import numpy as np
+from tqdm import tqdm
+import os
+
+# HDBSCAN Clustering
+#import hdbscan
+#import numpy as np
 
 # Watershed Clustering
 import numpy as np
@@ -9,6 +16,11 @@ from skimage.feature import peak_local_max
 from scipy import ndimage as ndi
 import matplotlib.pyplot as plt
 from scipy import stats
+from sklearn.utils import shuffle
+
+# Import Helper Function
+from helper import locate_bad_fr, cuml_umap, cuml_pca
+from utils.data import Dataset
 
 def HDBSCAN(embed, min_cluster_size=7000, min_samples=10, cluster_selection_epsilon=0, cluster_selection_method="leaf", memory="memory"):
     # HDBSCAN
@@ -125,5 +137,52 @@ def Watershed(data, grid_dim=100, grid_padding=2, bw_method=None, verbose=False,
     labels[good_fr] = watershed_labels
     return labels, Z, markers, segmented
 
+def main():
+    # grab arguments
+    config_name = sys.argv[1]
+
+    with open(config_name) as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+
+    config_path = f"{config['GPU_project_path']}/{config_name}"
+    PROJECT_PATH = config['GPU_project_path']
+    Data = Dataset(PROJECT_PATH, config_path)
+    Data.load_data()
+
+    # configuration
+    INFO = Data.info
+    INFO_values = Data.info_values
+    config = Data.config
+
+    # embeddings
+    all_embed = Data.data_obj['all_embeddings']
+
+    num_fr, num_dim = all_embed.shape
+    nan_fr, nan_dim = np.where(np.isnan(all_embed))
+    np_unique_fr = np.unique(nan_fr)
+    good_fr = np.array([True]*num_fr)
+    good_fr[np_unique_fr] = False
+
+    good_all_embed = all_embed[good_fr]
+
+    watershed_labels = Watershed(data=good_all_embed, grid_dim=400, bw_method=0.08, 
+                                 ROI_thresh=0.0001, grid_padding=10, verbose=True, 
+                                 fig_alpha=0.01, fig_s=2, watershed_line=True)
+
+    full_label = np.ones(num_fr)*-1
+    full_label[good_fr] = watershed_labels[0]
+
+    for val in INFO_values:
+        start_fr, stop_fr = val['global_start_fr'], val['global_stop_fr']
+        save_path = f"/rapids/notebooks/host/BM_GPU/{val['directory']}"
+        #save_path = f"/antennae_clusters/{val['directory']}"
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        np.save(f"{save_path}/cluster.npy", full_label[start_fr:stop_fr])
+        print(f"{save_path}")
+    return
 
 
+
+if __name__ == "__main__":
+    main()
