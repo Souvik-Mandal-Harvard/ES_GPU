@@ -3,8 +3,8 @@ import os
 import yaml
 
 # HDBSCAN Clustering
-#import hdbscan
-#import numpy as np
+import hdbscan
+import numpy as np
 
 # Watershed Clustering
 import numpy as np
