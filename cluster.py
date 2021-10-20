@@ -45,8 +45,9 @@ def HDBSCAN(embed, min_cluster_size=7000, min_samples=10, cluster_selection_epsi
 def Watershed(data, grid_dim=100, grid_padding=2, bw_method=None, verbose=False, ROI_thresh=0.001, fig_alpha=0.2, fig_s=7, watershed_line=False):
     # data - [num_fr, 2]
     # grid_dim - number of bins for density and watershed
-    # verbose - True creates figures
-    # ROI_thresh - controls the area of interest. Lower number limits the area to denser regions
+    # verbose - True creates figures.
+    # ROI_thresh - controls the area of interest. Lower number limits the area to denser regions. Higher value gives more clusters.
+    # fig_s - the size of each dot for each data point in the figure
     # take out nan frames for clustering
 
     num_fr, num_dim = data.shape

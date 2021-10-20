@@ -1,9 +1,10 @@
 ### Experimental Settings ###
 fps: 50          # camera frame rate (units: frames/sec)
-camera_scale: 60 # pixel/cm
+# camera_scale: 60 # pixel/cm
 input_data_path: "data/ant_field_final"
 result_path: "results/final"
-GPU_project_path: "/rapids/notebooks/host/BM_GPU"
+GPU_project_path: "/rapids/notebooks/host/ES_GPU"
+
 ### Skeleton ###
 skeleton: [
     [0,1],[1,2],[2,3],
@@ -35,8 +36,8 @@ bad_fr_pad: 20
 ### Signals ###
 bp_center: 2
 bp_scale: [1, 2]
-bp_rotate: 1
 scale: False
+bp_rotate: 1
 
 ### Postural Features ###
 # Marker Position
@@ -122,20 +123,6 @@ limb_labels:
   - (L) Front Leg
   - (L) Mid Leg
   - (L) Hind Leg
-limb_threshold:
-  - 15
-  - 25
-  - 25
-  - 15
-  - 15
-  - 25
-  - 25
-  - 25
-  - 15
-  - 15
-  - 25
-  - 25
-  - 25
 
 include_all_postural: True
 include_all_kinematic: True
