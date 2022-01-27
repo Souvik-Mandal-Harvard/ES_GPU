@@ -5,7 +5,7 @@
 # Overview
 **Ethoscope is a "free for academic use" software that extracts behaviors from positional bodypoints, derived from pose estimator software (like [DeepLabCut](http://www.mackenziemathislab.org/deeplabcut), [DeepPoseKit](https://github.com/jgraving/DeepPoseKit), [SLEAP](https://sleap.ai/) etc.), using unsupervised models.** 
 
-Once Ethoscope is installed on the computer (please see the **Getting Started** section for the process), the next workflow is largely divided into 5 consecutive steps:
+Once Ethoscope is installed on the computer (please see the **Getting Started** section for the process) and working directories/paths are properly set, the next workflow is largely divided into 5 consecutive steps:
 
 ### STEP 1: Editing config.yaml
 Each animal system and experimental setup can be unique and defined by some parameters. This file contains such parameters necessary to be defined for the proper functioning of the rest of the workflow; users can change the parameters according to the need. For details of the parameters, please [click here](docs/config.md), or open the config.yaml file and follow the instructions.
@@ -17,13 +17,15 @@ Each animal system and experimental setup can be unique and defined by some para
 * helper function for converting different data format to npy
  Please note, users do not need to edit this file if the primary source of pose data is DLC or SLEAP. If the user uses some other software for body point estimation, then format the data into npy. -->
 
-### STEP 2: Run preproessing.py
-Animals can show same behavior while they have different body orientations. Also, their body size can appear different to the camera due to their distance from the camera. Due to these two factors, same behavior can be flagged as different by an automated system. This preprocessing step accounts for these variations by centering, rotating and scaling the body poses by transforming the raw data for the next steps.
+### STEP 2: Preprocessing
+Animals can show same behavior while they have different body orientations. Also, different animals can have different body size, and their body size can appear different to the camera due to their distance from the camera. Due to these two factors, same behavior can be flagged as different by an automated system. This preprocessing step accounts for these variations by centering, rotating and scaling the body poses by transforming the raw data for the next steps.
 
-### STEP 3: Run features.py
-Behavior is defined by combinations of diffrent body movements called behavioral syllables. Imagine different body postures and movements as letters - different combinations of which produce different words, or in the context of behavior science, different behavioral syllables. Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances between the labeled body points (limbs.npy), one for the angular data (angles.npy), and two for the kinematics power spectrogram (limb_power.npy, angle_power.npy).
+*Please note that different body orientations can be taken into account **ONLY** for videos taken from top view, and **NOT** for videos taken from side view.*
 
-### STEP 4: embed_gpu.py
+### STEP 3: Feature extraction
+Behavior is defined by combinations of diffrent unique body movements called behavioral syllables. Imagine different body postures and movements as letters - different combinations of which produce different words, or in the context of behavior science, different behavioral syllables. Ethoscope uses both body postures as well as the kinematics of the animal to define behavioral syllables. Postural features are calculated using the eucledian distance and angle between different body points. Next, Ethoscope performs a Morlet-wavelet transformation on the postural data to coupute the kinematics features. This step generates 4 .npy files in total for each video sample - one contaning data of the Eucledian distances between the labeled body points (limbs.npy), one for the angular data (angles.npy), and two for the kinematics power spectrogram (limb_power.npy, angle_power.npy).
+
+### STEP 4: Embedding
 **THIS STEP REQUIRES A GPU on a local computer. In future, we will come up with pipeline that can use cloud-GPU computing and/or CPU (much slower).**
 
 Then, Ethoscope uses these multi-dimensional postural and kinematic feature dataset and reduces it to two-dimension first using PCA (to reduce the dimention of kinamatics data) and then UMAP (to reduce the dimension of the kinematic principal components and the postural data). Running this step generates three different files - all_embeddings.npy, all_kinematic_embeddings.npy, and all_postural_embeddings.npy.
@@ -31,7 +33,7 @@ Then, Ethoscope uses these multi-dimensional postural and kinematic feature data
 By default, these outcome files of this step will be a two-dimentional behavioral space. However, users can change the number of final dimention by editing the parameter "n_components" under UMAP heading in the config.yaml file.
 
 
-### Step 5: cluster.py
+### Step 5: Getting clusters
 **This step may require a GPU depending on the clustering model users select**
 
 Taking the low-dimensional embedding of the behavioral space, this step labels each frame as a behavioral syllable using one of the clustering methods (i.e. Watershed, HDBSCAN). These cluster labels serve as the primary syllables, which can then be utilized to create higher order ethograms.
@@ -93,6 +95,7 @@ pip install scikit-video
 pip install tables
 ```
 
+A big step is done! You can get out of the docker, if you wish. But you will need to restart the docker to run Ethoscope.
 
 ## Run Ethoscope
 
@@ -103,8 +106,45 @@ pip install tables
 ### Step 2: Update *config.yaml*
 > Update the configuration file so that the proper features and parameters are set to create a behavioral space based on the bodypoints you have provided. Specific information regarding each parameter of *config.yaml* can be found in this [document](docs/config.md).
 
-### Step 3: Run preproessing.py
-> 
+### Step 3: Switch to Terminal
+> Open the **Terminal** on the computer and navigate to the the directory where you saved BM_GPU.
+
+### Step 3: Start the docker
+> As described before, run the following command.
+```sh
+docker start -i <CONTAINER_NAME>
+```
+
+### Step 4: Set the path
+> Enter the BM_GPU directory by simply typying ```cd BM_GPU```
+
+### Step 4: Preprocessing
+
+Change the *config_file_name* to the name of your config file, and run the following command. This step should be complete pretty quickly.
+```sh
+python preprocessing.py config_file_name.yaml
+```
+### Step 5: Feature extraction
+Run the following command. Again, don't forget to change the name of the config file. This process should take some time.
+
+```sh
+python features_gpu.py config_file_name.yaml
+```
+
+### Step 6: Embedding
+Run the following command after changing the name of the config file. This process also should take some time.
+```sh
+python embed_gpu.py config_file_name.yaml
+```
+
+### Step 7: Getting clusters
+Same as before, run the following command after changing the name of the config file. This step can take some substantial time.
+```sh
+python cluster.py config_file_name.yaml
+```
+
+### Step 8: Using the cluster data for further analysis
+Check the **Notebook** folder for codes that can be executed using Jupyter notebook for various types of analyses.
 
 ---
 # For Developers
