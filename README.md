@@ -5,10 +5,10 @@
 # Overview
 **Ethoscope is a "free for academic use" software that extracts behaviors from positional bodypoints, derived from pose estimator software (like [DeepLabCut](http://www.mackenziemathislab.org/deeplabcut), [DeepPoseKit](https://github.com/jgraving/DeepPoseKit), [SLEAP](https://sleap.ai/) etc.), using unsupervised models.** 
 
-The workflow in Ethoscope is largely divided into 5 consecutive steps:
+Once Ethoscope is installed on the computer (please see the **Getting Started** section for the process), the next workflow is largely divided into 5 consecutive steps:
 
 ### STEP 1: Editing config.yaml
-Each animal system and experimental setup can be unique and defined by some parameters. This file contains such parameters necessary to be defined for the proper functioning of the rest of the workflow; users can change the parameters according to the need. For details of the parameters, please open the config.yaml file and follow the instructions.
+Each animal system and experimental setup can be unique and defined by some parameters. This file contains such parameters necessary to be defined for the proper functioning of the rest of the workflow; users can change the parameters according to the need. For details of the parameters, please [click here](docs/config.md), or open the config.yaml file and follow the instructions.
 
 <!-- ### STEP 2: data_formatting.py
 * config parameter: 
@@ -57,7 +57,7 @@ docker pull rapidsai/rapidsai:21.06-cuda11.0-runtime-ubuntu18.04-py3.8
 
 > Change the **<CONTAINER_NAME>** and **<PROJECT_PATH>** depending on what you want to call your container and where your BM_GPU directory path is on your computer respectively. Also make sure to change the RapidsAI image name (rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8) what you pulled from the previous step.
 
-*note: be careful when you change the path of BM_GPU directory in the future because the container may not find your project* 
+*Note: Be careful when you change the path of BM_GPU directory in the future because the container may not find your project* 
 
 ```sh
 docker run --gpus all -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
