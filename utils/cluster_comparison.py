@@ -3,7 +3,7 @@ from shutil import copyfile
 import pandas as pd
 import numpy as np
 
-def create_group_folders(RESULT_PATH, TARGET_DIR_PATH):
+def create_group_folders(RESULT_PATH, TARGET_DIR_PATH, groupings=["cluster"]):
 
     # create TARGET_DIR if it does not already exist
     try:
@@ -20,10 +20,6 @@ def create_group_folders(RESULT_PATH, TARGET_DIR_PATH):
     for file in all_files:
         if os.path.isdir(file):
             all_folders.append(file)
-    
-    groupings = ["all_embeddings", "all_kinematic_embeddings", "all_postural_embeddings", "angle_power", 
-             "angles", "bodypoints", "cluster", "limb_power", "limbs", "rotated_bodypoints", 
-             "scaled_bodypoints"]
 
     # create a directory for each group that will be filled in later
     for group in groupings:
@@ -41,7 +37,8 @@ def create_group_folders(RESULT_PATH, TARGET_DIR_PATH):
             group = file.split(".")[0]
             
             # copy each file to its designated group directory created earlier
-            copyfile(f"{folder}/{file}", f"{TARGET_DIR_PATH}/{group}/{group}_{folder.split('/')[-1]}.npy")
+            if group in groupings:
+                copyfile(f"{folder}/{file}", f"{TARGET_DIR_PATH}/{group}/{group}_{folder.split('/')[-1]}.npy")
 
 def create_normalized_cluster_csv(CLUSTER_PATH, TARGET_DIR_PATH):
     all_clusters = [CLUSTER_PATH + "/" + f for f in os.listdir(CLUSTER_PATH)]

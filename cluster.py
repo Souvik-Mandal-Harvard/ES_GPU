@@ -175,9 +175,10 @@ def main():
     for val in INFO_values:
         start_fr, stop_fr = val['global_start_fr'], val['global_stop_fr']
         save_path = f"/rapids/notebooks/host/BM_GPU/{val['directory']}"
-        #save_path = f"/antennae_clusters/{val['directory']}"
         if not os.path.exists(save_path):
             os.makedirs(save_path)
+        #if config['save_clusters']:
+        #    np.save(f"{save_path}/cluster.npy", full_label[start_fr:stop_fr])
         np.save(f"{save_path}/cluster.npy", full_label[start_fr:stop_fr])
         print(f"{save_path}")
     return
