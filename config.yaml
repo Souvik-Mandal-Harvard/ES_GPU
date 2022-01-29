@@ -2,9 +2,14 @@
 fps: 50          # camera frame rate (units: frames/sec)
 # camera_scale: 60 # pixel/cm
 input_data_path: "data/ant_field_final"
+<<<<<<< HEAD
+result_path: "ant_antennae"
+GPU_project_path: "/rapids/notebooks/host/BM_GPU"
+=======
 result_path: "results/final"
 GPU_project_path: "/rapids/notebooks/host/ES_GPU"
 
+>>>>>>> master
 ### Skeleton ###
 skeleton: [
     [0,1],[1,2],[2,3],
