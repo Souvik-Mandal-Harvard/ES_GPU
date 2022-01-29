@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 import time, sys
 import pickle
 import yaml
+=======
+import sys
+import os
+import yaml
+
+# HDBSCAN Clustering
+import hdbscan
+>>>>>>> master
 import numpy as np
 from tqdm import tqdm
 import os
@@ -20,6 +29,8 @@ from sklearn.utils import shuffle
 
 # Import Helper Function
 from helper import locate_bad_fr, cuml_umap, cuml_pca
+from utils.data import Dataset
+
 from utils.data import Dataset
 
 def HDBSCAN(embed, min_cluster_size=7000, min_samples=10, cluster_selection_epsilon=0, cluster_selection_method="leaf", memory="memory"):
@@ -51,8 +62,9 @@ def HDBSCAN(embed, min_cluster_size=7000, min_samples=10, cluster_selection_epsi
 def Watershed(data, grid_dim=100, grid_padding=2, bw_method=None, verbose=False, ROI_thresh=0.001, fig_alpha=0.2, fig_s=7, watershed_line=False):
     # data - [num_fr, 2]
     # grid_dim - number of bins for density and watershed
-    # verbose - True creates figures
-    # ROI_thresh - controls the area of interest. Lower number limits the area to denser regions
+    # verbose - True creates figures.
+    # ROI_thresh - controls the area of interest. Lower number limits the area to denser regions. Higher value gives more clusters.
+    # fig_s - the size of each dot for each data point in the figure
     # take out nan frames for clustering
 
     num_fr, num_dim = data.shape
@@ -179,6 +191,52 @@ def main():
             os.makedirs(save_path)
         #if config['save_clusters']:
         #    np.save(f"{save_path}/cluster.npy", full_label[start_fr:stop_fr])
+        np.save(f"{save_path}/cluster.npy", full_label[start_fr:stop_fr])
+        print(f"{save_path}")
+    return
+
+
+def main():
+    # grab arguments
+    config_name = sys.argv[1]
+
+    with open(config_name) as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+
+    config_path = f"{config['GPU_project_path']}/{config_name}"
+    PROJECT_PATH = config['GPU_project_path']
+    Data = Dataset(PROJECT_PATH, config_path)
+    Data.load_data()
+
+    # configuration
+    INFO = Data.info
+    INFO_values = Data.info_values
+    config = Data.config
+
+    # embeddings
+    all_embed = Data.data_obj['all_embeddings']
+
+    num_fr, num_dim = all_embed.shape
+    nan_fr, nan_dim = np.where(np.isnan(all_embed))
+    np_unique_fr = np.unique(nan_fr)
+    good_fr = np.array([True]*num_fr)
+    good_fr[np_unique_fr] = False
+
+    good_all_embed = all_embed[good_fr]
+
+    watershed_labels = Watershed(data=good_all_embed, grid_dim=400, bw_method=0.08, 
+                                 ROI_thresh=0.0001, grid_padding=10, verbose=True, 
+                                 fig_alpha=0.01, fig_s=2, watershed_line=True)
+
+    full_label = np.ones(num_fr)*-1
+    full_label[good_fr] = watershed_labels[0]
+
+    for val in INFO_values:
+        start_fr, stop_fr = val['global_start_fr'], val['global_stop_fr']
+        save_path = f"/rapids/notebooks/host/BM_GPU/{val['directory']}"
+        #save_path = f"/antennae_clusters/{val['directory']}"
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
         np.save(f"{save_path}/cluster.npy", full_label[start_fr:stop_fr])
         print(f"{save_path}")
     return

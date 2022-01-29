@@ -132,4 +132,8 @@ save_scaled_bodypoints: True
 save_body_orientation_angles: False
 save_rotated_bodypoints: True
 save_embeddings: True
+<<<<<<< HEAD
 save_clusters: True
+=======
+save_clusters: False
+>>>>>>> master
