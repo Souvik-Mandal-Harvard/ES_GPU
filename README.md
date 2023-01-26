@@ -95,7 +95,7 @@ pip install scikit-video
 pip install tables
 ```
 
-A big step is done! You can get out of the docker, if you wish. But you will need to restart the docker to run Ethoscope.
+A big step is done! You can get out of the docker, if you wish. But you will need to restart the docker to run Ethoscope. Run ``` docker restart <CONTAINER_NAME>``` on your command line.
 
 ## Run Ethoscope
 
