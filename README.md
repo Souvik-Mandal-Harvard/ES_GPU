@@ -70,7 +70,7 @@ docker run --gpus all -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
 ```
 
 ### Step 3: Start Your Docker Container
-> Now that you have successfully created your container and linked your project path to it, you want to now enter the container environment to start analyzing your data. You can do this by simpally running the following code and replacing *<CONTAINER_NAME>* with whatever you decided on from the previous step.
+> Once the container is successfully created and the project path is linked to it, you can now start analyzing your data. For that, first you need to enter the container environment by simpally running the following code and replacing *<CONTAINER_NAME>* with whatever name you chose for the container in the previous step.
 > If at any moment you want to exit the container and go back to your root environment just run ```docker stop``` or click "Control-C"
 
 ```sh
