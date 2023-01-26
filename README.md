@@ -57,7 +57,7 @@ docker pull rapidsai/rapidsai:21.06-cuda11.0-runtime-ubuntu18.04-py3.8
 ### Step 2: Create RapidsAI Docker Container
 > After you have successfully pulled a copy of RapidsAI image from DockerHub to your computer, you need to unravel it and create a proper container to run Ethoscope. Images are not enough to run a program because it only contains the bare bone information and instructions necessary for Docker to install the proper program into your container. Don't worry about having duplicate software or version conflict while Docker is creating the container because the installed product will only be contained with the container and not your main computer root environment. 
 
-> Change the **<CONTAINER_NAME>** and **<PROJECT_PATH>** depending on what you want to call your container and where your BM_GPU directory path is on your computer respectively. Also make sure to change the RapidsAI image name (rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8) what you pulled from the previous step.
+> Change the **<CONTAINER_NAME>** and **<PROJECT_PATH>** depending on what you want to call your container and where your BM_GPU directory path is on your computer respectively. Also make sure to change the RapidsAI image name (rapidsai/rapidsai-core:cuda11.0-runtime-ubuntu18.04-py3.8) to what you pulled from the previous step (you cn copy that name from the last line appears on your Terminal after you run the ```docker pull``` command).
 
 *Note: Be careful when you change the path of BM_GPU directory in the future because the container may not find your project* 
 
