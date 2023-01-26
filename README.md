@@ -100,11 +100,11 @@ A big step is done! You can get out of the docker, if you wish. But you will nee
 ## Run Ethoscope
 
 ### Step 1: Upload Your Dataset
-> Create a folder named *data* inside BM_GPU, and create another folder inside the *data* with a name you prefer (without space). You should name this folder to whatever you would like to call the overall project name or iteration. Upload your bodypoint dataset (like the .h5 files) into the inner-most folder.
+> Create a folder named *data* inside BM_GPU, and create another folder inside the *data* with a name you prefer (without space); you can name this folder to whatever you would like to call the overall project name or iteration. For instance, let's name it MY_DATA. Upload your bodypoint dataset (like the .h5 files) into the inner-most folder (MY_DATA).
 
 
 ### Step 2: Update *config.yaml*
-> Update the configuration file so that the proper features and parameters are set to create a behavioral space based on the bodypoints you have provided. Specific information regarding each parameter of *config.yaml* can be found in this [document](docs/config.md).
+> The configuration file contains all the necessary information required to be set for extracting the proper features and parameters, and creating a behavioral space based on the bodypoints saved in the MY_DATA folder. This is where you need to specify the **input_data_path** (should be something like data/MY_DATA) and **result_path** (results/MY_DATA), as well as other parameters specific to your experiment like the digital skeleton of the animal and the clustering methods. Please check this [document](docs/config.md) for specific information and instruction for each parameter.
 
 ### Step 3: Switch to Terminal
 > Open the **Terminal** on the computer and navigate to the the directory where you saved BM_GPU.
